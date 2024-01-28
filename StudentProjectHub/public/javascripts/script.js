@@ -1,7 +1,6 @@
 gsap.to(".nav", {
     backgroundColor: `rgb(203 213 225 /1)`,
     // // backgroundColor:`cyan`,
-
     backdropFilter: "blur(10px)",
     scrollTrigger: {
         trigger: ".nav",
@@ -33,7 +32,7 @@ gsap.to(".nav", {
     scrollTrigger: {
         trigger: ".nav",
         scroller: "body",
-        markers:true,
+        // markers:true,
         start: "top -250%",
         end: "top -250%",
         scrub: 1
