@@ -40,7 +40,6 @@ gsap.to(".nav", {
 })
 
 
-
 function marquee() {
     const anim = document.querySelectorAll(".anim")
     gsap.registerPlugin(ScrollTrigger);
