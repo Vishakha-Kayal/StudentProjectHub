@@ -158,5 +158,12 @@ background: linear-gradient(to bottom, #71B280, #134E5E); /* W3C, IE 10+/ Edge, 
   color: white;
 }
 
+/* projects.ejs css */
 
+.hero{
+  height: calc(100% - 10rem);
+}
 
+.projdesc::-webkit-scrollbar{
+  display: none;
+}
