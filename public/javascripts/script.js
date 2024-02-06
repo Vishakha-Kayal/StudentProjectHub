@@ -1,7 +1,7 @@
 gsap.to(".nav", {
     backgroundColor: `rgb(203 213 225 /1)`,
     // // backgroundColor:`cyan`,
-    backdropFilter: "blur(10px)",
+    backdropFilter: "blur(15px)",
     scrollTrigger: {
         trigger: ".nav",
         scroller: "body",
@@ -27,8 +27,8 @@ gsap.from(".head", {
 })
 
 gsap.to(".nav", {
-    dispaly:"none",
-    opacity:0,
+    dispaly: "none",
+    opacity: 0,
     scrollTrigger: {
         trigger: ".nav",
         scroller: "body",
@@ -38,6 +38,24 @@ gsap.to(".nav", {
         scrub: 1
     }
 })
+
+gsap.to(".cards", {
+    y:0,
+    duration: 1,
+    opacity: 1,
+    stagger: 0.2,
+    scrollTrigger: {
+        trigger: ".cards-conatiner",
+        scroller: "body",
+        // markers:true,
+        start: "top 60%",
+        end: "top 60%",
+        scrub: 1
+    }
+})
+
+
+
 
 
 function marquee() {
