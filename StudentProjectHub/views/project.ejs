@@ -1,28 +1,34 @@
 <% include ./partials/header.ejs%>
     <div class="main z-[10] relative">
-        <div class="w-full h-screen  bg-[#e4ebe8] flex">
-            <div class="w-[80%] h-28 mt-16 flex items-center gap-8 px-20 ">
-                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3">
+        <div class="w-full h-screen  bg-[#e4ebe8] flex  ">
+            <div class="w-[80%] h-28 mt-16 flex items-center gap-8 border-b-2  pl-20">
+                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#43856F] hover:text-white hover:border-[#43856F] cursor-pointer">
                     <i class="ri-upload-cloud-2-line text-xl"></i>
-                    <h5 class="text-lg mb-1">Upload Project</h5>
+                    <h5 class="text-md mb-1">Upload Project</h5>
                 </div>
-                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center px-3">
+                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center px-3 hover:bg-[#43856F] hover:text-white hover:border-[#43856F] cursor-pointer">
                     <i class="ri-school-fill text-xl "></i>
-                    <h3 class="text-lg ">University</h3>
+                    <h3 class="text-md ">University</h3>
                     <i class="ri-arrow-drop-down-fill text-3xl mt-1"></i>
                 </div>
-                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3">
+                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 search cursor-pointer">
                     <i class="ri-search-eye-line text-xl"></i>
-                   <input class="w-36 bg-[#e4ebe8] text-lg outline-none " type="text" name="search" placeholder="Search">
+                   <input class="w-32 bg-[#e4ebe8] text-md outline-none cursor-pointer hover:bg-[#43856F]" type="text" name="search" placeholder="Search">
                 </div>
-                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center px-3">
-                    <i class="ri-school-fill text-xl "></i>
-                    <h3 class="text-lg ">Categories</h3>
-                    <i class="ri-arrow-drop-down-fill text-3xl mt-1"></i>
+                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center px-3 hover:bg-[#43856F] hover:text-white hover:border-[#43856F] cursor-pointer">
+                    <i class="ri-list-indefinite text-xl"></i>
+                    <h3 class="text-md mb-1">Categories</h3>
+                    <i class="ri-arrow-drop-down-fill text-3xl"></i>
                 </div>
             </div>
-            <div class="w-[20%] h-28 bg-slate-400 mt-20"></div>
+            <div class="w-[20%] h-28 mt-16 flex items-center justify-end  pr-20">
+                <div class="  h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#43856F] hover:text-white hover:border-[#43856F] cursor-pointer">
+                    <i class="ri-filter-off-fill text-xl"></i>
+                    <h5 class="text-md mb-1">Clear filters</h5>
+                </div>
+            </div>
         </div>
+        <!-- second page -->
         <div class="w-full h-screen">
         </div>
     </div>

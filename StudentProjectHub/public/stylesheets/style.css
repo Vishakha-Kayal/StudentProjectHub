@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 * {
   margin: 0;
   padding: 0;
@@ -143,4 +146,17 @@ background: linear-gradient(to bottom, #71B280, #134E5E); /* W3C, IE 10+/ Edge, 
   transform: translateY(-25%);
  box-shadow: rgba(226, 196, 63, 0.25) 0px 13px 47px -5px, rgba(180, 71, 71, 0.3) 0px 8px 16px -8px;
 } */
+
+.search:hover input{
+  background-color: #43856F;
+}
+.search:hover{
+  background-color: #43856F;
+  color: white;
+}
+.search:hover input::placeholder{
+  color: white;
+}
+
+
 
