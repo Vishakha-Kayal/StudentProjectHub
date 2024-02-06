@@ -9,6 +9,12 @@ router.get('/', function(req, res) {
 router.get('/home', function(req, res, next) {
   res.render('index2');
 });
+router.get('/projects', function(req, res, next) {
+  res.render('projects');
+});
+router.get('/aboutus', function(req, res, next) {
+  res.render('aboutus');
+});
 
 router.post("/register",function(req,res){
   var userdata = new userModel({

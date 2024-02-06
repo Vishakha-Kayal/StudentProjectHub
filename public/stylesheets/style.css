@@ -1,14 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Gellix Light";
+  font-family: 'Gellix';
+  scroll-behavior: smooth;
 }
-html,body{
-  cursor : url('/images/cursor.png'),auto;
-  width:100vw;
-  height:100vh;
-}
+
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -16,28 +18,14 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-.custom-color{
-  color:#43856F;
-}
-.anim{
-  /* -webkit-text-stroke-width: 0.1px;
-  -webkit-text-stroke-color: black;
-  white-space: nowrap;
-  letter-spacing: 1px; */
-  animation : infinity-marquee 11s linear infinite;
+body,html{
+  width: 100%;
+  height: 100%;
+  /* background-color: #EFEAE3; */
+ 
 }
 
-@keyframes infinity-marquee{
-  0%{
-    transform: translateX(0);
-  }
-  100%{
-    transform: translateX(-100%);
-  }
-} 
-.movingtext::-webkit-scrollbar{
-  display: none;
-}
+
 /* .con{
   background-image: url(https://images.unsplash.com/photo-1682687982167-d7fb3ed8541d?q=80&w=2671&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
   background-position: center;
@@ -91,12 +79,12 @@ input::-webkit-inner-spin-button {
   filter: drop-shadow(#949393 7px 2px 5px);
 }
 
-.btn {
+/* .btn {
   box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
     -6px -6px 10px -1px rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(0, 0, 0, 0);
   background: #e3edf7;  
-}
+} */
 
 .btn:hover {
   background: linear-gradient(145deg, #e6e6e6, #ffffff);
@@ -104,4 +92,41 @@ input::-webkit-inner-spin-button {
     -25px -25px 50px #ffffff;
   color: black;
   transition: all ease 0.3s;
+  
+}
+.hero{
+  height: calc(100% - 112px);
+}
+.search:hover input{
+  background-color: #43856F;
+}
+.search:hover{
+  background-color: #43856F;
+  color: white;
+}
+.search:hover input::placeholder{
+ color: white;
+}
+.paraadjust{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 4;
+}
+/* .anim{
+
+  animation : infinity-marquee 11s linear infinite;
+}
+
+@keyframes infinity-marquee{
+  0%{
+    transform: translateX(0);
+  }
+  100%{
+    transform: translateX(-100%);
+  }
+}  */
+
+.movingtext::-webkit-scrollbar{
+  display: none;
 }
