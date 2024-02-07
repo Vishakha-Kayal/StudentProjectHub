@@ -1648,6 +1648,10 @@ body,html{
   background-color: #43856F;
 }
 
+.imm{
+  display: none;
+}
+
 .hover\:border-\[\#43856F\]:hover {
   --tw-border-opacity: 1;
   border-color: rgb(67 133 111 / var(--tw-border-opacity));
