@@ -1,21 +1,26 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
-const projectSchema = mongoose.Schema({
-    projectTitle:String,
-    projectDesc:String,
-    technologyStack:String,
-    projectCategory:String,
-    universityName:String,
-    projectImages:[],
-    studentNames:[],
-    studentStream:[],
-    yearOfQualification : Number,
-    user:{
-        type : mongoose.Schema.Types.ObjectId ,
-        ref : "user"
+const studentSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    stream: { type: String, required: true },
+    yearOfQualification: { type: Number, required: true }
+});
+
+const projectSchema = new mongoose.Schema({
+    projectTitle: String,
+    projectDesc: String,
+    universityName: String,
+    technologyStack: String,
+    projectCategory: String,
+    projectImages: [
+        { type: String }
+    ],
+    student: [studentSchema],
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
     },
-    approvedProject : Boolean
-})
+    approvedProject: Boolean
+}, { timestamps: true })
 
-
-module.exports = mongoose.model("project",projectSchema)
+module.exports = mongoose.model("project", projectSchema)
