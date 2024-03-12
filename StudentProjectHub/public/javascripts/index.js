@@ -69,7 +69,7 @@ function marquee() {
             x: "-100%",
             duration: 11,
             ease: 'linear',
-            repeat: -1,
+            repeat: Infinity,
             scrollTrigger: {
                 trigger: e,
                 scroller: "body",

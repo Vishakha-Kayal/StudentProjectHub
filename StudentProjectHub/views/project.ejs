@@ -1,35 +1,296 @@
 <% include ./partials/header.ejs%>
     <div class="main z-[10] relative">
-        <div class="w-full h-screen  bg-[#e4ebe8] flex  ">
-            <div class="w-[80%] h-28 mt-16 flex items-center gap-8 border-b-2  pl-20">
-                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#43856F] hover:text-white hover:border-[#43856F] cursor-pointer">
-                    <i class="ri-upload-cloud-2-line text-xl"></i>
-                    <h5 class="text-md mb-1">Upload Project</h5>
+        <div class="w-full h-screen  bg-[#e4ebe8] flex flex-col">
+            <!-- upper div -->
+            <div class="w-full h-40 flex justify-between relative mt-16">
+                <div class="w-[80%] h-full flex items-center gap-4 border-b-2  pl-20">
+                    <div
+                        class="filters text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
+                        <i class="ri-upload-cloud-2-line text-xl"></i>
+                        <h5 class="text-md mb-1">Upload Project</h5>
+                    </div>
+                    <div
+                        class="filters text-white point-cursor h-10 border-[1px] relative  rounded-md flex gap-2 items-center  bg-[#43856F]  hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
+                        <i class="ri-school-fill text-xl pl-3"></i>
+                        <h3 class="text-md ">University</h3>
+                        <i class="ri-arrow-drop-down-fill text-3xl mt-1 pr-3"></i>
+                        <div class="w-full h-40 dropdown hidden bg-[#72af9b] absolute top-[101%]   rounded-b-xl overflow-auto">
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm ">Poddar International College</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm ">Science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm ">Science</p></div>
+                        </div>
+                    </div>
+                    <div
+                        class="filters text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-2 bg-[#43856F]  hover:bg-[#e4ebe8] hover:border-black hover:text-black search cursor-pointer">
+                        <i class="ri-search-eye-line text-xl"></i>
+                        <input
+                            class="w-28 bg-[#43856F] text-md outline-none cursor-pointer hover:bg-[#e4ebe8] filters point-cursor"
+                            type="text" name="search" placeholder="Search">
+                    </div>
+                    <div
+                        class="filters relative text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center  bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
+                        <i class="ri-list-indefinite text-xl pl-2"></i>
+                        <h3 class="text-md mb-1">Category</h3>
+                        <i class="ri-arrow-drop-down-fill text-3xl pr-2"></i>
+                        <div class="w-full dropdown-scnd hidden bg-[#72af9b] absolute top-[101%] rounded-b-xl  overflow-hidden">
+                            <div class="w-full py-2 border-b-2 text-white"><h5 class="text-sm text-center">Technical</h5></div>
+                            <div class="w-full py-2 border-b-2 text-white"><h5 class="text-sm text-center">Management</h5></div>
+                            <div class="w-full py-2 border-b-2 text-white"><h5 class="text-sm text-center">Science</h5></div>
+                        </div>
+                    </div>
                 </div>
-                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center px-3 hover:bg-[#43856F] hover:text-white hover:border-[#43856F] cursor-pointer">
-                    <i class="ri-school-fill text-xl "></i>
-                    <h3 class="text-md ">University</h3>
-                    <i class="ri-arrow-drop-down-fill text-3xl mt-1"></i>
+                <div class="w-[20%] h-full flex items-center justify-end  pr-20">
+                    <div
+                        class="text-white h-10 border-[1px] rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#e4ebe8] bg-[#43856F] hover:text-black hover:border-black cursor-pointer">
+                        <i class="ri-filter-off-fill text-xl"></i>
+                        <h5 class="text-md mb-1">Clear filters</h5>
+                    </div>
                 </div>
-                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 search cursor-pointer">
-                    <i class="ri-search-eye-line text-xl"></i>
-                   <input class="w-32 bg-[#e4ebe8] text-md outline-none cursor-pointer hover:bg-[#43856F]" type="text" name="search" placeholder="Search">
-                </div>
-                <div class=" h-10 border-[1px] border-black rounded-md flex gap-2 items-center px-3 hover:bg-[#43856F] hover:text-white hover:border-[#43856F] cursor-pointer">
-                    <i class="ri-list-indefinite text-xl"></i>
-                    <h3 class="text-md mb-1">Categories</h3>
-                    <i class="ri-arrow-drop-down-fill text-3xl"></i>
-                </div>
+                
             </div>
-            <div class="w-[20%] h-28 mt-16 flex items-center justify-end  pr-20">
-                <div class="  h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#43856F] hover:text-white hover:border-[#43856F] cursor-pointer">
-                    <i class="ri-filter-off-fill text-xl"></i>
-                    <h5 class="text-md mb-1">Clear filters</h5>
+            <!-- bottom div -->
+            <div class="hero w-full border-gray-400 border-t-2 flex justify-center">
+                <div class="left w-[30%] py-8 overflow-auto">
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem] ">Poddar Technical Campus</h1>
+                                <h3 class="text-xl text-zinc-500">Smart Dustbin</h3>
+                                <h3 class="text-md text-zinc-500 ">Technical</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem] ">Poddar International College</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem]">Poddar International College and
+                                    technical</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right w-[60%] border-r-2 border-black overflow-auto">
+                    <div class="w-full h-full  m-auto px-7 py-7">
+                        <div class="flex justify-between items-center text-2xl gap-3 ">
+                            <div>
+                                <h1 class="text-4xl text-zinc-700 underline underline-offset-4 mb-3">SMART DUSTBIN</h1>
+                            </div>
+                            <div class="flex gap-3 items-center">
+                                <img src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="" class="h-10">
+                                <h2 class="text-base uppercase">Poddar International College</h2>
+                            </div>
+                        </div>
+                        <div>
+                            <h1 class="text-xl text-zinc-700 mt-2 mb-2 capitalize">Technical project</h1>
+                            <button class="bg-[#43856F] px-2 py-2 rounded-md text-white point-cursor">
+                                <i class="ri-shake-hands-line"></i>
+                                Collaborate
+                            </button>
+                        </div>
+                        <div class="w-full h-[70%] flex items-center px-20">
+                            <i class="left-icon ri-arrow-left-s-line text-6xl point-cursor"></i>
+                            <div class="w-[60%] h-[80%] m-auto overflow-hidden ">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D"
+                                    alt="" class="actual m-auto h-full  rounded-md">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D"
+                                    alt="" class="imm image">
+                                <img src="https://images.unsplash.com/photo-1706708316348-942c80a29576?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8"
+                                    alt="" class="image imm">
+                                <img src="/images/smart.jpg" alt="" class="image imm">
+                                <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D"
+                                    alt="" class="imm image">
+                            </div>
+                            <i class="right-icon ri-arrow-right-s-line text-6xl point-cursor"></i>
+                        </div>
+
+
+                        <h1 class="text-3xl mb-4">Project Description :</h1>
+                        <div class="projdesc w-full overflow-auto h-[40%] text-justify">
+                            <p>Arduino Uno is an open-source microcontroller board based on the processor ATmega328P. It
+                                has 14 digital input/output pins (of which 6 can be used as PWM outputs), 6 analog
+                                inputs, a USB connection, a power jack, an ICSP header and a reset button. It contains
+                                everything needed to support the microcontroller. Just plug it into a computer with a
+                                USB cable or power it with an adapter to get started. You can experiment with your
+                                Arduino without worrying too much about it. In the event of a worst case scenario, you
+                                could buy a new one as the Uno is very economical.HC-SR04 is an ultrasonic distance
+                                sensor used for measuring the distance at which an object is located. The principle used
+                                by this sensor is called SONAR. It is perfect for small robotics projects such as
+                                obstacle avoiding robot, distance measuring device etc. It has two parts, one emits the
+                                ultrasound sonar to measure the distance to an object. The other part is the receiver
+                                which listens for the echo. As soon as the ultrasound hits the object it bounces back
+                                and is detected by the receiver. The time taken for the wave to come back decides the
+                                distance of the object being measured.The micro servo 9G is a light, good quality and
+                                very fast servo motor. This servo is designed to work with most radio control systems.
+                                It is perfect for small robotics projects. The SG90 mini servo with accessories is
+                                perfect for remote-controlled helicopters, planes, cars, boat,s and trucks.</p>
+                        </div>
+                        <div class="mt-4 w-full h-96">
+                            <H1 class="text-3xl mb-2">Student Details:</H1>
+
+                            <div class="w-full h-60 px-2 py-3 flex flex-col gap-1 ">
+                                <div class="flex justify-between items-center w-full h-[25%]">
+                                    <div
+                                        class="w-[33.3%] h-full  text-center text-2xl font-semibold border-2  border-black flex justify-center items-center">
+                                        <h1>Names</h1>
+                                    </div>
+                                    <div
+                                        class="w-[33.3%] h-full  text-center text-2xl font-semibold border-2  border-black flex justify-center items-center">
+                                        <h1>Stream</h1>
+                                    </div>
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-2xl font-semibold border-2  border-black flex justify-center items-center">
+                                        <h1>Year Of Qualification</h1>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-between items-center w-full h-[25%]">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                        <h1>abc</h1>
+                                    </div>
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                        <h1>bca</h1>
+                                    </div>
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                        <h1>2024</h1>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-between items-center w-full h-[25%]">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                        <h1>lisa</h1>
+                                    </div>
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                        <h1>bca</h1>
+                                    </div>
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                        <h1>2024</h1>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-between items-center w-full h-[25%]">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                        <h1>anjali</h1>
+                                    </div>
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                        <h1>bca</h1>
+                                    </div>
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                        <h1>2024</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-        <!-- second page -->
-        <div class="w-full h-screen">
-        </div>
+
     </div>
-<% include ./partials/footer.ejs%>
+    <script src="/javascripts/project.js"></script>
+    <% include ./partials/footer.ejs%>
