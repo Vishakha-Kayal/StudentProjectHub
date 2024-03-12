@@ -1,124 +1,135 @@
 <% include ./partials/header.ejs%>
     <div class="main z-[10] relative">
         <div class="w-full h-screen  bg-[#e4ebe8] flex flex-col">
+            <!-- upper div -->
             <div class="w-full h-40 flex justify-between  mt-16">
                 <div class="w-[80%] h-full flex items-center gap-8 border-b-2  pl-20">
                     <div
-                        class="filters text-white point-cursor h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-[#43856F] cursor-pointer">
+                        class="filters text-white point-cursor h-10 border-[1px] rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
                         <i class="ri-upload-cloud-2-line text-xl"></i>
-                        <h5 class="text-xl mb-1">Upload Project</h5>
+                        <h5 class="text-md mb-1">Upload Project</h5>
                     </div>
                     <div
-                        class="filters text-white point-cursor h-10 border-[1px] border-black rounded-md flex gap-2 items-center px-3 bg-[#43856F]  hover:bg-[#e4ebe8] hover:text-black hover:border-[#43856F] cursor-pointer">
+                        class="filters text-white point-cursor h-10 border-[1px] rounded-md flex gap-2 items-center px-3 bg-[#43856F]  hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
                         <i class="ri-school-fill text-xl "></i>
-                        <h3 class="text-xl ">University</h3>
+                        <h3 class="text-md ">University</h3>
                         <i class="ri-arrow-drop-down-fill text-3xl mt-1"></i>
                     </div>
                     <div
-                        class="filters text-white point-cursor h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F]  hover:bg-[#e4ebe8] hover:text-black search cursor-pointer">
+                        class="filters text-white point-cursor h-10 border-[1px] rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F]  hover:bg-[#e4ebe8] hover:text-black hover:border-black search cursor-pointer">
                         <i class="ri-search-eye-line text-xl"></i>
-                        <input class="w-32 bg-[#43856F] text-xl outline-none point-cursor hover:bg-[#e4ebe8] filters"
+                        <input class="w-32 bg-[#43856F] text-md outline-none cursor-pointer hover:bg-[#e4ebe8] filters point-cursor"
                             type="text" name="search" placeholder="Search">
                     </div>
                     <div
-                        class="filters text-white point-cursor h-10 border-[1px] border-black rounded-md flex gap-2 items-center px-3 bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-[#43856F] cursor-pointer">
+                        class="filters text-white point-cursor h-10 border-[1px] rounded-md flex gap-2 items-center px-3 bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
                         <i class="ri-list-indefinite text-xl"></i>
-                        <h3 class="text-xl mb-1">Categories</h3>
+                        <h3 class="text-md mb-1">Categories</h3>
                         <i class="ri-arrow-drop-down-fill text-3xl"></i>
                     </div>
                 </div>
                 <div class="w-[20%] h-full flex items-center justify-end  pr-20">
                     <div
-                        class="text-white h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#e4ebe8] bg-[#43856F] hover:text-black hover:border-[#43856F] cursor-pointer">
+                        class="text-white h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#e4ebe8] bg-[#43856F] hover:text-black hover:border-black cursor-pointer">
                         <i class="ri-filter-off-fill text-xl"></i>
-                        <h5 class="text-xl mb-1">Clear filters</h5>
+                        <h5 class="text-md mb-1">Clear filters</h5>
                     </div>
                 </div>
 
             </div>
-
-            <div class="hero w-full border-gray-400 border-t-2 flex justify-center">
+             <!-- bottom div -->
+             <div class="hero w-full border-gray-400 border-t-2 flex justify-center"> 
                 <div class="left w-[30%] py-8 overflow-auto">
-                    <div class="w-full px-9 h-24 rounded-lg">
-
-                        <div class="fir flex gap-7 mb-7 cursor-pointer point-cursor">
-                            <div class="lef">
-                                <i class="ri-school-fill text-4xl "></i>
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                              <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
                             </div>
-                            <div class="rig">
-                                <h1 class="text-2xl font-medium ">University Name</h1>
-                                <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                <h3 class="text-xl text-zinc-500">Category</h3>
-                            </div>
-                        </div>
-
-                        <div class="fir flex gap-7 mb-7 cursor-pointer point-cursor">
-                            <div class="lef">
-                                <i class="ri-school-fill text-4xl "></i>
-                            </div>
-                            <div class="rig">
-                                <h1 class="text-2xl font-medium ">University Name</h1>
-                                <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                <h3 class="text-xl text-zinc-500">Category</h3>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem] ">Poddar Technical Campus</h1>
+                                <h3 class="text-xl text-zinc-500">Smart Dustbin</h3>
+                                <h3 class="text-md text-zinc-500 " >Technical</h3>
                             </div>
                         </div>
-
-                        <div class="fir flex gap-7 mb-7 cursor-pointer point-cursor">
-                            <div class="lef">
-                                <i class="ri-school-fill text-4xl "></i>
-                            </div>
-                            <div class="rig">
-                                <h1 class="text-2xl font-medium ">University Name</h1>
-                                <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                <h3 class="text-xl text-zinc-500">Category</h3>
-                            </div>
                         </div>
 
-                        <div class="fir flex gap-7 mb-7 cursor-pointer point-cursor">
-                            <div class="lef">
-                                <i class="ri-school-fill text-4xl "></i>
+                        <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                            <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                                <div class="lef w-[10%] h-full mt-2">
+                                    <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
+                                </div>
+                                <div class="rig w-[90%] h-full ">
+                                    <h1 class="text-2xl font-medium max-h-[4.5rem] ">Poddar International College</h1>
+                                    <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                    <h3 class="text-md text-zinc-500 " >Category</h3>
+                                </div>
                             </div>
-                            <div class="rig">
-                                <h1 class="text-2xl font-medium ">University Name</h1>
+                            </div>
+
+                            <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                                <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                                    <div class="lef w-[10%] h-full mt-2">
+                                        <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
+                                    </div>
+                                    <div class="rig w-[90%] h-full ">
+                                        <h1 class="text-2xl font-medium max-h-[4.5rem]">Poddar International College and technical</h1>
+                                        <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                        <h3 class="text-md text-zinc-500 " >Category</h3>
+                                    </div>
+                                </div>
+                                </div>
+
+                        <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
                                 <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                <h3 class="text-xl text-zinc-500">Category</h3>
+                                <h3 class="text-md text-zinc-500 " >Category</h3>
                             </div>
                         </div>
-
-                        <div class="fir flex gap-7 mb-7 cursor-pointer point-cursor">
-                            <div class="lef">
-                                <i class="ri-school-fill text-4xl "></i>
-                            </div>
-                            <div class="rig">
-                                <h1 class="text-2xl font-medium ">University Name</h1>
-                                <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                <h3 class="text-xl text-zinc-500">Category</h3>
-                            </div>
                         </div>
 
-                        <div class="fir flex gap-7 mb-7 cursor-pointer point-cursor">
-                            <div class="lef">
-                                <i class="ri-school-fill text-4xl "></i>
+                        <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                            <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                                <div class="lef w-[10%] h-full mt-2">
+                                    <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
+                                </div>
+                                <div class="rig w-[90%] h-full ">
+                                    <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
+                                    <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                    <h3 class="text-md text-zinc-500 " >Category</h3>
+                                </div>
                             </div>
-                            <div class="rig">
-                                <h1 class="text-2xl font-medium ">University Name</h1>
-                                <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                <h3 class="text-xl text-zinc-500">Category</h3>
                             </div>
-                        </div>
 
-                        <div class="fir flex gap-7 mb-7 cursor-pointer point-cursor">
-                            <div class="lef">
-                                <i class="ri-school-fill text-4xl "></i>
-                            </div>
-                            <div class="rig">
-                                <h1 class="text-2xl font-medium ">University Name</h1>
-                                <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                <h3 class="text-xl text-zinc-500">Category</h3>
-                            </div>
-                        </div>
+                            <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                                <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                                    <div class="lef w-[10%] h-full mt-2">
+                                        <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
+                                    </div>
+                                    <div class="rig w-[90%] h-full ">
+                                        <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
+                                        <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                        <h3 class="text-md text-zinc-500 " >Category</h3>
+                                    </div>
+                                </div>
+                                </div>
 
-                    </div>
+                                <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                                    <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                                        <div class="lef w-[10%] h-full mt-2">
+                                            <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
+                                        </div>
+                                        <div class="rig w-[90%] h-full ">
+                                            <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
+                                            <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                            <h3 class="text-md text-zinc-500 " >Category</h3>
+                                        </div>
+                                    </div>
+                                    </div>
                 </div>
                 <div class="right w-[60%] border-r-2 border-black overflow-auto">
                     <div class="w-full h-full  m-auto px-7 py-7">
@@ -134,7 +145,7 @@
                         </div>
                         <div>
                             <h1 class="text-xl text-zinc-700 mt-2 mb-2 capitalize">Technical project</h1>
-                            <button class="bg-[#43856F] px-2 py-2 rounded-md text-white">
+                            <button class="bg-[#43856F] px-2 py-2 rounded-md text-white point-cursor">
                                 <i class="ri-shake-hands-line"></i>
                                 Collaborate
                             </button>
@@ -233,13 +244,9 @@
 
                 </div>
             </div>
-            <!-- <div class="w-[20%] h-28 bg-slate-400 mt-20"></div> -->
         </div>
 
-        <!-- 
-        <div class="w-full h-screen">
-        </div> -->
+
     </div>
     <script src="/javascripts/projects.js"></script>
-
     <% include ./partials/footer.ejs%>

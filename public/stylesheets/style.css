@@ -178,7 +178,7 @@ background: linear-gradient(to bottom, #71B280, #134E5E); /* W3C, IE 10+/ Edge, 
 
 
 .fir:hover{
-  background-color: #43856F;
+  /* background-color: #43856F; */
 }
 .imm{
   display: none;
