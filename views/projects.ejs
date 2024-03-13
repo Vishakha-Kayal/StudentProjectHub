@@ -2,139 +2,168 @@
     <div class="main z-[10] relative">
         <div class="w-full h-screen  bg-[#e4ebe8] flex flex-col">
             <!-- upper div -->
-            <div class="w-full h-40 flex justify-between  mt-16">
-                <div class="w-[80%] h-full flex items-center gap-8 border-b-2  pl-20">
+            <div class="w-full h-40 flex justify-between relative mt-16">
+                <div class="w-[80%] h-full flex items-center gap-4 border-b-2  pl-20">
                     <div
-                        class="filters text-white point-cursor h-10 border-[1px] rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
+                        class="filters text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
                         <i class="ri-upload-cloud-2-line text-xl"></i>
                         <h5 class="text-md mb-1">Upload Project</h5>
                     </div>
                     <div
-                        class="filters text-white point-cursor h-10 border-[1px] rounded-md flex gap-2 items-center px-3 bg-[#43856F]  hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
-                        <i class="ri-school-fill text-xl "></i>
-                        <h3 class="text-md ">University</h3>
-                        <i class="ri-arrow-drop-down-fill text-3xl mt-1"></i>
+                        class="filters text-white point-cursor h-10  border-[1px] relative  rounded-md flex gap-2 items-center  bg-[#43856F]  hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
+                        <i class="ri-school-fill text-xl pl-3 ic"></i>
+                        <h3 class="text-md uname">University</h3>
+                        <i class="ri-arrow-drop-down-fill text-3xl mt-1 pr-3 ic"></i>
+                        <p class="updated-uni-name"></p>
+                        <div class="w-full h-40 dropdown hidden bg-[#72af9b] absolute top-[101%] rounded-b-xl overflow-auto checkbox">
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm ">Poddar International College</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm  ">Subodh College of law and science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm ">Science</p></div>
+                            <div class="w-full  py-2 border-b-2  text-white px-2"><p class="text-sm ">Science</p></div>
+                        </div>
                     </div>
                     <div
-                        class="filters text-white point-cursor h-10 border-[1px] rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F]  hover:bg-[#e4ebe8] hover:text-black hover:border-black search cursor-pointer">
+                        class="filters text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-2 bg-[#43856F]  hover:bg-[#e4ebe8] hover:border-black hover:text-black search cursor-pointer">
                         <i class="ri-search-eye-line text-xl"></i>
-                        <input class="w-32 bg-[#43856F] text-md outline-none cursor-pointer hover:bg-[#e4ebe8] filters point-cursor"
+                        <input
+                            class="w-28 bg-[#43856F] text-md outline-none cursor-pointer hover:bg-[#e4ebe8] filters point-cursor"
                             type="text" name="search" placeholder="Search">
                     </div>
                     <div
-                        class="filters relative text-white point-cursor h-10 border-[1px] rounded-md flex gap-2 items-center  bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
-                        <i class="ri-list-indefinite text-xl px-3"></i>
-                        <h3 class="text-md mb-1">Categories</h3>
-                        <i class="ri-arrow-drop-down-fill text-3xl"></i>
-                        <div class="w-full h-36 bg-slate-400 absolute top-11 flex flex-col justify-between">
-                            <div class="w-full py-2 bg-black">Technical</div>
-                            <div class="w-full py-2 bg-black">MANAGEMENT</div>
-                            <div class="w-full py-2 bg-black">SCIENCE</div>
+                        class="filters relative text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center  bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
+                        <i class="ri-list-indefinite text-xl pl-2"></i>
+                        <h3 class="text-md mb-1">Category</h3>
+                        <i class="ri-arrow-drop-down-fill text-3xl pr-2"></i>
+                        <div class="w-full dropdown-scnd hidden bg-[#72af9b] absolute top-[101%] rounded-b-xl  overflow-hidden">
+                            <div class="w-full py-2 border-b-2 text-white"><h5 class="text-sm text-center">Technical</h5></div>
+                            <div class="w-full py-2 border-b-2 text-white"><h5 class="text-sm text-center">Management</h5></div>
+                            <div class="w-full py-2 border-b-2 text-white"><h5 class="text-sm text-center">Science</h5></div>
                         </div>
                     </div>
                 </div>
                 <div class="w-[20%] h-full flex items-center justify-end  pr-20">
                     <div
-                        class="text-white h-10 border-[1px] border-black rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#e4ebe8] bg-[#43856F] hover:text-black hover:border-black cursor-pointer">
+                        class="text-white h-10 border-[1px] rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#e4ebe8] bg-[#43856F] hover:text-black hover:border-black cursor-pointer">
                         <i class="ri-filter-off-fill text-xl"></i>
                         <h5 class="text-md mb-1">Clear filters</h5>
                     </div>
                 </div>
-
+                
             </div>
-             <!-- bottom div -->
-             <div class="hero w-full border-gray-400 border-t-2 flex justify-center"> 
+            <!-- bottom div -->
+            <div class="hero w-full border-gray-400 border-t-2 flex justify-center">
                 <div class="left w-[30%] py-8 overflow-auto">
                     <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
                         <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
                             <div class="lef w-[10%] h-full mt-2">
-                              <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
                             </div>
                             <div class="rig w-[90%] h-full ">
                                 <h1 class="text-2xl font-medium max-h-[4.5rem] ">Poddar Technical Campus</h1>
                                 <h3 class="text-xl text-zinc-500">Smart Dustbin</h3>
-                                <h3 class="text-md text-zinc-500 " >Technical</h3>
+                                <h3 class="text-md text-zinc-500 ">Technical</h3>
                             </div>
                         </div>
-                        </div>
+                    </div>
 
-                        <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
-                            <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
-                                <div class="lef w-[10%] h-full mt-2">
-                                    <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
-                                </div>
-                                <div class="rig w-[90%] h-full ">
-                                    <h1 class="text-2xl font-medium max-h-[4.5rem] ">Poddar International College</h1>
-                                    <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                    <h3 class="text-md text-zinc-500 " >Category</h3>
-                                </div>
-                            </div>
-                            </div>
-
-                            <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
-                                <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
-                                    <div class="lef w-[10%] h-full mt-2">
-                                        <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
-                                    </div>
-                                    <div class="rig w-[90%] h-full ">
-                                        <h1 class="text-2xl font-medium max-h-[4.5rem]">Poddar International College and technical</h1>
-                                        <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                        <h3 class="text-md text-zinc-500 " >Category</h3>
-                                    </div>
-                                </div>
-                                </div>
-
-                        <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
                         <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
                             <div class="lef w-[10%] h-full mt-2">
-                                <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem] ">Poddar International College</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem]">Poddar International College and
+                                    technical</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
                             </div>
                             <div class="rig w-[90%] h-full ">
                                 <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
                                 <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                <h3 class="text-md text-zinc-500 " >Category</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
-                            <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
-                                <div class="lef w-[10%] h-full mt-2">
-                                    <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
-                                </div>
-                                <div class="rig w-[90%] h-full ">
-                                    <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
-                                    <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                    <h3 class="text-md text-zinc-500 " >Category</h3>
-                                </div>
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
                             </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
-                                <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
-                                    <div class="lef w-[10%] h-full mt-2">
-                                        <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
-                                    </div>
-                                    <div class="rig w-[90%] h-full ">
-                                        <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
-                                        <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                        <h3 class="text-md text-zinc-500 " >Category</h3>
-                                    </div>
-                                </div>
-                                </div>
-
-                                <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
-                                    <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
-                                        <div class="lef w-[10%] h-full mt-2">
-                                            <img  class="w-32 h-10 object-contain " src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt="">
-                                        </div>
-                                        <div class="rig w-[90%] h-full ">
-                                            <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
-                                            <h3 class="text-xl text-zinc-500">Project Title</h3>
-                                            <h3 class="text-md text-zinc-500 " >Category</h3>
-                                        </div>
-                                    </div>
-                                    </div>
+                    <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
+                        <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[10%] h-full mt-2">
+                                <img class="w-32 h-10 object-contain "
+                                    src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-2xl font-medium max-h-[4.5rem]">PIC</h1>
+                                <h3 class="text-xl text-zinc-500">Project Title</h3>
+                                <h3 class="text-md text-zinc-500 ">Category</h3>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="right w-[60%] border-r-2 border-black overflow-auto">
                     <div class="w-full h-full  m-auto px-7 py-7">
@@ -193,53 +222,65 @@
                                 perfect for remote-controlled helicopters, planes, cars, boat,s and trucks.</p>
                         </div>
                         <div class="mt-4 w-full h-96">
-                            <H1 class="text-3xl mb-2">Student Details:</H1> 
+                            <H1 class="text-3xl mb-2">Student Details:</H1>
 
                             <div class="w-full h-60 px-2 py-3 flex flex-col gap-1 ">
                                 <div class="flex justify-between items-center w-full h-[25%]">
-                                    <div class="w-[33.3%] h-full  text-center text-2xl font-semibold border-2  border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full  text-center text-2xl font-semibold border-2  border-black flex justify-center items-center">
                                         <h1>Names</h1>
                                     </div>
-                                    <div class="w-[33.3%] h-full  text-center text-2xl font-semibold border-2  border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full  text-center text-2xl font-semibold border-2  border-black flex justify-center items-center">
                                         <h1>Stream</h1>
                                     </div>
-                                    <div class="w-[33.3%] h-full text-center text-2xl font-semibold border-2  border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-2xl font-semibold border-2  border-black flex justify-center items-center">
                                         <h1>Year Of Qualification</h1>
                                     </div>
                                 </div>
 
                                 <div class="flex justify-between items-center w-full h-[25%]">
-                                    <div class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
                                         <h1>abc</h1>
                                     </div>
-                                    <div class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
                                         <h1>bca</h1>
                                     </div>
-                                    <div class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
                                         <h1>2024</h1>
                                     </div>
                                 </div>
 
                                 <div class="flex justify-between items-center w-full h-[25%]">
-                                    <div class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
                                         <h1>lisa</h1>
                                     </div>
-                                    <div class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
                                         <h1>bca</h1>
                                     </div>
-                                    <div class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
                                         <h1>2024</h1>
                                     </div>
                                 </div>
 
                                 <div class="flex justify-between items-center w-full h-[25%]">
-                                    <div class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
                                         <h1>anjali</h1>
                                     </div>
-                                    <div class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
                                         <h1>bca</h1>
                                     </div>
-                                    <div class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <div
+                                        class="w-[33.3%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
                                         <h1>2024</h1>
                                     </div>
                                 </div>
@@ -250,7 +291,6 @@
                 </div>
             </div>
         </div>
-
 
     </div>
     <script src="/javascripts/projects.js"></script>
