@@ -79,7 +79,7 @@ html {
   color: white;
 }
 
-.image {
+.hero-image {
   filter: drop-shadow(#949393 7px 2px 5px);
 }
 
@@ -199,7 +199,42 @@ html {
 .dropdown::-webkit-scrollbar-thumb {
   background-color: #dadada;
   border-radius: 20px;
- 
+}
+
+.left::-webkit-scrollbar-track {
+  background: white;
+}
+.left::-webkit-scrollbar-thumb {
+  background-color: #dadada;
+  border-radius: 20px;
+}
+
+.left::-webkit-scrollbar {
+  width: 10px;
+}
+
+.right::-webkit-scrollbar-track {
+  background: white;
+}
+.right::-webkit-scrollbar-thumb {
+  background-color: #dadada;
+  border-radius: 20px;
+}
+
+.right::-webkit-scrollbar {
+  width: 10px;
+}
+
+.dropdown>div:hover{
+  background-color: #43856F;
+}
+
+.dropdown-scnd>div:hover{
+  background-color: #43856F;
+}
+
+.prevent-select {
+  user-select: none; 
 }
 
 

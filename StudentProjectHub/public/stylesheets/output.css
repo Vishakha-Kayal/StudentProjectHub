@@ -742,6 +742,10 @@ video {
   height: 1.5vh;
 }
 
+.h-\[10\.5rem\] {
+  height: 10.5rem;
+}
+
 .h-\[100\%\] {
   height: 100%;
 }
@@ -983,11 +987,6 @@ video {
   border-bottom-left-radius: 1rem;
 }
 
-.rounded-b-xl {
-  border-bottom-right-radius: 0.75rem;
-  border-bottom-left-radius: 0.75rem;
-}
-
 .rounded-l-lg {
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
@@ -1134,6 +1133,10 @@ video {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem;
 }
 
 .pl-16 {
@@ -1441,7 +1444,7 @@ html {
   color: white;
 }
 
-.image {
+.hero-image {
   filter: drop-shadow(#949393 7px 2px 5px);
 }
 
@@ -1569,6 +1572,46 @@ html {
 .dropdown::-webkit-scrollbar-thumb {
   background-color: #dadada;
   border-radius: 20px;
+}
+
+.left::-webkit-scrollbar-track {
+  background: white;
+}
+
+.left::-webkit-scrollbar-thumb {
+  background-color: #dadada;
+  border-radius: 20px;
+}
+
+.left::-webkit-scrollbar {
+  width: 10px;
+}
+
+.right::-webkit-scrollbar-track {
+  background: white;
+}
+
+.right::-webkit-scrollbar-thumb {
+  background-color: #dadada;
+  border-radius: 20px;
+}
+
+.right::-webkit-scrollbar {
+  width: 10px;
+}
+
+.dropdown>div:hover{
+  background-color: #43856F;
+}
+
+.dropdown-scnd>div:hover{
+  background-color: #43856F;
+}
+
+.prevent-select {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 .hover\:border-black:hover {
