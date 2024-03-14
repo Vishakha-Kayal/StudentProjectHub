@@ -6,15 +6,15 @@ const leftBtn = document.querySelector(".left-icon");
 const rightBtn = document.querySelector(".right-icon");
 
 let i = 0;
-const totalImages = arr.length; 
+const totalImages = arr.length;
 
 rightBtn.addEventListener("click", () => {
-    i = (i + 1) % totalImages; 
+    i = (i + 1) % totalImages;
     imgdiv.src = arr[i].getAttribute('src');
 });
 
 leftBtn.addEventListener("click", () => {
-    i = (i - 1 + totalImages) % totalImages; 
+    i = (i - 1 + totalImages) % totalImages;
     imgdiv.src = arr[i].getAttribute('src');
 });
 
@@ -53,27 +53,54 @@ filters[4].addEventListener("click", () => {
 
 
 const icon = document.querySelectorAll('.ic')
-const universityname = document.querySelector('.uname')
 const selectedCollege = document.querySelectorAll('.checkbox div')
 const updatedUniversityNmae = document.querySelector('.updated-uni-name')
 const closeicon = document.createElement('i')
 
 selectedCollege.forEach((collegeElement) => {
     collegeElement.addEventListener('click', (event) => {
-        universityname.remove();
         icon[0].remove();
         icon[1].remove();
+        icon[2].remove();
         updatedUniversityNmae.textContent = event.currentTarget.textContent;
         updatedUniversityNmae.classList.add('uni-style')
-        closeicon.innerHTML = `<i class="ri-close-circle-line"></i>`
+        closeicon.innerHTML = `<i class="ri-close-circle-line text-xl px-2"></i>`
         filters[1].append(closeicon)
         filters[1].style.backgroundColor = "#e4ebe8";
         filters[1].style.color = 'black';
         filters[1].style.border = '1px solid black';
-
+        dropdown.addEventListener("click", () => {
+            dropdown.style.visibility = 'hidden';
+        })
     });
 });
+const closeIcon = document.createElement('i')
+const iconCategory = document.querySelectorAll('.icc')
+const contentUpdated = document.querySelector('.updated-category')
+const dropdownListsCheckboxes = document.querySelectorAll('.checkbox-category div')
 
+dropdownListsCheckboxes.forEach((elem) => {
+    elem.addEventListener("click", function (event) {
+        iconCategory[0].remove();
+        iconCategory[1].remove();
+        iconCategory[2].remove();
+        contentUpdated.textContent = event.currentTarget.textContent;
+        console.log(event.currentTarget.textContent);
+        contentUpdated.classList.add('uni-style')
+        closeIcon.innerHTML = `<i class="ri-close-circle-line text-xl px-2"></i>`
+        filters[4].append(closeIcon)
+        filters[4].style.backgroundColor = "#e4ebe8";
+        filters[4].style.color = 'black';
+        filters[4].style.border = '1px solid black';
+        dropdownScnd.addEventListener("click", () => {
+            dropdownScnd.style.visibility = 'hidden';
+        })
+    })
+})
+
+closeicon.addEventListener("click", () => {
+    window.location.reload();
+})
 
 
 
