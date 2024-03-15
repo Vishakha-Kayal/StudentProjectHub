@@ -6,8 +6,13 @@ var userModel = require("./users")
 router.get('/', function(req, res) {
   res.render('index');
 });
+
 router.get('/project', function(req, res) {
   res.render('project');
+});
+
+router.get('/uploadProject', function(req, res) {
+  res.render('uploadProject');
 });
 
 router.post("/register" , async function(req,res){

@@ -83,21 +83,18 @@ html {
   filter: drop-shadow(#949393 7px 2px 5px);
 }
 
-/* .btn {
-  box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
-    -6px -6px 10px -1px rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(0, 0, 0, 0);
-  background: #e3edf7;  
-} */
+.btn {
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
 
-.btn:hover {
+/* .btn:hover {
   background: linear-gradient(145deg, #e6e6e6, #ffffff);
   box-shadow: 25px 25px 50px #d6d6d6,
     -25px -25px 50px #ffffff;
   color: black;
   transition: all ease 0.3s;
 
-}
+} */
 
 /* .anim{
 
@@ -237,4 +234,14 @@ html {
   user-select: none; 
 }
 
+.uni-style{
+  padding: 0 10px;
+  /* font-size: 0.9em; */
+  white-space: nowrap;
+  overflow: hidden;
+}
 
+
+.closeIc:hover{
+color: grey;
+}
