@@ -2,20 +2,21 @@
     <div class="main z-[10] relative">
         <div class="w-full h-screen  bg-[#e4ebe8] flex flex-col">
             <!-- upper div -->
-            <div class="w-full h-40 flex justify-between relative mt-16 prevent-select ">
+            <div class="w-full h-40 flex justify-between relative mt-16 prevent-select">
                 <div class="w-[80%] h-full flex items-center gap-4 border-b-2  pl-20">
                     <div
-                        class="filters text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
-                        <i class="ri-upload-cloud-2-line text-xl"></i>
-                        <h5 class="text-md mb-1">Upload Project</h5>
+                        class="filters  text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
+                        <a href="/upload">
+                            <i class="ri-upload-cloud-2-line text-xl"></i>
+                            <h5 class="text-md mb-1">Upload Project
+                        </a></h5>
                     </div>
                     <div
                         class="filters  text-white point-cursor h-10 border-[1px] relative  rounded-md flex gap-2 items-center  bg-[#43856F]  hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
-                        <div class="w-full h-full flex items-center gap-2 original bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
-                        <i class="ri-school-fill text-xl pl-3 ic"></i>
-                        <h3 class="text-md uname">University</h3>
+                        <i class="ri-school-fill text-xl pl-3 ic hover:text-black"></i>
+                        <h3 class="text-md uname ">University</h3>
                         <i class="ri-arrow-drop-down-fill text-3xl mt-1 pr-3 ic"></i>
-                        <p class="updated-uni-name"></p>
+                        <!-- <p class="updated-uni-name"></p> -->
                         <div
                             class="w-full h-[10.5rem] dropdown hidden bg-[#72af9b] absolute top-[101%]  overflow-auto pb-2">
                             <div class="w-full  py-2 border-b-2  text-white px-2">
@@ -50,9 +51,8 @@
                             </div>
 
                         </div>
-                        </div>
                     </div>
-                  
+
                     <div
                         class="filters text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-2 bg-[#43856F]  hover:bg-[#e4ebe8] hover:border-black hover:text-black search cursor-pointer">
                         <i class="ri-search-eye-line text-xl"></i>
@@ -62,12 +62,10 @@
                     </div>
                     <div
                         class="filters relative text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center  bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
-                        <i class="ri-list-indefinite text-xl pl-2 icc"></i>
-                        <h3 class="text-md mb-1 icc">Category</h3>
-                        <h3 class="updated-category"></h3>
-                        <i class="ri-arrow-drop-down-fill text-3xl pr-2 icc"></i>
-                        <div
-                            class="w-full dropdown-scnd hidden bg-[#72af9b] absolute top-[101%] rounded-b-xl  checkbox-category overflow-hidden">
+                        <i class="ri-list-indefinite text-xl pl-2 icons"></i>
+                        <h3 class="text-md mb-1 category">Category</h3>
+                        <i class="ri-arrow-drop-down-fill text-3xl pr-2 icons"></i>
+                        <div class="w-full dropdown-scnd hidden bg-[#72af9b] absolute top-[101%]   overflow-hidden">
                             <div class="w-full py-2 border-b-2 text-white">
                                 <h5 class="text-sm text-center">Technical</h5>
                             </div>
@@ -80,18 +78,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-[20%] h-full flex items-center justify-end  pr-20">
+                <div class="w-[20%] h-full flex items-center justify-end pr-20">
                     <div
-                        class="text-white h-10 border-[1px] rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#e4ebe8] bg-[#43856F] hover:text-black hover:border-black cursor-pointer">
+                        class="text-white  clearfilters h-10 border-[1px] rounded-md flex gap-2 items-center justify-center px-3 hover:bg-[#e4ebe8] bg-[#43856F] hover:text-black hover:border-black cursor-pointer">
                         <i class="ri-filter-off-fill text-xl"></i>
-                        <h5 class="text-md mb-1 clear-filters">Clear filters</h5>
+                        <h5 class="text-md mb-1">Clear filters</h5>
                     </div>
                 </div>
 
             </div>
             <!-- bottom div -->
             <div class="hero w-full border-gray-400 border-t-2 flex justify-center">
-                <div class="left w-[30%] py-8 overflow-auto prevent-select ">
+                <div class="left w-[30%] py-8 overflow-auto prevent-select">
                     <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2">
                         <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
                             <div class="lef w-[10%] h-full mt-2">

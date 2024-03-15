@@ -43,8 +43,7 @@ function updateFilterStyle(filter, isHidden) {
     }
 }
 
-filters[1].addEventListener("click", (e) => {
-    console.log(e);
+filters[1].addEventListener("click", () => {
     toggleDropdown(dropdown, dropdownScnd, filters[1]);
 });
 
@@ -52,96 +51,63 @@ filters[4].addEventListener("click", () => {
     toggleDropdown(dropdownScnd, dropdown, filters[4]);
 });
 
-// const icon = document.querySelectorAll('.ic')
-// const selectedCollege = document.querySelectorAll('.checkbox div')
-// const updatedUniversityNmae = document.querySelector('.updated-uni-name')
-// const closeicon = document.createElement('i')
-
-// selectedCollege.forEach((collegeElement) => {
-//     collegeElement.addEventListener('click', (event) => {
-//         icon[0].remove();
-//         icon[1].remove();
-//         icon[2].remove();
-//         updatedUniversityNmae.textContent = event.currentTarget.textContent;
-//         updatedUniversityNmae.classList.add('uni-style')
-//         closeicon.innerHTML = `<i class="ri-close-circle-line text-xl px-2"></i>`
-//         filters[1].append(closeicon)
-//         filters[1].style.backgroundColor = "#e4ebe8";
-//         filters[1].style.color = 'black';
-//         filters[1].style.border = '1px solid black';
-//         dropdown.addEventListener("click", () => {
-//             dropdown.style.visibility = 'hidden';
-//         })
-//     });
-// });
-// const closeIcon = document.createElement('i')
-// const iconCategory = document.querySelectorAll('.icc')
-// const contentUpdated = document.querySelector('.updated-category')
-// const dropdownListsCheckboxes = document.querySelectorAll('.checkbox-category div')
-
-// dropdownListsCheckboxes.forEach((elem) => {
-//     elem.addEventListener("click", function (event) {
-//         iconCategory[0].remove();
-//         iconCategory[1].remove();
-//         iconCategory[2].remove();
-//         contentUpdated.textContent = event.currentTarget.textContent;
-//         console.log(event.currentTarget.textContent);
-//         contentUpdated.classList.add('uni-style')
-//         closeIcon.innerHTML = `<i class="ri-close-circle-line text-xl px-2"></i>`
-//         filters[4].append(closeIcon)
-//         filters[4].style.backgroundColor = "#e4ebe8";
-//         filters[4].style.color = 'black';
-//         filters[4].style.border = '1px solid black';
-//         dropdownScnd.addEventListener("click", () => {
-//             dropdownScnd.style.visibility = 'hidden';
-//         })
-//     })
-// })
+const icon = document.querySelectorAll('.ic')
+const universityname = document.querySelector('.uname')
+const selectedCollege = document.querySelectorAll('.dropdown div')
 
 
-// closeIcon.addEventListener("click", () => {
-//     filters[4].innerHTML = originalFiltersHTML;
+selectedCollege.forEach((collegeElement) => {
+    collegeElement.addEventListener('click', (event) => {
+        icon[0].className = 'ri-check-fill text-xl pl-2 ic mt-[1rem]'
+        universityname.textContent = event.currentTarget.textContent;
+        // icon[0].remove();
+        icon[1].className = 'ri-close-circle-line pr-2 text-xl text-black closeIc ';
+        filters[1].style.backgroundColor = "#e4ebe8";
+        filters[1].style.color = 'black';
+        filters[1].style.border = '1px solid black';
 
-// })
-// document.querySelector('.clear-filters').addEventListener("click",()=>{
-//     window.location.reload();
-// })
+        icon[1].addEventListener("click", (event) => {
+            event.stopPropagation();
+            icon[0].className = "ri-school-fill text-xl pl-3 ic";
+            universityname.textContent = "University";
+            icon[1].className = "ri-arrow-drop-down-fill text-3xl mt-1 pr-3 ic";
+            filters[1].style.backgroundColor = "#43856F";
+            filters[1].style.color = 'white';
+            filters[1].style.border = 'none';
 
-const originalUniversityLists = document.querySelector('.original')
-const closeicon = document.createElement('i')
-const dropdownLists = document.querySelectorAll(".dropdown div");
-const selectedOptiondiv = document.createElement('div')
 
-dropdownLists.forEach((university) => {
-    university.addEventListener("click", (e) => {
-        selectedOptiondiv.textContent = e.currentTarget.textContent
-        closeicon.innerHTML = `<i class="ri-close-circle-line text-xl px-2"></i>`
-        closeicon.classList.add('closeicn')
-        selectedOptiondiv.classList.add('selectedOption')
-        originalUniversityLists.remove();
-        filters[1].style.backgroundColor = "#e4ebe8"
-        selectedOptiondiv.append(closeicon)
-        filters[1].append(selectedOptiondiv)
-    })
+        });
+    });
+});
+
+const iconSnc = document.querySelectorAll('.icons')
+const category = document.querySelector('.category')
+const selectedCategory = document.querySelectorAll('.dropdown-scnd div')
+
+selectedCategory.forEach((categoryElement) => {
+    categoryElement.addEventListener('click', (event) => {
+        iconSnc[0].className = 'ri-check-fill text-xl pl-2 ic mt-[1rem]'
+        category.textContent = event.currentTarget.textContent;
+        // icon[0].remove();
+        iconSnc[1].className = 'ri-close-circle-line pr-2 text-xl text-black closeIc ';
+        filters[4].style.backgroundColor = "#e4ebe8";
+        filters[4].style.color = 'black';
+        filters[4].style.border = '1px solid black';
+
+        iconSnc[1].addEventListener("click", (event) => {
+            event.stopPropagation();
+            iconSnc[0].className = "ri-list-indefinite text-xl pl-3 ic";
+            category.textContent = "Category";
+            iconSnc[1].className = "ri-arrow-drop-down-fill text-3xl mt-1 pr-3 ic";
+            filters[4].style.backgroundColor = "#43856F";
+            filters[4].style.color = 'white';
+            filters[4].style.border = 'none';
+
+
+        });
+    });
+});
+
+document.querySelector('.clearfilters').addEventListener("click",()=>{
+    window.location.reload();
 })
-closeicon.addEventListener("click", () => {
-    selectedOptiondiv.remove();
-    filters[1].append(originalUniversityLists)
-    // dropdown.style.visibility = 'hidden'
-})
-
-// const closeIcon = document.createElement('i')
-// const scndDropdownLists = document.querySelectorAll(".dropdown-scnd div");
-// const scndSelectedOptiondiv = document.createElement('div')
-
-// scndDropdownLists.forEach((category)=>{
-//     category.addEventListener("click",(e)=>{
-//         scndSelectedOptiondiv.textContent = e.currentTarget.textContent;
-//         closeIcon.innerHTML = `<i class="ri-close-circle-line text-xl px-2"></i>`
-//         closeIcon.classList.add('closeicn')
-//         scndSelectedOptiondiv.classList.add('selectedOption')
-//         scndSelectedOptiondiv.append(closeIcon)
-//    console.log(scndSelectedOptiondiv);
-//    filters[4].innerHTML = scndSelectedOptiondiv
-//     })
-// })
