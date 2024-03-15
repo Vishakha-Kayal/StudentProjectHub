@@ -15,6 +15,9 @@ router.get('/projects', function(req, res, next) {
 router.get('/aboutus', function(req, res, next) {
   res.render('aboutus');
 });
+router.get('/upload', function(req, res, next) {
+  res.render('upload');
+});
 
 router.post("/register",function(req,res){
   var userdata = new userModel({
