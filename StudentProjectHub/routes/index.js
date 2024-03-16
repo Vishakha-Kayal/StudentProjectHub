@@ -4,15 +4,15 @@ var userModel = require("./users")
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index');
+  res.render('index',{nav:true});
 });
 
 router.get('/project', function(req, res) {
-  res.render('project');
+  res.render('project',{nav:true});
 });
 
 router.get('/uploadProject', function(req, res) {
-  res.render('uploadProject');
+  res.render('uploadProject',{nav:false});
 });
 
 router.post("/register" , async function(req,res){

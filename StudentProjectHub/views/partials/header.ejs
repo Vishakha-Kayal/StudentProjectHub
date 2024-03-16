@@ -14,7 +14,7 @@
 
 <body>
     <!-- navbar started -->
-    <div class="w-full h-16 px-20 fixed z-50 top-[0%] bottom-auto left-auto right-auto ">
+    <% if(nav==true){ %><div class="w-full h-16 px-20 fixed z-50 top-[0%] bottom-auto left-auto right-auto ">
         <div class="w-full h-[100%] px-20 py-10 flex items-center justify-between mt-2 nav rounded-md ">
             <div class="w-[8vw] flex items-center ">
                 <img class="w-[40%]" src="/images/logo1.png" alt="">
@@ -39,3 +39,4 @@
             </div>
         </div>
     </div>
+    <% } %>

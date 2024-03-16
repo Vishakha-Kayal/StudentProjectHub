@@ -114,12 +114,7 @@ html {
   display: none;
 }
 
-.paraadjust {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  -webkit-line-clamp: 4;
-}
+
 
 .cards {
   box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
@@ -244,4 +239,15 @@ html {
 
 .closeIc:hover{
 color: grey;
+}
+
+/* uploadproject */
+
+.mail::placeholder{
+  color: grey;
+  padding-left: 1vw;
+}
+
+.images{
+ width:19.5%;
 }
