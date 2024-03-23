@@ -2,8 +2,7 @@
     <div class="w-full h-screen bg-[#e4ebe8] ">
         <div class="w-[60%] h-[15%] flex flex-col   m-auto">
             <div class="w-full mt-6 flex items-center gap-2">
-                <div
-                    class="w-[2rem] h-[2rem] rounded-full flex items-center justify-center border-2 border-[#43856F] ">
+                <div class="w-[2rem] h-[2rem] rounded-full flex items-center justify-center border-2 border-[#43856F] ">
                     <i class="ri-mail-fill text-[#43856F] "></i>
                 </div>
                 <div class="opacity-40 h-[10%] w-[25%] bg-[#43856F]"></div>
@@ -21,26 +20,38 @@
                     class=" opacity-40 w-[2rem] h-[2rem] rounded-full bg-[#e4ebe8] flex items-center justify-center border-2 border-[#43856F] ">
                     <i class="ri-checkbox-fill text-[#43856F]"></i>
                 </div>
-               
             </div>
             <div class="w-[110%] h-[80%] -ml-[4%] flex items-center justify-between ">
-                <div><h1 class="text-[#43856F] text-xl whitespace-nowrap">Enter Email</h1></div>
-                <div><h1 class="text-[#43856F] text-xl whitespace-nowrap opacity-30 ">Verify OTP</h1></div>
-                <div><h1 class="text-[#43856F] text-xl whitespace-nowrap opacity-30 ml-12">Fill Details</h1></div>
-                <div><h1 class="text-[#43856F] text-xl whitespace-nowrap opacity-30 ">Project Uploaded</h1></div>
+                <div>
+                    <h1 class="text-[#43856F] text-xl whitespace-nowrap">Enter Email</h1>
+                </div>
+                <div>
+                    <h1 class="text-[#43856F] text-xl whitespace-nowrap opacity-30 ml-6 ">Verify OTP</h1>
+                </div>
+                <div>
+                    <h1 class="text-[#43856F] text-xl whitespace-nowrap opacity-30 ml-10">Fill Details</h1>
+                </div>
+                <div>
+                    <h1 class="text-[#43856F] text-xl whitespace-nowrap opacity-30 ">Project Uploaded</h1>
+                </div>
             </div>
         </div>
-        <div class="flex items-center justify-center gap-4 flex-col h-[40%]">
+
+        <div class="flex items-center justify-center gap-4 flex-col h-[40%] ">
             <div class="flex flex-col justify-center items-center   gap-2">
                 <h1 class="text-5xl   font-medium font-['Gellix Black'] ">Start Uploading </h1>
                 <h1 class="text-5xl font-medium font-['Gellix Black'] text-gradient h-[3.5rem] ">Your Project</h1>
             </div>
-            <input type="email" name="email" id="" placeholder="Enter your university email"
-                class="h-14 w-[25%]  bg-[#e4ebe8]  text-xl mail px-4 rounded-md border-2 border-[#43856F]">
-            <div class="w-[26%] h-10 overflow-hidden flex justify-center ">
-                <button class="bg-[#43856F] rounded-md h-full w-[30%] text-white text-xl ">Next</button>
-            </div>
+            <form action="/uploadProject" method="post" class="w-[25%] h-[6.5rem] flex justify-center items-center gap-3 flex-col ">
+                <input type="email" required name="email" id="" placeholder="Enter university email"
+                    class="h-[7.5rem] w-full bg-[#e4ebe8]  text-xl mail px-4 rounded-md border-2 border-[#43856F]">
+                <input type="submit" value="Next" class="bg-[#43856F] rounded-md h-full w-[30%] text-white text-xl ">
+            </form>
+
         </div>
+
+       
+
         <div class="images w-full relative h-[45%]">
             <img src="https://images.unsplash.com/photo-1562774053-701939374585?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Y29sbGVnZXxlbnwwfHwwfHx8MA%3D%3D"
                 alt="" class="absolute left-[105%] top-10">
