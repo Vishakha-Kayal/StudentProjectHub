@@ -1,0 +1,57 @@
+<% include ./partials/header.ejs%>
+<div class="w-full h-screen bg-[#e4ebe8] ">
+    <div class="w-[60%] h-[15%] flex flex-col   m-auto">
+        <div class="w-full mt-6 flex items-center gap-2">
+            <div class="w-[2rem] h-[2rem] rounded-full flex items-center justify-center border-2 border-[#43856F] ">
+                <i class="ri-mail-fill text-[#43856F] "></i>
+            </div>
+            <div class=" h-[10%] w-[25%] bg-[#43856F]"></div>
+            <div
+                class="  w-[2rem] h-[2rem] rounded-full bg-[#e4ebe8] flex items-center justify-center border-2 border-[#43856F] ">
+                <i class="ri-verified-badge-fill text-[#43856F]"></i>
+            </div>
+            <div class="opacity-40 h-[10%] w-[25%] bg-[#43856F]"></div>
+            <div
+                class="opacity-40 w-[2rem] h-[2rem] rounded-full bg-[#e4ebe8] flex items-center justify-center border-2 border-[#43856F] ">
+                <i class="ri-file-edit-fill text-[#43856F]"></i>
+            </div>
+            <div class="opacity-40 h-[10%] w-[25%] bg-[#43856F]"></div>
+            <div
+                class=" opacity-40 w-[2rem] h-[2rem] rounded-full bg-[#e4ebe8] flex items-center justify-center border-2 border-[#43856F] ">
+                <i class="ri-checkbox-fill text-[#43856F]"></i>
+            </div>
+        </div>
+        <div class="w-[110%] h-[80%] -ml-[4%] flex items-center justify-between ">
+            <div>
+                <h1 class="text-[#43856F] text-xl whitespace-nowrap">Enter Email</h1>
+            </div>
+            <div>
+                <h1 class="text-[#43856F] text-xl whitespace-nowrap ml-6">Verify OTP</h1>
+            </div>
+            <div>
+                <h1 class="text-[#43856F] text-xl whitespace-nowrap opacity-30 ml-10">Fill Details</h1>
+            </div>
+            <div>
+                <h1 class="text-[#43856F] text-xl whitespace-nowrap opacity-30 ">Project Uploaded</h1>
+            </div>
+        </div>
+    </div>
+<div class="flex items-center justify-center gap-4 flex-col h-[80%] ">
+    <form class="otp-Form" action="/verify" method="post">
+
+    <span class="mainHeading">Enter OTP</span>
+    <p class="otpSubheading">We have sent a verification code to your email address</p>
+    <div class="inputContainer">
+        <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input1">
+        <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input2">
+        <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input3">
+        <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input4">
+
+    </div>
+    <input class="verifyButton" type="submit" value="Verify">
+    <button class="exitBtn point-cursor"><i class="ri-close-line"></i></button>
+    <p class="resendNote">Didn't receive the code? <button class="resendBtn point-cursor">Resend Code</button></p>
+
+    </form>
+</div>
+</div>

@@ -107,7 +107,7 @@ selectedCategory.forEach((categoryElement) => {
         });
     });
 });
-
 document.querySelector('.clearfilters').addEventListener("click",()=>{
     window.location.reload();
 })
+
