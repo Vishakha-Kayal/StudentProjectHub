@@ -374,5 +374,8 @@ color: grey;
 .resendBtn:hover{
   border-bottom: 1px solid #43856F;
   border-spacing: -7px;
-
 }
+.placeholder{
+  color:gray;
+}
+

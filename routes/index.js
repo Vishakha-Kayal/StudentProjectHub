@@ -7,6 +7,10 @@ router.get('/', function(req, res) {
   res.render('index',{nav:true});
 });
 
+router.get('/projectform', function(req, res) {
+  res.render('form',{nav:false});
+});
+
 router.get('/project', function(req, res) {
   res.render('projects',{nav:true});
 });
@@ -23,8 +27,8 @@ router.get('/verify', function(req, res) {
   res.render('verification',{nav:false});
 });
 
-router.post('/verify', function(req, res) {
-  res.redirect('/uploadProject')
+router.get('/signup', function(req, res) {
+  res.render(('signup'),{nav:false});
 });
 
 router.post("/register" , async function(req,res){

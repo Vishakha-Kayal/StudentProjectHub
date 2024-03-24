@@ -1,0 +1,92 @@
+<% include ./partials/header.ejs%>
+    <div class="w-full h-screen bg-[#e4ebe8]">
+        <div class="w-[60%] h-[15%] flex flex-col m-auto">
+            <div class="w-full mt-6 flex items-center gap-2">
+                <div class="w-[2rem] h-[2rem] rounded-full flex items-center justify-center border-2 border-[#43856F] ">
+                    <i class="ri-mail-fill text-[#43856F] "></i>
+                </div>
+                <div class="h-[10%] w-[25%] bg-[#43856F]"></div>
+                <div
+                    class="w-[2rem] h-[2rem] rounded-full bg-[#e4ebe8] flex items-center justify-center border-2 border-[#43856F] ">
+                    <i class="ri-verified-badge-fill text-[#43856F]"></i>
+                </div>
+                <div class="h-[10%] w-[25%] bg-[#43856F]"></div>
+                <div
+                    class="w-[2rem] h-[2rem] rounded-full bg-[#e4ebe8] flex items-center justify-center border-2 border-[#43856F] ">
+                    <i class="ri-file-edit-fill text-[#43856F]"></i>
+                </div>
+                <div class="h-[10%] w-[25%] bg-[#43856F]"></div>
+                <div
+                    class=" opacity-40 w-[2rem] h-[2rem] rounded-full bg-[#e4ebe8] flex items-center justify-center border-2 border-[#43856F] ">
+                    <i class="ri-checkbox-fill text-[#43856F]"></i>
+                </div>
+            </div>
+            <div class="w-[110%] h-[80%] -ml-[4%] flex items-center justify-between ">
+                <div>
+                    <h1 class="text-[#43856F] text-xl whitespace-nowrap">Enter Email</h1>
+                </div>
+                <div>
+                    <h1 class="text-[#43856F] text-xl whitespace-nowrap ml-6 ">Verify OTP</h1>
+                </div>
+                <div>
+                    <h1 class="text-[#43856F] text-xl whitespace-nowrap ml-10">Fill Details</h1>
+                </div>
+                <div>
+                    <h1 class="text-[#43856F] text-xl whitespace-nowrap opacity-30  mr-7">Project Uploaded</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-[95%] bg-white h-screen m-auto rounded-md overflow-hidden mt-7">
+            <div class="first-sec w-full h-full">
+                <div class="w-full h-14 flex items-center justify-between bg-[#58b19b]">
+                    <div class="flex items-center gap-4 text-[#e4ebe8]">
+                        <div class="bg-[#285647c4] rounded-full w-6 px-2 ml-4">1</div>
+                        <h1 class="text-2xl">Project Information</h1>
+                    </div>
+                    <i class="ri-arrow-drop-up-line text-4xl w-14"></i>
+                    <i class="ri-arrow-drop-down-line text-4xl w-14 hidden"></i>
+                </div>
+                <div class="w-full h-full flex">
+                    <div class="details-first-sec w-[50%] opacity-70 ml-10">
+                        <div>
+                            <h1 class="mt-14 text-xl">Project Title</h1>
+                            <div class="project-title w-[60%]">
+                                <input required type="text" name="" placeholder="Example : Speech Recognition Software"
+                                    class="rounded-sm px-3 py-2 mt-3 w-full  border-2 border-black">
+                            </div>
+                        </div>
+                        <div>
+                            <h1 class="mt-4 text-xl">Project Category</h1>
+                            <div class="project-category w-[60%]">
+                                <select name="category" id=""
+                                    class="placeholder rounded-sm px-3 py-2 mt-3 w-full border-2 border-black">
+                                    <option value="" disabled selected class="hidden">Choose Category
+                                    </option>
+                                    <option value="technical" class="text-black">Technical</option>
+                                    <option value="management" class="text-black">Management</option>
+                                    <option value="science" class="text-black">Science</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right w-[50%] h-full">
+                        <img src="/images/form-image.png" alt="" class="w-full h-full object-cover">
+                        
+                    </div>
+    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <script>
+        let select = document.querySelector('select');
+        select.addEventListener("change", function () {
+            if (this.value === "") {
+                this.classList.add("placeholder");
+            } else {
+                this.classList.remove("placeholder");
+            }
+        });
+    </script>
