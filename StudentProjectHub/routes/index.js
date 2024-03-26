@@ -24,18 +24,22 @@ router.get('/verify', function(req, res) {
 });
 
 router.post('/verify', function(req, res) {
-  res.redirect('/uploadProject')
+  res.redirect('/form')
 });
 
-router.post("/register" , async function(req,res){
-  var userdata= new userModel({
-    username:req.body.username,
-    password:req.body.password,
-    email: req.body.email
-  })
-  await userdata.save();
-  res.send("created")
-})
+router.get('/form', function(req, res) {
+  res.render('form',{nav:false});
+});
+
+router.get('/signup', function(req, res) {
+  res.render('signup',{nav:false});
+});
+
+router.get('/login', function(req, res) {
+  res.render('login',{nav:false});
+});
+
+
 
 
 

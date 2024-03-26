@@ -329,27 +329,6 @@ color: grey;
   transition-duration: .2s;
 }
 
-.exitBtn {
-  position: absolute;
-  top: 2%;
-  right: 2%;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.171);
-  background-color: rgb(255, 255, 255);
-  border-radius: 50%;
-  width: 8%;
-  height: 8%;
-  border: none;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-}
-
-.exitBtn:hover{
-  background-color: #43856F;
-  color: white;
-}
 
 .resendNote {
   font-size: 0.7em;
@@ -375,4 +354,10 @@ color: grey;
   border-bottom: 1px solid #43856F;
   border-spacing: -7px;
 
+}
+
+/* form.ejs */
+
+.placeholder{
+  color:gray;
 }

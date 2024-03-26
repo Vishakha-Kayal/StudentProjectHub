@@ -36,22 +36,20 @@
             </div>
         </div>
     </div>
+
 <div class="flex items-center justify-center gap-4 flex-col h-[80%] ">
     <form class="otp-Form" action="/verify" method="post">
 
     <span class="mainHeading">Enter OTP</span>
     <p class="otpSubheading">We have sent a verification code to your email address</p>
     <div class="inputContainer">
-        <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input1">
-        <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input2">
-        <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input3">
-        <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input4">
-
+        <input required="required" maxlength="1" type="number" class="otp-input" id="otp-input1">
+        <input required="required" maxlength="1" type="number" class="otp-input" id="otp-input2">
+        <input required="required" maxlength="1" type="number" class="otp-input" id="otp-input3">
+        <input required="required" maxlength="1" type="number" class="otp-input" id="otp-input4">
     </div>
     <input class="verifyButton" type="submit" value="Verify">
-    <button class="exitBtn point-cursor"><i class="ri-close-line"></i></button>
     <p class="resendNote">Didn't receive the code? <button class="resendBtn point-cursor">Resend Code</button></p>
-
     </form>
 </div>
 </div>
