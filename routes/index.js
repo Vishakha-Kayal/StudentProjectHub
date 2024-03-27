@@ -10,6 +10,9 @@ router.get('/', function(req, res) {
 router.get('/projectform', function(req, res) {
   res.render('form',{nav:false});
 });
+router.post('/submitform1',function(req,res){
+  res.render('successfull',{nav:true})
+})
 
 router.get('/project', function(req, res) {
   res.render('projects',{nav:true});
