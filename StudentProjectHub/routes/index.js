@@ -31,6 +31,16 @@ router.get('/form', function(req, res) {
   res.render('form',{nav:false});
 });
 
+router.post('/form', function(req, res) {
+  res.redirect('/verify')
+});
+
+router.post('/submitForm', function(req, res) {
+  const projectTitle = req.body;
+  console.log(projectTitle); // Log the received form data
+  res.redirect('/verify')
+}); 
+
 router.get('/signup', function(req, res) {
   res.render('signup',{nav:false});
 });

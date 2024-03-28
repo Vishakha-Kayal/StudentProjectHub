@@ -372,3 +372,23 @@ color: grey;
   transition: all 0.5s ease-in-out;
   
 }
+
+.submitBtn{
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
+
+.nextBtn{
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
+
+.submitBtn:hover{
+  background-color: #4d9c89;
+}
+
+.submitBtn:hover input{
+  background-color: #4d9c89;
+}
+
+.another:hover i, .another:hover h1 {
+  color: #024237;
+}
