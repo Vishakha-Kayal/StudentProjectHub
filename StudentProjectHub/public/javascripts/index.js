@@ -105,9 +105,8 @@ function typeWriterEffect() {
             } else {
                 setTimeout(function () {
                     textElement.innerHTML = "";
-                    if (callback) {
                         callback();
-                    }
+                    
                 }, 1000);
             }
         }

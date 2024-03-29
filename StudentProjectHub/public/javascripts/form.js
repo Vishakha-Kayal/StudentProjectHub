@@ -9,7 +9,7 @@ select.addEventListener("change", function () {
 
 const form = document.querySelector('form')
 const inputDiv = document.querySelector('#projectImages')
-const imagesdiv = document.querySelector('.images')
+const imagesdiv = document.querySelector('.images-form')
 
 const uploadIcon = document.getElementsByClassName('ic')
 uploadIcon[0].addEventListener('click', function () {
@@ -23,7 +23,6 @@ inputDiv.addEventListener('change', function () {
     Array.from(images).forEach(image => {
         const img = document.createElement('img');
         img.src = URL.createObjectURL(image);
-        
         img.classList.add('style-img')
         imagesdiv.classList.remove('hidden')
         // imagesdiv.classList.add('style-img')
@@ -31,6 +30,11 @@ inputDiv.addEventListener('change', function () {
         // Optionally, revoke the object URL after the image has loaded to free memory
         img.onload = () => URL.revokeObjectURL(img.src);
     });
+});
+
+const uploadlogo = document.getElementsByClassName('ic')
+uploadlogo[1].addEventListener('click', function () {
+    inputDiv.click();
 });
 
 function showLimit(){

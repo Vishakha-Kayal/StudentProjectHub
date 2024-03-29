@@ -31,8 +31,15 @@ router.get('/form', function(req, res) {
   res.render('form',{nav:false});
 });
 
+
+router.get('/projectUploaded', function(req, res) {
+  res.render('projectUploaded',{nav:false});
+});
+
+
+
 router.post('/form', function(req, res) {
-  res.redirect('/verify')
+  res.redirect('/projectUploaded')
 });
 
 router.post('/submitForm', function(req, res) {

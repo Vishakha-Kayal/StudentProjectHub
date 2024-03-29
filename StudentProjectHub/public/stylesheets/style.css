@@ -363,15 +363,26 @@ color: grey;
 }
 
 .style-img{
-  width: 100%;
+  width: 19%;
   height: 100%;
   object-fit: cover;
-}
-
-.uniDets{
-  transition: all 0.5s ease-in-out;
   
 }
+
+.projectImg::-webkit-scrollbar {
+  width: 10px;
+}
+
+.projectImg::-webkit-scrollbar-track {
+  background: white;
+}
+
+.projectImg::-webkit-scrollbar-thumb {
+  background-color: grey;
+  /* border-radius: 10px; */
+}
+
+
 
 .submitBtn{
   box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
@@ -391,4 +402,10 @@ color: grey;
 
 .another:hover i, .another:hover h1 {
   color: #024237;
+}
+
+/* projectuploaded.ejs */
+
+.homeBtn{
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
 }
