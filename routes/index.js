@@ -7,13 +7,6 @@ router.get('/', function(req, res) {
   res.render('index',{nav:true});
 });
 
-router.get('/projectform', function(req, res) {
-  res.render('form',{nav:false});
-});
-router.post('/submitform1',function(req,res){
-  res.render('successfull',{nav:true})
-})
-
 router.get('/project', function(req, res) {
   res.render('projects',{nav:true});
 });
@@ -30,19 +23,36 @@ router.get('/verify', function(req, res) {
   res.render('verification',{nav:false});
 });
 
-router.get('/signup', function(req, res) {
-  res.render(('signup'),{nav:false});
+router.post('/verify', function(req, res) {
+  res.redirect('/form')
 });
 
-router.post("/register" , async function(req,res){
-  var userdata= new userModel({
-    username:req.body.username,
-    password:req.body.password,
-    email: req.body.email
-  })
-  await userdata.save();
-  res.send("created")
-})
+router.get('/form', function(req, res) {
+  res.render('form',{nav:false});
+});
+
+router.post('/form', function(req, res) {
+  res.redirect('/verify')
+});
+
+router.post('/submitForm', function(req, res) {
+  const projectTitle = req.body;
+  console.log(projectTitle); // Log the received form data
+  res.redirect('/verify')
+}); 
+
+router.get('/signup', function(req, res) {
+  res.render('signup',{nav:false});
+});
+
+router.get('/login', function(req, res) {
+  res.render('login',{nav:false});
+});
+router.get('/aboutus', function(req, res) {
+  res.render('aboutus',{nav:true});
+});
+
+
 
 
 
