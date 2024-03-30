@@ -92,17 +92,18 @@
                             <div class="w-full">
                                 <h1 class="mt-4 text-xl font-semibold mb-4">Project Images</h1>
                                 <div class="project-images rounded-md flex w-[90%] ">
-                                    <h1><input type="file" name="projectImages[]" id="projectImages"
+                                    <h1><input type="file" name="projectImages" id="projectImages"
                                             class="w-full px-3 py-2 mt-3 hidden" multiple re></h1>
                                     <div
-                                        class="pl-2 w-[90%] h-32 flex items-center gap-4 border-2  border-[#000000a4] rounded-md">
-                                        <div class="cursor-pointer w-[20%] h-[83%] flex flex-col justify-center ic items-center  gap-2  border-2 bg-[#F1F5F4] border-black border-dashed">
+                                        class="pl-2 w-[90%] h-32 flex items-center gap-4 border-2  border-[#000000a4] rounded-md overflow-x-auto  projectImg">
+                                        <div
+                                            class="cursor-pointer w-[25%] h-[83%] flex flex-col justify-center ic items-center  gap-2  border-2 bg-[#F1F5F4] border-black border-dashed">
                                             <h2><i class="ri-image-add-fill " style="font-size: 24px;"></i>
                                             </h2>
                                             <h1 class="text-md font-semibold opacity-70">Upload Image</h1>
                                         </div>
-                                        <div class="images-form w-[75%] h-[83%] flex gap-4 items-center">
-                                      
+                                        <div class="images-form w-[75%] h-[83%] flex gap-4 items-center pr-2">
+
                                         </div>
                                     </div>
                                 </div>
@@ -136,39 +137,49 @@
                         class="ri-arrow-drop-down-line text-5xl text-white w-14  uniInfoDown point-cursor hover:scale-125 transition-all duration-100 ease-in-out"></i>
                 </div>
 
-                <div class="w-full min-h-full flex uniDets hidden relative">
-                    
+                <div class="w-full min-h-full flex uniDets hidden ">
                     <div class="details-scnd-first w-[55%] opacity-70 ml-10">
-                        <h4 class="mt-4 opacity-75">Basic details of the university</h4>
-                        <form action="/form" method="post" class="flex flex-col w-full h-full form2">
-                            <div class="w-full mb-4">
+                        <h4 class="mt-4  opacity-75 ">Basic details of the university</h4>
+                        <form action="/submitForm" method="post" class="flex flex-col w-full h-full form2">
+                            <div class="w-full h-[18vh] ">
                                 <h1 class="mt-4 text-xl font-semibold">University Name</h1>
                                 <div class="project-title w-[80%]">
                                     <input required type="text" name="universityName"
-                                    placeholder="Example: Poddar International College" maxlength="40"
-                                    class="rounded-md px-3 py-2 mt-3 w-full  border-2   border-[#000000b9] universityName">
+                                        placeholder="Example: Poddar International College" maxlength="40"
+                                        class="rounded-md px-3 py-2 mt-3 w-full  border-2   border-[#000000b9] universityName">
                                 </div>
                                 <div class="w-[80%] hidden limit">
                                     <h1 class="text-red-600 ml-[0.3rem] ">Maximum word limit is 30</h1>
                                 </div>
                             </div>
-                            <div class="w-full  mb-4 pb-4">
-                                <div class="w-full h-36">
-                                    <h1><input type="file" name="projectImages[]" id="universityLogo"
-                                        class="w-full px-3 py-2 mt-3 hidden" multiple re></h1>
-                                    <h1 class="mt-4 text-xl font-semibold mb-4">University Logo</h1>
-                                    <div class="cursor-pointer w-[19%] h-[83%] flex flex-col justify-center items-center  gap-2 ic border-2 bg-[#F1F5F4] border-black border-dashed">
-                                        <h2><i class="ri-image-add-fill" style="font-size: 24px;"></i>
-                                        </h2>
-                                        <h1 class="text-md font-semibold opacity-70">Upload Logo</h1>
+
+                            <div class="w-full h-[23vh] pb-7">
+                                <div class="w-[80%] h-full">
+                                    <h1><input type="file" name="universityLogo" id="universityLogo"
+                                            class="w-full px-3 py-2 hidden"></h1>
+                                    <h1 class=" text-xl font-semibold mb-2">University Logo</h1>
+                                    <div class="w-full h-[83%] flex gap-2">
+                                        <div
+                                            class="cursor-pointer w-[19%] h-full flex flex-col justify-center items-center  gap-2 ic border-2 bg-[#F1F5F4] border-black border-dashed">
+                                            <h2><i class="ri-image-add-fill" style="font-size: 24px;"></i>
+                                            </h2>
+                                            <h1 class="text-md font-semibold opacity-70">Upload Logo</h1>
+                                        </div>
+                                        <div class="w-[19%] h-full uni-logo">
+                                        
+                                        </div>
+
                                     </div>
                                 </div>
+
                             </div>
+
                             <div class="w-full  studentInfo">
                                 <div class="w-full">
-                                    <h1 class=" text-xl font-semibold">Student's Information</h1>
+                                    <h1 class=" text-xl font-semibold">Student's Information <span
+                                            class="text-sm opacity-75">(Details of the project contributor)</span></h1>
                                     <div class="flex mt-1 gap-4">
-                                        <div class="w-[35%]  ">
+                                        <div class="w-[35%] ">
                                             <input type="text"
                                                 class="rounded-md px-3 py-2 mt-3 w-full  border-2  border-[#000000b9]"
                                                 placeholder="Student Name">
@@ -219,22 +230,28 @@
 
                             </div>
 
-                            <div class="w-full mt-4  mb-2">
+                            <div class="w-full mb-2 mt-4 ">
                                 <div class="w-[26%] flex gap-1 items-center another">
-                                    <i class="ri-add-circle-line text-[#018B75] font-bold text-lg point-cursor "></i>
+                                    <i
+                                        class="ri-add-circle-line text-[#018B75] font-bold text-lg point-cursor mb-[0.1rem]"></i>
                                     <h1 class="text-[#018B75] mb-[0.2rem] font-bold point-cursor">Add another field</h1>
                                 </div>
-                                <div class="w-[170%] mt-2 flex gap-2">
-                                    <input type="checkbox" name="conditions" id="" class="align-top w-6 h-6">
+                                <div class="w-[170%] mt-5 flex gap-1">
+                                    <input type="checkbox" name="conditions" id="" class="align-top w-6 h-6 mt-[0.1rem]"
+                                        required>
                                     <p class="text-md">
-                                        We hereby grant <span class="text-[#018B75]">StudentProjectHub</span> the permission to showcase our project on its website. We affirm that we hold the <span class="text-[#018B75]">copyright</span> to the submitted project and authorize its use for these purposes.
+                                        We hereby grant <span
+                                            class="text-[#018B75] font-semibold">StudentProjectHub</span> the permission
+                                        to showcase our project on its website. We affirm that we hold the <span
+                                            class="text-[#018B75] font-semibold">copyright</span> to the submitted
+                                        project and authorize its use for these purposes.
                                     </p>
                                 </div>
                             </div>
 
-                            <div class="w-full mb-6">
+                            <div class="w-full mb-6 mt-4 ">
                                 <div
-                                    class=" w-[30%] bg-[#028977] flex items-center justify-center rounded-md overflow-hidden point-cursor transition-all duration-[0.5s] ease-in-out submitBtn">
+                                    class="w-[30%] bg-[#028977] flex items-center justify-center rounded-md overflow-hidden point-cursor transition-all duration-[0.5s] ease-in-out submitBtn">
                                     <input type="submit" value="SUBMIT"
                                         class="w-[60%] bg-[#028977] text-xl text-white -ml-[1.5rem] py-3  font-semibold tracking-wider transition-all duration-[0.5s] ease-in-out point-cursor ">
                                     <i
@@ -243,12 +260,10 @@
                             </div>
                         </form>
                     </div>
-
-                    <div class="details-scnd-scnd w-[35%] h-[70vh] ml-14">
-                        <img src="images/form-university.webp" class="w-full h-full object-cover mt-[4.5rem]" alt="">
+                    <div class="details-scnd-scnd w-[35%] h-[70vh] ml-14 ">
+                        <!-- <img src="images/form-university.webp" class="w-full h-full object-cover mt-[4.5rem]" alt="">   -->
                     </div>
                 </div>
-              
             </div>
         </div>
     </div>

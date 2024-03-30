@@ -31,15 +31,17 @@ router.get('/form', function(req, res) {
   res.render('form',{nav:false});
 });
 
-router.post('/form', function(req, res) {
-  res.redirect('/verify')
+
+router.get('/projectUploaded', function(req, res) {
+  res.render('projectUploaded',{nav:false});
 });
 
+
 router.post('/submitForm', function(req, res) {
-  const projectTitle = req.body;
-  console.log(projectTitle); // Log the received form data
-  res.redirect('/verify')
-}); 
+  const projectData = req.body;
+  console.log(projectData); // Log the received form data
+  res.json({ success: true, message: 'Form submitted successfully' });
+});
 
 router.get('/signup', function(req, res) {
   res.render('signup',{nav:false});
@@ -48,11 +50,10 @@ router.get('/signup', function(req, res) {
 router.get('/login', function(req, res) {
   res.render('login',{nav:false});
 });
-router.get('/aboutus', function(req, res) {
-  res.render('aboutus',{nav:true});
-});
 
-
+router.get('/aboutus',function(req, res) {
+  res.render('aboutus',{nav:false});
+})
 
 
 

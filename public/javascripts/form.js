@@ -7,96 +7,109 @@ select.addEventListener("change", function () {
     }
 });
 
-const form = document.querySelector('form')
-const inputDiv = document.querySelector('#projectImages')
-const imagesdiv = document.querySelector('.images-form')
-
 const uploadIcon = document.getElementsByClassName('ic')
-uploadIcon[0].addEventListener('click', function () {
-    inputDiv.click();
-});
-
-
-
-// Listen for changes to the file input to handle file selection
-inputDiv.addEventListener('change', function () {
-    const images = inputDiv.files;
-   // Now this should log the selected files
-    Array.from(images).forEach(image => {
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(image);
-        img.classList.add('style-img')
-        imagesdiv.classList.remove('hidden')
-        // imagesdiv.classList.add('style-img')
-        imagesdiv.appendChild(img);
-        // Optionally, revoke the object URL after the image has loaded to free memory
-        img.onload = () => URL.revokeObjectURL(img.src);
+function uploadProjectImages(){
+    const form = document.querySelector('form')
+    const inputDiv = document.querySelector('#projectImages')
+    const imagesdiv = document.querySelector('.images-form')
+    
+    uploadIcon[0].addEventListener('click', function () {
+        inputDiv.click();
     });
-});
-
-const uploadlogo = document.getElementsByClassName('ic')
-uploadlogo[1].addEventListener('click', function () {
-    inputDiv.click();
-});
-
-
-function showLimit(){
-    const universityName = document.querySelector(".universityName")
-const limit = document.querySelector(".limit")
-
-universityName.addEventListener("click", () => {
-    limit.classList.remove('hidden')
-})
+    
+    // Listen for changes to the file input to handle file selection
+    inputDiv.addEventListener('change', function () {
+        const images = inputDiv.files;
+        // Now this should log the selected files
+        Array.from(images).forEach(image => {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(image);
+            img.classList.add('style-img')
+            imagesdiv.classList.remove('hidden')
+            // imagesdiv.classList.add('style-img')
+            imagesdiv.appendChild(img);
+            // Optionally, revoke the object URL after the image has loaded to free memory
+            img.onload = () => URL.revokeObjectURL(img.src);
+        });
+    });    
 }
 
-function uniInfo(){
+function uploaduniversityLogo(){
+    const inputDiv = document.querySelector('#universityLogo')
+    uploadIcon[1].addEventListener('click', function () {
+        inputDiv.click();
+    });
+
+    inputDiv.addEventListener("change",()=>{
+        const uniLogo = inputDiv.files;
+        console.log(uniLogo);
+        let thisDiv = '';
+        Array.from(uniLogo).forEach(file => {
+            thisDiv += `<img src=${URL.createObjectURL(file)} alt="" class="w-full h-full contain"></img>`;
+        });
+        let unilogoDiv = document.querySelector('.uni-logo');
+        unilogoDiv.innerHTML = thisDiv;
+        console.log(unilogoDiv);
+    })
+}
+
+function showLimit() {
+    const universityName = document.querySelector(".universityName")
+    const limit = document.querySelector(".limit")
+
+    universityName.addEventListener("click", () => {
+        limit.classList.remove('hidden')
+    })
+}
+
+function uniInfo() {
     const uniInfoUp = document.querySelector(".uniInfoUp")
     const uniInfoDown = document.querySelector(".uniInfoDown")
     const uniDets = document.querySelector(".uniDets")
 
-uniInfoUp.addEventListener("click", () => {
-    uniDets.classList.toggle('hidden')
-    uniInfoUp.classList.add("hidden")
-    uniInfoDown.classList.remove("hidden")
+    uniInfoUp.addEventListener("click", () => {
+        uniDets.classList.toggle('hidden')
+        uniInfoUp.classList.add("hidden")
+        uniInfoDown.classList.remove("hidden")
 
-})
+    })
 
-uniInfoDown.addEventListener("click", () => {
-    uniDets.classList.toggle('hidden')
-    uniInfoUp.classList.remove("hidden")
-    uniInfoDown.classList.add("hidden")
+    uniInfoDown.addEventListener("click", () => {
+        uniDets.classList.toggle('hidden')
+        uniInfoUp.classList.remove("hidden")
+        uniInfoDown.classList.add("hidden")
 
-    if (!uniDets.classList.contains('hidden')) {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
+        if (!uniDets.classList.contains('hidden')) {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
 
-})
+    })
 }
 
-function projectInfo(){
+function projectInfo() {
     const projectInfoUp = document.querySelector(".projectInfoUp")
     const projectInfoDown = document.querySelector(".projectInfoDown")
-const projectDets = document.querySelector(".projectDets")
+    const projectDets = document.querySelector(".projectDets")
 
-projectInfoUp.addEventListener("click", () => {
-    projectDets.classList.toggle('hidden')
-    projectInfoUp.classList.add("hidden")
-    projectInfoDown.classList.remove("hidden")
+    projectInfoUp.addEventListener("click", () => {
+        projectDets.classList.toggle('hidden')
+        projectInfoUp.classList.add("hidden")
+        projectInfoDown.classList.remove("hidden")
 
-})
+    })
 
-projectInfoDown.addEventListener("click", () => {
-    projectDets.classList.toggle('hidden')
-    projectInfoUp.classList.remove("hidden")
-    projectInfoDown.classList.add("hidden")
+    projectInfoDown.addEventListener("click", () => {
+        projectDets.classList.toggle('hidden')
+        projectInfoUp.classList.remove("hidden")
+        projectInfoDown.classList.add("hidden")
 
-})
+    })
 }
 
-function addField(){
-    const another=document.querySelector(".another")
-    const studentInfo=document.querySelector(".studentInfo")
-    let field=`<div class="w-full mt-2">
+function addField() {
+    const another = document.querySelector(".another")
+    const studentInfo = document.querySelector(".studentInfo")
+    let field = `<div class="w-full mt-2">
     <div class="flex mt-1 gap-4">
         <div class="w-[35%]  ">
             <input type="text"
@@ -121,40 +134,38 @@ function addField(){
     </div>
 </div>`
 
-another.addEventListener("click", () => {
-    studentInfo.insertAdjacentHTML('beforeend', field);
-});
-
+    another.addEventListener("click", () => {
+        studentInfo.insertAdjacentHTML('beforeend', field);
+    });
 }
 
-function storeFormData(){
+function storeFormData() {
     const uniInfoUp = document.querySelector(".uniInfoUp")
     const uniInfoDown = document.querySelector(".uniInfoDown")
-const uniDets = document.querySelector(".uniDets")
-    const form1=document.querySelector(".form1")
-    const form2=document.querySelector(".form2")
-    form1.addEventListener("submit",async(e)=>{
+    const uniDets = document.querySelector(".uniDets")
+    const form1 = document.querySelector(".form1")
+    const form2 = document.querySelector(".form2")
+    form1.addEventListener("submit", async (e) => {
         e.preventDefault();
         uniDets.classList.remove('hidden')
-        uniInfoDown.classList.add("hidden")    
+        uniInfoDown.classList.add("hidden")
         uniInfoUp.classList.remove("hidden")
 
         if (!uniDets.classList.contains('hidden')) {
             window.scrollTo(0, document.body.scrollHeight);
-        }    
-
+        }
 
         const formData = new FormData(e.target);
-        
+
         const combinedFormData = {};
-
+        console.log(formData.entries());
         for (let entry of formData.entries()) {
-
+            console.log(entry);
             combinedFormData[entry[0]] = entry[1];
-          }
-        
-          form2.addEventListener("submit",async(event)=>{
-            // event.preventDefault();
+        }
+
+        form2.addEventListener("submit", async (event) => {
+            event.preventDefault();
             const formData2 = new FormData(form2);
 
             for (let entry of formData2.entries()) {
@@ -167,38 +178,35 @@ const uniDets = document.querySelector(".uniDets")
                     combinedFormData[entry[0]] = entry[1];
                 }
             }
-           
-            try {
-              const response = await fetch('/submitForm', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(combinedFormData)
+
+            fetch('/submitForm', {
+                method: 'POST',
+                body: JSON.stringify(combinedFormData),
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                    console.log(data);
+                  window.location.href = '/projectUploaded'; 
+                } else {
+                  // Handle error or show a message to the user
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
               });
-  
-              if (!response.ok) {
-                  throw new Error(`Server responded with a status of ${response.status}`);
-              }
-  
-              const contentType = response.headers.get("content-type");
-              if (!contentType || !contentType.includes("application/json")) {
-                  throw new Error("Received non-JSON response from server");
-              }
-  
-              const data = await response.json();
-              console.log(data);
-          } catch (error) {
-              console.error("Error:", error);
-          }
-          })
+        })
 
     })
 
 
 }
 
-
+uploadProjectImages()
+uploaduniversityLogo()
 showLimit()
 uniInfo()
 projectInfo()
