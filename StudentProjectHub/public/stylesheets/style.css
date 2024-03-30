@@ -119,7 +119,7 @@ html {
 .cards {
   box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
   transition: all 0.5s ease-in-out;
-  transform: translateY(100%);
+  scale: 0;
   opacity: 0;
 }
 
@@ -382,6 +382,11 @@ color: grey;
   /* border-radius: 10px; */
 }
 
+.projectImg {
+  scrollbar-width: thin;
+  scrollbar-color: grey white; /* Firefox */
+}
+
 
 
 .submitBtn{
@@ -408,4 +413,15 @@ color: grey;
 
 .homeBtn{
   box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
+
+#submit{
+  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+}
+
+.contactForm{
+  border-radius: 9px;
+
+box-shadow:  23px 23px 43px #b3b3b3,
+             -23px -23px 43px #ffffff;
 }

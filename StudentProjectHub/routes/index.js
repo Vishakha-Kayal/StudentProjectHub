@@ -44,8 +44,8 @@ router.post('/form', function(req, res) {
 
 router.post('/submitForm', function(req, res) {
   const projectTitle = req.body;
-  console.log(projectTitle); // Log the received form data
-  res.redirect('/verify')
+  console.log(projectTitle);
+  res.json({sucess:true,message:"Form submitted successfully"});
 }); 
 
 router.get('/signup', function(req, res) {
@@ -55,6 +55,19 @@ router.get('/signup', function(req, res) {
 router.get('/login', function(req, res) {
   res.render('login',{nav:false});
 });
+
+router.get('/dashboard', function(req, res) {
+  res.render('dashboard',{nav:true});
+});
+
+router.get('/about', function(req, res) {
+  res.render('about',{nav:true});
+});
+
+router.get('/contact', function(req, res) {
+  res.render('contact',{nav:true});
+});
+
 
 
 

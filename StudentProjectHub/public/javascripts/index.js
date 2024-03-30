@@ -40,19 +40,21 @@ gsap.to(".nav", {
 })
 
 gsap.to(".cards", {
-    y:0,
-    duration: 0.5,
     opacity: 1,
-    stagger: 0.2,
-    ease: 'bounce.out',
-    // scrollTrigger: {
-    //     trigger: ".cards-container",
-    //     scroller: "body",
-    //     markers:true,
-    //     start: "top 80%",
-    //     end: "top 80%",
-    //     scrub: 1
-    // }
+    scale:1,
+    duration: 2,
+    stagger:{
+        amount:2
+    },
+    ease:Power4,
+    scrollTrigger: {
+        trigger: ".cards-container",
+        scroller: "body",
+        // markers:true,
+        start: "top 70%",
+        end: "top 60%",
+        scrub: 2
+    }
 })
 
 

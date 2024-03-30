@@ -151,7 +151,7 @@ const uniDets = document.querySelector(".uniDets")
           }
         
           form2.addEventListener("submit",async(event)=>{
-            // event.preventDefault();
+            event.preventDefault();
             const formData2 = new FormData(form2);
 
             for (let entry of formData2.entries()) {
@@ -173,17 +173,19 @@ const uniDets = document.querySelector(".uniDets")
                   },
                   body: JSON.stringify(combinedFormData)
               });
-  
+
+              
               if (!response.ok) {
                   throw new Error(`Server responded with a status of ${response.status}`);
-              }
-  
-              const contentType = response.headers.get("content-type");
-              if (!contentType || !contentType.includes("application/json")) {
-                  throw new Error("Received non-JSON response from server");
-              }
-  
-              const data = await response.json();
+                }
+                
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Received non-JSON response from server");
+                }
+
+                const data = await response.json();
+                window.location.href="/projectUploaded"
               console.log(data);
           } catch (error) {
               console.error("Error:", error);
