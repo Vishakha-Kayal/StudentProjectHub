@@ -52,6 +52,11 @@ router.get('/signup', function(req, res) {
   res.render('signup',{nav:false});
 });
 
+router.post('/signup', function(req, res) {
+  console.log(req.body);
+  res.send("submited")
+});
+
 router.get('/login', function(req, res) {
   res.render('login',{nav:false});
 });

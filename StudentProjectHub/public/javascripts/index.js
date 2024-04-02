@@ -39,23 +39,57 @@ gsap.to(".nav", {
     }
 })
 
-gsap.to(".cards", {
+let tl=gsap.timeline();
+
+tl.to(".card-one", {
+    // y:"100%",
     opacity: 1,
-    scale:1,
-    duration: 2,
-    stagger:{
-        amount:2
-    },
+    scale:1 ,
+    duration:2,
+    
     ease:Power4,
     scrollTrigger: {
         trigger: ".cards-container",
         scroller: "body",
         // markers:true,
-        start: "top 70%",
-        end: "top 60%",
-        scrub: 2
+        start: "top 80%",
+        end: "top 50%",
+        scrub: 1
     }
 })
+tl.to(".card-two", {
+    // y:"100%",
+    opacity: 1,
+    scale:1 ,
+    duration:2,
+   
+    ease:Power4,
+    scrollTrigger: {
+        trigger: ".cards-container",
+        scroller: "body",
+        // markers:true,
+        start: "top 80%",
+        end: "top 50%",
+        scrub: 1
+    }
+})
+tl.to(".card-three", {
+    // y:"100%",
+    opacity:1,
+    scale:1,
+    duration:2,
+   
+    ease:Power4,
+    scrollTrigger: {
+        trigger: ".cards-container",
+        scroller: "body",
+        // markers:true,
+        start: "top 80%",
+        end: "top 50%",
+        scrub: 1
+    }
+})
+
 
 
 
