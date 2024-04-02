@@ -33,7 +33,7 @@ document.querySelector('.signupForm').addEventListener('submit', async function(
     .then(data => {
         // Assuming the server returns the user ID upon successful creation
         
-          // Handle error or show a message to the user
+        window.location.href="/"; 
         uploadAvatar(data.userId);
          // Call the function to upload the avatar
     })

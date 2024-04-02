@@ -4,7 +4,7 @@ var userModel = require("./users")
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index',{nav:true});
+  res.render('index',{nav:true,loggedIn:false});
 });
 
 router.get('/project', function(req, res) {
@@ -66,6 +66,7 @@ router.post('/api/user/signup', async function(req, res) {
 } catch (error) {
     res.status(500).json({ message: 'Error creating user', error: error.message });
 }
+// res.redirect("/")
 });
 
 router.put('/api/user/:userId/avatar', async (req, res) => {
@@ -74,7 +75,7 @@ router.put('/api/user/:userId/avatar', async (req, res) => {
   console.log(userId);
   try {
       // Find the user by ID and update the avatar
-      const updatedUser = await User.findByIdAndUpdate(userId, { avatar }, { new: true });
+      const updatedUser = await userModel.findByIdAndUpdate(userId, { avatar }, { new: true });
       
       if (!updatedUser) {
           return res.status(404).send({ message: 'User not found' });
@@ -91,7 +92,7 @@ router.get('/login', function(req, res) {
 });
 
 router.get('/dashboard', function(req, res) {
-  res.render('dashboard',{nav:true});
+  res.render('dashboard',{nav:true ,loggedIn:true});
 });
 
 router.get('/about', function(req, res) {
