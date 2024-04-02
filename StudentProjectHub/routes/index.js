@@ -52,9 +52,38 @@ router.get('/signup', function(req, res) {
   res.render('signup',{nav:false});
 });
 
-router.post('/signup', function(req, res) {
-  console.log(req.body);
-  res.send("submited")
+router.post('/api/user/signup', async function(req, res) {
+  try {
+    const newUser = new userModel({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password, // Consider hashing the password
+    });
+    const savedUser = await newUser.save();
+    
+    // Respond with the user ID (or another unique identifier)
+    res.status(201).json({ userId: savedUser._id });
+} catch (error) {
+    res.status(500).json({ message: 'Error creating user', error: error.message });
+}
+});
+
+router.put('/api/user/:userId/avatar', async (req, res) => {
+  const { userId } = req.params;
+  const { avatar } = req.body;
+  console.log(userId);
+  try {
+      // Find the user by ID and update the avatar
+      const updatedUser = await User.findByIdAndUpdate(userId, { avatar }, { new: true });
+      
+      if (!updatedUser) {
+          return res.status(404).send({ message: 'User not found' });
+      }
+
+      res.send({ message: 'Avatar updated successfully', user: updatedUser });
+  } catch (error) {
+      res.status(400).send({ message: 'Error updating avatar', error: error.message });
+  }
 });
 
 router.get('/login', function(req, res) {
