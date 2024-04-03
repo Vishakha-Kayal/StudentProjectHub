@@ -5,6 +5,7 @@ const userSchema = mongoose.Schema({
   username:String,
   password:String,
   email:String,
+  avatar:String,
   projects:[
     {
     type:mongoose.Schema.Types.ObjectId,
