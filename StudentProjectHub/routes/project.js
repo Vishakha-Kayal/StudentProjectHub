@@ -15,6 +15,7 @@ const projectSchema = new mongoose.Schema({
     projectImages: [
         { type: String }
     ],
+    universityLogo:String,
     student: [studentSchema],
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

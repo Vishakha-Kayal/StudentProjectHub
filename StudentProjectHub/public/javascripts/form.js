@@ -164,6 +164,7 @@ const uniDets = document.querySelector(".uniDets")
                     combinedFormData[entry[0]] = entry[1];
                 }
             }
+            console.log(combinedFormData);
            
             try {
               const response = await fetch('/submitForm', {

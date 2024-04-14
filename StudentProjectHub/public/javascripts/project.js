@@ -111,3 +111,11 @@ document.querySelector('.clearfilters').addEventListener("click",()=>{
     window.location.reload();
 })
 
+var currentUrl = window.location.href;
+
+var navLinks = document.querySelectorAll('.navlinks');
+navLinks.forEach(function(link) {
+  if (link.href === currentUrl) {
+    link.classList.add("text-[#43856F]");
+  }
+});

@@ -1,5 +1,5 @@
 gsap.to(".nav", {
-    backgroundColor: `rgb(203 213 225 /1)`,
+    backgroundColor: `rgb(184,212,207/1)`,
     // // backgroundColor:`cyan`,
     backdropFilter: "blur(15px)",
     scrollTrigger: {
@@ -160,3 +160,12 @@ function typeWriterEffect() {
     changing();
 }
 typeWriterEffect();
+
+var currentUrl = window.location.href;
+
+var navLinks = document.querySelectorAll('.navlinks');
+navLinks.forEach(function(link) {
+  if (link.href === currentUrl) {
+    link.classList.add("text-[#43856F]");
+  }
+});
