@@ -1,17 +1,32 @@
-const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/StudentProjectHub")
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://127.0.0.1:27017/StudentProjectHub')
 
-const userSchema = mongoose.Schema({
-  username:String,
-  password:String,
-  email:String,
-  avatar:String,
+const userSchema = new mongoose.Schema({
+  username:{
+    type:String,
+    required: true,
+    lowercase:true,
+  },
+  email: {
+    type: String,
+    required: true,
+    lowercase:true
+  },
+  password:{
+    type:String,
+    required:true
+  },
+  avatar:{
+    type:String,
+    required:false
+  },
   projects:[
     {
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"project"
-  }
-]
-})
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"project"
+    }
+  ]
 
-module.exports = mongoose.model("user",userSchema)
+}, { timestamps: true })
+
+module.exports = mongoose.model("user", userSchema)
