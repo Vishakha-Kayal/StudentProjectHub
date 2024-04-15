@@ -12,9 +12,14 @@
                 <div class="w-full h-full ">
                     <form action="/signup" method="post" class="w-full h-full flex flex-col gap-2 signupForm">
                     <div class="w-full flex flex-col gap-2 px-4">
-                    <h1 class="font-semibold text-medium">Username</h1>
+                    <h1 class="font-semibold text-medium ">Username
+                        <% if(userExist){ %>
+                            <span class="text-red-600 text-sm">(Username already exits)</span>
+                        <% } %>
+                    </h1>
+                        
                     <div class="w-[90%] h-[2.2rem] rounded-md px-2 bg-[#e4ebe8] flex items-center gap-2 "><i class="ri-user-2-fill"></i><input type="text" name="username" class=" outline-none w-full h-full bg-inherit" placeholder="Enter username" required ></div>
-                    </div>
+                </div>
                     <div class="w-full flex flex-col gap-2 px-4">
                     <h1 class="font-semibold text-medium">Email</h1>
                     <div class="w-[90%] h-[2.2rem] rounded-md px-2 bg-[#e4ebe8]  flex items-center gap-2"><i class="ri-mail-fill"></i><input type="email" name="email" class="outline-none w-full h-full bg-inherit" placeholder="Enter email" required></div>

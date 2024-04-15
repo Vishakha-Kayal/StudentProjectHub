@@ -1,17 +1,21 @@
 var express = require('express');
 var router = express.Router();
 var userModel = require("./users")
+const bcrypt = require('bcryptjs');
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index',{nav:true,loggedIn:false});
+  loggedIn=req.session.loggedIn
+  const avatar=req.session.avatar
+  console.log(avatar);
+  res.render('index',{nav:true,loggedIn:loggedIn,avatar:avatar});
 });
 
 router.get('/project', function(req, res) {
   res.render('project',{nav:true,loggedIn:false});
 });
 
-router.get('/uploadProject', function(req, res) {
+router.get('/uploadProject',isAuthenticated, function(req, res) {
   res.render('uploadProject',{nav:false,loggedIn:false});
 });
 
@@ -19,7 +23,7 @@ router.post('/uploadProject', function(req, res) {
  res.redirect('/verify')
 });
 
-router.get('/verify', function(req, res) {
+router.get('/verify',isAuthenticated, function(req, res) {
   res.render('verification',{nav:false,loggedIn:false});
 });
 
@@ -27,12 +31,12 @@ router.post('/verify', function(req, res) {
   res.redirect('/form')
 });
 
-router.get('/form', function(req, res) {
+router.get('/form',isAuthenticated, function(req, res) {
   res.render('form',{nav:false,loggedIn:false});
 });
 
 
-router.get('/projectUploaded', function(req, res) {
+router.get('/projectUploaded',isAuthenticated, function(req, res) {
   res.render('projectUploaded',{nav:false,loggedIn:false});
 });
 
@@ -51,35 +55,59 @@ router.post('/submitForm', function(req, res) {
 }); 
 
 router.get('/signup', function(req, res) {
-  res.render('signup',{nav:false,loggedIn:false});
+  res.render('signup',{nav:false,loggedIn:false,userExist:false});
 });
 
 router.post('/signup', async function (req, res) {
-  console.log(req.body);
+  const { username, email, password } = req.body;
+  try{
+    const existingUser = await userModel.findOne({ username: username });
+    let userExist=false;
+    if (existingUser) {
+      userExist=true;
+      res.render('signup',{nav:false,loggedIn:false,userExist:userExist});
+    }
+
+    else{
+      let random = Math.floor(Math.random() * 16);
+    let avatarUrl = await fetch(`https://api.dicebear.com/7.x/lorelei/svg?seed=${random}`)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Error fetching avatar: ${res.statusText}`);
+        }
+        return res.url;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+      const salt = await bcrypt.genSalt(7);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      let user = await userModel.create({
+        username: req.body.username,
+        email:email,
+        password: hashedPassword,
+        avatar: avatarUrl // Assign the generated avatar URL
+      });
+      await user.save();
+      req.session.username = user.username;
+      req.session.loggedIn = true;
+      req.session.avatar = user.avatar;
+      console.log(user.avatar)
+    
+      res.redirect("/");
+    }
+  }
+  catch (error) {
+    console.error('Error saving user:', error);
+    // Handle errors appropriately
+    res.redirect("/signup");
+  }
   
-  let random = Math.floor(Math.random() * 16);
-  let avatarUrl = await fetch(`https://api.dicebear.com/7.x/lorelei/svg?seed=${random}`)
-    .then(res => {
-      if (!res.ok) {
-        throw new Error(`Error fetching avatar: ${res.statusText}`);
-      }
-      return res.url;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  
+
 
   // Create a new user with the avatar URL
-  let user = await userModel.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    avatar: avatarUrl // Assign the generated avatar URL
-  });
-  await user.save();
-  console.log(user.avatar)
-
-  res.redirect("/");
+  
 });
 
 // router.post('/api/user/signup', async function(req, res) {
@@ -118,10 +146,41 @@ router.post('/signup', async function (req, res) {
 // });
 
 router.get('/login', function(req, res) {
-  res.render('login',{nav:false,loggedIn:false});
+  res.render('login',{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:false});
 });
 
-router.get('/dashboard', function(req, res) {
+router.post('/login', async (req, res) => {
+  const { username,email, password } = req.body
+console.log(username);
+console.log(email);
+
+const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
+  
+  if (!user) {
+    res.render("login",{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:true});
+  }
+  
+ else{
+  const validPassword = await bcrypt.compare(password, user.password)
+  if (!validPassword) {
+     res.render("login",{nav:false,loggedIn:false,InvalidPassword:true,userNotFound:false});
+  }
+  else{
+  req.session.username = user.username;
+  req.session.loggedIn = true;
+  req.session.avatar = user.avatar;
+  res.redirect('/');
+  }
+ }
+  
+  
+
+  // res.render({user})
+  // res.send('User authenticated and logged in successfully')
+  // res.redirect('/')
+})
+
+router.get('/dashboard',isAuthenticated, function(req, res) {
   res.render('dashboard',{nav:true ,loggedIn:true});
 });
 
@@ -133,17 +192,27 @@ router.get('/contact', function(req, res) {
   res.render('contact',{nav:true,loggedIn:false});
 });
 
-router.get('/forgotpsswd', function(req, res) {
+router.get('/forgotpsswd',isAuthenticated, function(req, res) {
   res.render('forgotpsswd',{nav:false,loggedIn:false});
 });
 
-router.get('/verifypage', function(req, res) {
+router.get('/verifypage',isAuthenticated, function(req, res) {
   res.render('verifypage',{nav:false,loggedIn:false});
+});
+
+router.get('/createpsswd',isAuthenticated, function(req, res) {
+  res.render('createpsswd',{nav:false,loggedIn:false});
 });
 
 
 
-
+function isAuthenticated(req, res, next) {
+  if (req.session.username) {
+    return next();
+  } else {
+    res.redirect('/signup')
+  }
+}
 
 
 module.exports = router;
