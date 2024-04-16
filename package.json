@@ -7,6 +7,7 @@
     "build": "npx tailwindcss -i ./public/stylesheets/style.css -o ./public/stylesheets/output.css --watch"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",

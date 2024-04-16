@@ -2,11 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face{
+  font-family: 'custom Gellix';
+  src:url('Gellix-Regular.ttf')
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Gellix';
+  font-family: 'custom Gellix';
   scroll-behavior: smooth;
 }
 
@@ -398,4 +403,17 @@ color: grey;
 
 .homeBtn{
   box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
+
+.invalidStyle{
+  animation: anime 0.5s ease-in-out;
+}
+
+@keyframes anime{
+  0%{
+    transform: translateY(-60%);
+  }
+  100%{
+    transform: translateY(0%);
+  }
 }
