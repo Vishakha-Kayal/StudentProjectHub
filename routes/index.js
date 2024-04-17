@@ -3,7 +3,14 @@ var router = express.Router();
 var userModel = require("./users")
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const dotenv = require('dotenv')
 
+
+dotenv.config({
+  path: './.env'
+})
+
+let verificationCode = ""
 let msg = ""
 
 async function sendMail(email) {
@@ -14,12 +21,13 @@ async function sendMail(email) {
     port: 587,
     auth: {
       user: 'studentprojecthub11@gmail.com',  // This may need to be the authorized sender by 'smtp-relay.brevo.com'
-      pass: 'xsmtpsib-c5e4b0d9f37edda8c1121a470ecda5f4dd1b1c722cb753ccc46cf37bb8808950-3IrtXzZE0DhP6VC7',
+      pass: process.env.SECRET_KEY,
     },
   });
 
   // Temporary storage for verification codes (replace with a database)
   // const verificationCodes = new Map();
+  // console.log("verificationCodes = ",verificationCodes);
   const code = generateRandomCode();
 
   try {
@@ -31,32 +39,22 @@ async function sendMail(email) {
       subject: 'Hello, this is a check mail',
       text: `Your verification number is:${code}`,
     });
-
     console.log('Message sent: %s', info.messageId);
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    return code;
 
     // await res.json(info);
   } catch (error) {
     console.error(error);
     // res.status(500).send('Internal Server Error');
   }
+
 }
 
 function generateRandomCode() {
   const randomNum = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
   return randomNum.toString();
 }
-
-
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com', // Replace with your email provider's SMTP host
-  port: 587, // Replace with your email provider's port
-  secure: false, // Use TLS for Gmail
-  auth: {
-    user: 'kayalvishakha@gmail.com', // Replace with your email address
-    pass: '2factorAuthentication@lol' // Replace with your email password
-  }
-});
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -94,8 +92,6 @@ router.get('/form', isAuthenticated, function (req, res) {
 router.get('/projectUploaded', isAuthenticated, function (req, res) {
   res.render('projectUploaded', { nav: false, loggedIn: false });
 });
-
-
 
 router.post('/form', isAuthenticated, function (req, res) {
   res.redirect('/projectUploaded')
@@ -197,7 +193,7 @@ router.post('/signup', async function (req, res) {
 // });
 
 router.get('/login', function (req, res) {
-  res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false });
+  res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false,passwordReseted:false });
 });
 
 router.post('/login', async (req, res) => {
@@ -242,19 +238,64 @@ router.get('/forgotpsswd', function (req, res) {
   res.render('forgotpsswd', { nav: false, loggedIn: false });
 });
 
-router.post('/forgotpsswd', async function(req,res){
-  const { username,email } = req.body
-  const result = await sendMail(email)
-  console.log(result);
-  res.redirect('/verifypage')
+router.post('/forgotpsswd', async function (req, res) {
+  const { username, email } = req.body
+  const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] })
+
+  if (!user) {
+    res.render("login", { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: true });
+
+  }
+  else {
+    req.session.username = user.username
+    verificationCode = await sendMail(user.email)
+    // console.log("result code is = ",result);
+    res.redirect('verifypage')
+  }
 })
 
-router.get('/verifypage',  function (req, res) {
-  res.render('verifypage', { nav: false, loggedIn: false });
+router.get('/verifypage', function (req, res) {
+  res.render('verifypage', { nav: false, loggedIn: false, invalidOtp: false });
+});
+router.post('/verifypage', function (req, res) {
+  const { otp_input1, otp_input2, otp_input3, otp_input4 } = req.body;
+  console.log("verificationCode IS ", verificationCode);
+  console.log("type of verificationCode IS ", typeof (verificationCode));
+
+  const userInput = otp_input1 + otp_input2 + otp_input3 + otp_input4
+  if (userInput === verificationCode) {
+    res.redirect('/createpsswd')
+  }
+  else {
+    res.render('verifypage', { nav: false, loggedIn: false, invalidOtp: true });
+  }
+
 });
 
-router.get('/createpsswd',  function (req, res) {
+
+router.get('/createpsswd', function (req, res) {
   res.render('createpsswd', { nav: false, loggedIn: false });
+});
+
+router.post('/createpsswd', async function (req, res) {
+  const { confirmPassword } = req.body;
+try{
+  const user =await userModel.findOne({username: req.session.username })
+  if (!user) {
+    return res.status(404).send('User not found');
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(confirmPassword, salt);
+  user.password = hashedPassword;
+  await user.save();
+  res.render('login',{nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false ,passwordReseted:true})
+}
+
+  catch (error) {
+    res.status(500).send('Internal server error'); // Or redirect to an error page
+  }
+
 });
 
 router.get("/logout", function (req, res, next) {
