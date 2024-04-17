@@ -1,13 +1,29 @@
 <% include ./partials/header.ejs%>
-<div class="w-full h-screen bg-[#e4ebe8] flex items-center justify-center">
+<div class="w-full h-screen bg-[#e4ebe8] flex flex-col items-center justify-center">
+    <% if(passwordReseted){ %>
+        <div class="px-3 h-10 bg-green-600 -mt-12 mb-5 invalidStyle flex items-center justify-center rounded-lg">
+            <h1 class="text-white text-lg">Password reset successfully !!</h1>
+        </div>
+        <% } %>
+    <% if(userNotFound){ %>
+        <div class="h-10 bg-[#df2d00e3] -mt-12 mb-5 invalidStyle flex items-center justify-center rounded-lg px-2">
+            <h1 class="text-white text-lg">Invalid Username Or Email !!</h1>
+        </div>
+        <% } %>
+    <% if(InvalidPassword){ %>
+        <div class="h-10 bg-[#df2d00e3] -mt-12 mb-5 invalidStyle flex items-center justify-center rounded-lg px-2">
+            <h1 class="text-white text-lg">Incorrect Password !!</h1>
+        </div>
+        <% } %>
+
     <div class="w-[65%] h-[80%] bg-[#009D85] rounded-xl flex overflow-hidden">
         <div class="w-[45%] h-full flex items-center justify-center relative">
             <div class="w-[95%] h-[95%] bg-[#e4ebe8] rounded-xl "><img src="images/login.webp" class="w-full h-[99.5%] object-cover absolute left-7  " alt=""></div>
         </div>
         <div class="w-[55%] h-full flex flex-col  ">
             <div class="w-full h-full flex items-center flex-col px-7 ">
-                <div class="w-full h-[15%] flex items-center justify-center"><h1 class="font-bold text-2xl w-full text-center mr-6 text-white">Welcome Back!</h1></div>
-                <div class="w-full h-[75%] ">
+                <div class="w-full h-[13%] flex items-center justify-center"><h1 class="font-bold text-2xl w-full text-center mr-6 text-white">Welcome Back!</h1></div>
+                <div class="w-full h-[77%] ">
                     <form action="/login" method="post" class="w-full h-full flex flex-col gap-2">
                     <div class="w-full flex flex-col gap-2 px-4">
                     <h1 class="font-semibold text-medium text-white">Username</h1>
@@ -18,9 +34,7 @@
                         <h1 class="text-semibold text-white text-lg">OR</h1>
                         <div class="w-[40%] h-[1%] bg-white"></div>
                     </div>
-                    <% if(userNotFound){ %>
-                       <div class="w-full flex  justify-center "><h1 class="text-[#DF2D00] font-bold text-sm mr-8">Invalid Username or Email</h1></div>
-                <% } %>
+                   
                     <div class="w-full flex flex-col gap-2 px-4">
                     <h1 class="font-semibold text-medium text-white">Email</h1>
                     <div class="w-[90%] h-[2.2rem] rounded-md px-2 bg-[#e4ebe8]  flex items-center gap-2"><i class="ri-mail-fill"></i><input type="email" class="outline-none w-full h-full bg-inherit" name="email" placeholder="Enter email"></div>
@@ -32,9 +46,7 @@
                         <input type="password" class="pass outline-none w-[90%] h-full bg-inherit" name="password" placeholder="Enter password">
                         <i class="ri-eye-fill open point-cursor"></i>
                     </div>
-                    <% if(InvalidPassword){ %>
-                    <h1 class="text-[#DF2D00] font-bold text-sm ">Incorrect Password</h1>
-                    <% } %>
+                    
                     <a href="/forgotpsswd" class="point-cursor hover:underline text-white transition-all duration-500 ease-in-out"><h1 class="text-sm text-white">Forgot Password?</h1></a>
                     </div>
                     <div class="w-full grid place-items-center px-4 mt-3 " >

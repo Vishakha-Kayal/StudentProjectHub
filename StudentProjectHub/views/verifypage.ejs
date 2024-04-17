@@ -13,14 +13,18 @@
             <div class="w-full flex justify-center py-2">
                 <h2 class="capitalize w-[80%] text-center text-white font-semibold">Please enter the 4 Digit Code Sent to your email address
             </div>
-            <form action="" method="post" class="mt-4 flex items-center flex-col" >
+            <% if(invalidOtp){ %>
+                <div class="w-full flex  justify-center"><h1 class="bg-[#df2d00e3] text-white px-2 rounded-md py-1 text-sm">Incorrect Verification Code !!</h1></div>
+                <% } %>
+
+            <form action="/verifypage" method="post" class="mt-4 flex items-center flex-col" >
                 <div class="inputContainer">
-                    <input required="required" maxlength="1" type="number" class="otp-input" id="otp-input1">
-                    <input required="required" maxlength="1" type="number" class="otp-input" id="otp-input2">
-                    <input required="required" maxlength="1" type="number" class="otp-input" id="otp-input3">
-                    <input required="required" maxlength="1" type="number" class="otp-input" id="otp-input4">
+                    <input required="required" maxlength="1" type="text" class="otp-input text-white" id="otp-input1" name="otp_input1">
+                    <input required="required" maxlength="1" type="text" class="otp-input text-white" id="otp-input2" name="otp_input2">
+                    <input required="required" maxlength="1" type="text" class="otp-input text-white" id="otp-input3" name="otp_input3">
+                    <input required="required" maxlength="1" type="text" class="otp-input text-white" id="otp-input4" name="otp_input4">
                 </div>
-                  <input class="w-[10vw] h-[7vh] bg-black text-white mt-6 rounded-md text-lg font-semibold" type="submit" value="Verify">
+                  <input class="w-[10vw] h-[7vh] bg-black text-white mt-6 rounded-md text-lg font-semibold point-cursor" type="submit" value="Verify">
                 </form>
                 <div class="w-full flex  justify-center">
                     <button class="point-cursor mt-10 text-white underline">Resend Code</button>

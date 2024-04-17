@@ -2,6 +2,55 @@ var express = require('express');
 var router = express.Router();
 var userModel = require("./users")
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const dotenv=require("dotenv")
+
+dotenv.config({
+  path: './.env'
+})
+
+let verificationCode="";
+
+async function sendMail(email) {
+
+  // Configure nodemailer with secure settings
+  const transporter = nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    auth: {
+      user: 'studentprojecthub11@gmail.com',  // This may need to be the authorized sender by 'smtp-relay.brevo.com'
+      pass: `${process.env.SECERT_KEY}`,
+    },
+  });
+
+  // Temporary storage for verification codes (replace with a database)
+  // const verificationCodes = new Map();
+  const code = generateRandomCode();
+
+  try {
+    // Removed the testAccount creation as it's not being used
+
+    let info = await transporter.sendMail({
+      from: 'studentprojecthub11@gmail.com', // corrected sender address
+      to: email,
+      subject: 'Verification Code',
+      text: `Your verification code is:${code}`,
+    });
+
+    console.log('Message sent: %s', info.messageId);
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    return code;
+    // await res.json(info);
+  } catch (error) {
+    console.error(error);
+    // res.status(500).send('Internal Server Error');
+  }
+}
+
+function generateRandomCode() {
+  const randomNum = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+  return randomNum.toString();
+} 
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -157,13 +206,13 @@ console.log(email);
 const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
   
   if (!user) {
-    res.render("login",{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:true});
+    res.render("login",{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:true,passwordReseted:false });
   }
   
  else{
   const validPassword = await bcrypt.compare(password, user.password)
   if (!validPassword) {
-     res.render("login",{nav:false,loggedIn:false,InvalidPassword:true,userNotFound:false});
+     res.render("login",{nav:false,loggedIn:false,InvalidPassword:true,userNotFound:false,passwordReseted:false });
   }
   else{
   req.session.username = user.username;
@@ -192,27 +241,87 @@ router.get('/contact', function(req, res) {
   res.render('contact',{nav:true,loggedIn:false});
 });
 
-router.get('/forgotpsswd',isAuthenticated, function(req, res) {
-  res.render('forgotpsswd',{nav:false,loggedIn:false});
+router.get('/forgotpsswd', function(req, res) {
+  res.render('forgotpsswd',{nav:false,loggedIn:false,userNotFound:false});
 });
 
-router.get('/verifypage',isAuthenticated, function(req, res) {
-  res.render('verifypage',{nav:false,loggedIn:false});
+router.post('/forgotpsswd', async (req, res) => {
+const { username,email } = req.body
+
+
+const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
+console.log(user.email);
+  
+  if (!user) {
+    res.render("forgotpsswd",{nav:false,loggedIn:false,userNotFound:true});
+  }
+  
+  else{
+    req.session.username = user.username
+  verificationCode = await sendMail(user.email)
+  console.log(verificationCode);
+  res.redirect('/verifypage');
+  }
+ 
+})
+
+router.get('/verifypage', function(req, res) {
+  res.render('verifypage',{nav:false,loggedIn:false,invalidOtp:false});
 });
 
-router.get('/createpsswd',isAuthenticated, function(req, res) {
+router.post('/verifypage', function(req, res) {
+  const {otp_input1,otp_input2,otp_input3,otp_input4}= req.body;
+  let otp = otp_input1+otp_input2+otp_input3+otp_input4;
+  console.log("otp",otp);
+  console.log(verificationCode);
+  if(otp == verificationCode){
+  res.redirect("/createpsswd")
+  }
+  else{
+    res.render('verifypage',{nav:false,loggedIn:false,invalidOtp:true});
+  }
+});
+
+router.get('/createpsswd', function(req, res) {
   res.render('createpsswd',{nav:false,loggedIn:false});
 });
 
+router.post('/createpsswd', async function (req, res) {
+  const { confirmPassword } = req.body;
+try{
+  const user =await userModel.findOne({username: req.session.username })
+  if (!user) {
+    return res.status(404).send('User not found');
+  }
 
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(confirmPassword, salt);
+  user.password = hashedPassword;
+  await user.save();
+  res.render('login',{nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false ,passwordReseted:true})
+}
+
+  catch (error) {
+    res.status(500).send('Internal server error'); // Or redirect to an error page
+  }
+
+});
 
 function isAuthenticated(req, res, next) {
-  if (req.session.username) {
+  if (req.session.loggedIn) {
     return next();
   } else {
     res.redirect('/signup')
   }
 }
+
+router.get("/logout", function (req, res, next) {
+  req.session.loggedIn = false;
+  res.redirect('/')
+});
+
+
+
 
 
 module.exports = router;

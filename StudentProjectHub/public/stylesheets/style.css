@@ -303,7 +303,7 @@ color: grey;
   border: none;
   border-radius: 7px;
   caret-color: #5db094;
-  color: rgb(44, 44, 44);
+  /* color: rgb(44, 44, 44); */
   outline: none;
   font-weight: 600;
 }
@@ -436,4 +436,17 @@ box-shadow:  23px 23px 43px #b3b3b3,
   background: -webkit-linear-gradient(to bottom, #71B280, #134E5E);
   /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to bottom, #71B280, #134E5E);
+}
+
+.invalidStyle{
+  animation: anime 0.5s ease-in-out;
+}
+
+@keyframes anime{
+  0%{
+    transform: translateY(-60%);
+  }
+  100%{
+    transform: translateY(0%);
+  }
 }
