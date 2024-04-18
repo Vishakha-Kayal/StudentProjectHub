@@ -36,8 +36,12 @@ async function sendMail(email) {
     let info = await transporter.sendMail({
       from: 'studentprojecthub11@gmail.com', // corrected sender address
       to: email,
-      subject: 'Hello, this is a check mail',
-      text: `Your verification number is:${code}`,
+      subject: 'Your Access Verification Code',
+      text: `We hope this message finds you well. As part of our commitment to ensuring the security of your account, we are providing you with a verification code. Please use the code below to complete the verification process:
+
+      Verification Code: ${code}
+      
+      If you have any questions or concerns, please don't hesitate to reach out to our support team. We're here to help!`,
     });
     console.log('Message sent: %s', info.messageId);
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
@@ -68,11 +72,13 @@ router.get('/project', function (req, res) {
   res.render('projects', { nav: true, loggedIn: false });
 });
 
-router.get('/uploadProject', isAuthenticated, function (req, res) {
+router.get('/uploadProject', function (req, res) {
   res.render('uploadProject', { nav: false, loggedIn: false });
 });
 
-router.post('/uploadProject', function (req, res) {
+router.post('/uploadProject', async function (req, res) {
+  const {email}=req.body;
+  verificationCode = await sendMail(email)
   res.redirect('/verify')
 });
 
@@ -81,10 +87,19 @@ router.get('/verify', function (req, res) {
 });
 
 router.post('/verify', function (req, res) {
+  const {otp_input1 , otp_input2 , otp_input3 , otp_input4} = req.body;
+  let userInput =  otp_input1 + otp_input2 + otp_input3 + otp_input4;
+  if (userInput === verificationCode) {
+    res.redirect('/form')
+  }
+  else {
+    res.redirect('/');
+  }
+
   res.redirect('/form')
 });
 
-router.get('/form', isAuthenticated, function (req, res) {
+router.get('/form', function (req, res) {
   res.render('form', { nav: false, loggedIn: false });
 });
 
@@ -204,14 +219,14 @@ router.post('/login', async (req, res) => {
   const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
 
   if (!user) {
-    res.render("login", { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: true });
+    res.render("login", { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: true,passwordReseted:false  });
 
   }
 
   else {
     const validPassword = await bcrypt.compare(password, user.password)
     if (!validPassword) {
-      res.render("login", { nav: false, loggedIn: false, InvalidPassword: true, userNotFound: false });
+      res.render("login", { nav: false, loggedIn: false, InvalidPassword: true, userNotFound: false,passwordReseted:false  });
     }
     else {
       req.session.username = user.username;

@@ -8,49 +8,59 @@ select.addEventListener("change", function () {
 });
 
 const uploadIcon = document.getElementsByClassName('ic')
-function uploadProjectImages(){
-    const form = document.querySelector('form')
+function uploadProjectImages() {
     const inputDiv = document.querySelector('#projectImages')
     const imagesdiv = document.querySelector('.images-form')
-    
+
     uploadIcon[0].addEventListener('click', function () {
         inputDiv.click();
     });
-    
-    // Listen for changes to the file input to handle file selection
+
     inputDiv.addEventListener('change', function () {
         const images = inputDiv.files;
-        // Now this should log the selected files
         Array.from(images).forEach(image => {
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(image);
-            img.classList.add('style-img')
-            imagesdiv.classList.remove('hidden')
-            // imagesdiv.classList.add('style-img')
-            imagesdiv.appendChild(img);
-            // Optionally, revoke the object URL after the image has loaded to free memory
-            img.onload = () => URL.revokeObjectURL(img.src);
+            const maxSize = 150 * 1024;
+
+            if (image.size > maxSize) {
+                alert("Error: Image size exceeds 150kb. Please choose a smaller image.");
+            }
+            else{
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(image);
+                img.classList.add('style-img')
+                imagesdiv.classList.remove('hidden')
+                // imagesdiv.classList.add('style-img')
+                imagesdiv.appendChild(img);
+                // Optionally, revoke the object URL after the image has loaded to free memory
+                img.onload = () => URL.revokeObjectURL(img.src);
+            }
         });
-    });    
+    });
 }
 
-function uploaduniversityLogo(){
+function uploaduniversityLogo() {
     const inputDiv = document.querySelector('#universityLogo')
     uploadIcon[1].addEventListener('click', function () {
         inputDiv.click();
     });
-
-    inputDiv.addEventListener("change",()=>{
+    inputDiv.addEventListener("change", () => {
         const uniLogo = inputDiv.files;
-        console.log(uniLogo);
-        let thisDiv = '';
+        console.log("uniLogo", uniLogo);
+        // Iterate over each file in the array
         Array.from(uniLogo).forEach(file => {
-            thisDiv += `<img src=${URL.createObjectURL(file)} alt="" class="w-full h-full contain"></img>`;
+            console.log("file", file);
+            const maxSize = 150 * 1024; // 150kb in bytes
+            if (file.size > maxSize) {
+                alert("Error: Image size exceeds 150kb. Please choose a smaller image.");
+            } else {
+                let thisDiv = '';
+                thisDiv += `<img src=${URL.createObjectURL(file)} alt="" class="w-full h-full contain"></img>`;
+
+                let unilogoDiv = document.querySelector('.uni-logo');
+                unilogoDiv.innerHTML = thisDiv;
+            }
         });
-        let unilogoDiv = document.querySelector('.uni-logo');
-        unilogoDiv.innerHTML = thisDiv;
-        console.log(unilogoDiv);
-    })
+    });
 }
 
 function showLimit() {
@@ -183,21 +193,21 @@ function storeFormData() {
                 method: 'POST',
                 body: JSON.stringify(combinedFormData),
                 headers: {
-                  'Content-Type': 'application/json'
+                    'Content-Type': 'application/json'
                 }
-              })
-              .then(response => response.json())
-              .then(data => {
-                if (data.success) {
-                    console.log(data);
-                  window.location.href = '/projectUploaded'; 
-                } else {
-                  // Handle error or show a message to the user
-                }
-              })
-              .catch(error => {
-                console.error('Error:', error);
-              });
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log(data);
+                        window.location.href = '/projectUploaded';
+                    } else {
+                        // Handle error or show a message to the user
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         })
 
     })
