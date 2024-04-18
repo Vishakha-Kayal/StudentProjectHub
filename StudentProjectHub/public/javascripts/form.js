@@ -7,30 +7,34 @@ select.addEventListener("change", function () {
     }
 });
 
+
+
+// Listen for changes to the file input to handle file selection
 const form = document.querySelector('form')
 const inputDiv = document.querySelector('#projectImages')
 const imagesdiv = document.querySelector('.images-form')
 
 const uploadIcon = document.getElementsByClassName('ic')
 uploadIcon[0].addEventListener('click', function () {
-    inputDiv.click();
+inputDiv.click();
 });
 
-// Listen for changes to the file input to handle file selection
-inputDiv.addEventListener('change', function () {
-    const images = inputDiv.files;
-   // Now this should log the selected files
-    Array.from(images).forEach(image => {
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(image);
-        img.classList.add('style-img')
-        imagesdiv.classList.remove('hidden')
-        // imagesdiv.classList.add('style-img')
-        imagesdiv.appendChild(img);
-        // Optionally, revoke the object URL after the image has loaded to free memory
-        img.onload = () => URL.revokeObjectURL(img.src);
+function uploadProjectImages(){
+    inputDiv.addEventListener('change', function () {
+        const images = inputDiv.files;
+       // Now this should log the selected files
+        Array.from(images).forEach(image => {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(image);
+            img.classList.add('style-img')
+            imagesdiv.classList.remove('hidden')
+            // imagesdiv.classList.add('style-img')
+            imagesdiv.appendChild(img);
+            // Optionally, revoke the object URL after the image has loaded to free memory
+            img.onload = () => URL.revokeObjectURL(img.src);
+        });
     });
-});
+}
 
 const uploadlogo = document.getElementsByClassName('ic')
 uploadlogo[1].addEventListener('click', function () {
@@ -197,6 +201,26 @@ const uniDets = document.querySelector(".uniDets")
 
 
 }
+
+let projectImages=document.querySelector(".projectImages")
+projectImages.addEventListener("input",(e)=>{
+    if (projectImages.files) {
+        var maxSize = 150 * 1024; // 150 KB in bytes
+
+        for (var i = 0; i < projectImages.files.length; i++) {
+            var fileSize = projectImages.files[i].size; // in bytes
+
+            if (fileSize > maxSize) {
+                alert("One or more files exceed the maximum limit of 150 KB. Please select smaller files.");
+                projectImages.value = ''; 
+            }
+            
+            else{
+                uploadProjectImages();
+            }
+        }
+    }
+})
 
 
 showLimit()

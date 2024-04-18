@@ -33,8 +33,12 @@ async function sendMail(email) {
     let info = await transporter.sendMail({
       from: 'studentprojecthub11@gmail.com', // corrected sender address
       to: email,
-      subject: 'Verification Code',
-      text: `Your verification code is:${code}`,
+      subject: 'Your Access Verification Code',
+      text: `We hope this message finds you well. As part of our commitment to ensuring the security of your account, we are providing you with a verification code. Please use the code below to complete the verification process:
+
+      Verification Code: ${code}
+      
+      If you have any questions or concerns, please don't hesitate to reach out to our support team. We're here to help!`,
     });
 
     console.log('Message sent: %s', info.messageId);
@@ -64,28 +68,41 @@ router.get('/project', function(req, res) {
   res.render('project',{nav:true,loggedIn:false});
 });
 
-router.get('/uploadProject',isAuthenticated, function(req, res) {
+router.get('/uploadProject', function(req, res) {
   res.render('uploadProject',{nav:false,loggedIn:false});
 });
 
-router.post('/uploadProject', function(req, res) {
+router.post('/uploadProject', async function(req, res) {
+  const{universityEmail}=req.body;
+  verificationCode = await sendMail(universityEmail)
+  console.log(verificationCode);
  res.redirect('/verify')
 });
 
-router.get('/verify',isAuthenticated, function(req, res) {
-  res.render('verification',{nav:false,loggedIn:false});
+router.get('/verify', function(req, res) {
+  res.render('verification',{nav:false,loggedIn:false,invalidOtp:false});
 });
 
 router.post('/verify', function(req, res) {
-  res.redirect('/form')
+  const {otp_input1,otp_input2,otp_input3,otp_input4}= req.body;
+  let otp = otp_input1+otp_input2+otp_input3+otp_input4;
+  console.log("otp",otp);
+  console.log(verificationCode);
+  if(otp == verificationCode){
+    res.redirect('/form')
+  }
+  else{
+    res.render('verify',{nav:false,loggedIn:false,invalidOtp:true});
+  }
+  
 });
 
-router.get('/form',isAuthenticated, function(req, res) {
+router.get('/form', function(req, res) {
   res.render('form',{nav:false,loggedIn:false});
 });
 
 
-router.get('/projectUploaded',isAuthenticated, function(req, res) {
+router.get('/projectUploaded', function(req, res) {
   res.render('projectUploaded',{nav:false,loggedIn:false});
 });
 
@@ -195,7 +212,7 @@ router.post('/signup', async function (req, res) {
 // });
 
 router.get('/login', function(req, res) {
-  res.render('login',{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:false});
+  res.render('login',{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:false,passwordReseted:false});
 });
 
 router.post('/login', async (req, res) => {
