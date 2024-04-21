@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var userModel = require("./users")
+var projectModel = require('./project');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const dotenv=require("dotenv")
+const upload=require("./multer")
 
 dotenv.config({
   path: './.env'
@@ -60,23 +62,61 @@ function generateRandomCode() {
 router.get('/', function(req, res) {
   loggedIn=req.session.loggedIn
   const avatar=req.session.avatar
-  console.log(avatar);
   res.render('index',{nav:true,loggedIn:loggedIn,avatar:avatar});
 });
 
-router.get('/project', function(req, res) {
-  res.render('project',{nav:true,loggedIn:false});
+router.get('/project', async function(req, res) {
+  const project = await projectModel.find().populate('createdBy')
+  loggedIn=req.session.loggedIn
+  const avatar=req.session.avatar
+  console.log(project);
+  res.render('project',{project,nav:true,loggedIn:loggedIn,avatar:avatar});
 });
 
-router.get('/uploadProject', function(req, res) {
-  res.render('uploadProject',{nav:false,loggedIn:false});
+
+
+router.get('/uploadProject', async function(req, res) {
+  let username = req.session.username;
+  const user = await userModel.findOne({username:username})
+  if(user){
+    if(user.universityEmail){
+      res.redirect("/form")
+    }
+  }
+  else{
+    res.render('uploadProject',{nav:false,loggedIn:false});
+  }
 });
 
 router.post('/uploadProject', async function(req, res) {
   const{universityEmail}=req.body;
-  verificationCode = await sendMail(universityEmail)
-  console.log(verificationCode);
- res.redirect('/verify')
+  try {
+    verificationCode = await sendMail(universityEmail)
+    let username = req.session.username;
+    const user = await userModel.findOne({ username: username })
+
+    if (user.universityEmail === universityEmail) {
+      throw new Error("Enter unique email, email already exists.");
+    }
+
+    user.universityEmail = universityEmail;
+    await user.save();
+    console.log("user=", user);
+    res.redirect('/verify');
+  }
+  catch (error) {
+    console.error(error);
+    res.status(400).send(error.message);
+  }
+
+//   verificationCode = await sendMail(universityEmail);
+//   let username = req.session.username;
+//   const user = await userModel.findOne({username:username})
+//   user.universityEmail = universityEmail;
+//   await user.save();
+//   console.log(verificationCode);
+
+//  res.redirect('/verify')
 });
 
 router.get('/verify', function(req, res) {
@@ -102,23 +142,66 @@ router.get('/form', function(req, res) {
 });
 
 
+
+
+router.post('/submitForm',upload.fields([{ name: 'projectImages' }, { name: 'universityLogo' }]), async function(req, res) {
+  const projectImages = req.files['projectImages'];
+    const universityLogo = req.files['universityLogo'];
+    const user = await userModel.findOne({ username: req.session.username });
+
+    let projectImagesFilename=[]
+    projectImages.forEach(element => {
+      let filename=element.filename
+      projectImagesFilename.push(filename)
+    });
+
+    let UniversityImageFilename=""
+    universityLogo.forEach(element => {
+      let filename=element.filename
+      UniversityImageFilename=filename
+
+    });
+
+  console.log(projectImagesFilename);
+  console.log(UniversityImageFilename);
+
+  const{projectTitle,projectDescription,universityName,projectCategory}=req.body
+  const approvedProject=true
+  const inputData=req.body;
+
+  const students = [];
+
+for (let i = 1; inputData[`studentName_${i}`]; i++) {
+  const student = {
+    studentName: inputData[`studentName_${i}`],
+    studentStream: inputData[`studentStream_${i}`],
+    yearOfQualification: inputData[`yearOfQualification_${i}`]
+  };
+  students.push(student);
+}
+
+let project = await projectModel.create({
+  createdBy:user._id,
+  projectTitle:projectTitle,
+  projectDescription:projectDescription,
+  universityName:universityName,
+  projectCategory:projectCategory,
+  approvedProject:approvedProject,
+  projectImages:projectImagesFilename,
+  universityLogo:UniversityImageFilename,
+  student:students
+});
+
+user.projects.push(project._id)
+await user.save();
+
+console.log(students);
+  res.json({sucess:true,message:"Form submitted successfully"});
+}); 
+
 router.get('/projectUploaded', function(req, res) {
   res.render('projectUploaded',{nav:false,loggedIn:false});
 });
-
-
-
-router.post('/form', function(req, res) {
-  res.redirect('/projectUploaded')
-});
-
-router.post('/submitForm', function(req, res) {
-  const projectTitle = req.body;
-  const file = req.file;
-  console.log(projectTitle);
-  console.log(file);
-  res.json({sucess:true,message:"Form submitted successfully"});
-}); 
 
 router.get('/signup', function(req, res) {
   res.render('signup',{nav:false,loggedIn:false,userExist:false});
@@ -126,6 +209,7 @@ router.get('/signup', function(req, res) {
 
 router.post('/signup', async function (req, res) {
   const { username, email, password } = req.body;
+  const universityEmail="";
   try{
     const existingUser = await userModel.findOne({ username: username });
     let userExist=false;
@@ -152,9 +236,10 @@ router.post('/signup', async function (req, res) {
         username: req.body.username,
         email:email,
         password: hashedPassword,
-        avatar: avatarUrl // Assign the generated avatar URL
+        avatar: avatarUrl,
+        universityEmail:universityEmail // Assign the generated avatar URL
       });
-      await user.save();
+  
       req.session.username = user.username;
       req.session.loggedIn = true;
       req.session.avatar = user.avatar;
@@ -217,8 +302,7 @@ router.get('/login', function(req, res) {
 
 router.post('/login', async (req, res) => {
   const { username,email, password } = req.body
-console.log(username);
-console.log(email);
+
 
 const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
   

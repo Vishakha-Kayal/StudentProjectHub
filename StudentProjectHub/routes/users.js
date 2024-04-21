@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
     required:false,
     trim:true,
   },
+  universityEmail:{
+    type : String,
+    required:false,
+  },
   projects:[
     {
       type:mongoose.Schema.Types.ObjectId,

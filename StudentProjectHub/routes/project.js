@@ -1,20 +1,18 @@
 const mongoose = require("mongoose")
 
 const studentSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    stream: { type: String, required: true },
+    studentName: { type: String, required: true },
+    studentStream: { type: String, required: true },
     yearOfQualification: { type: Number, required: true }
 });
 
 const projectSchema = new mongoose.Schema({
     projectTitle: String,
-    projectDesc: String,
+    projectDescription: String,
     universityName: String,
-    technologyStack: String,
     projectCategory: String,
-    projectImages: [
-        { type: String }
-    ],
+    projectImages: [String]
+    ,
     universityLogo:String,
     student: [studentSchema],
     createdBy: {

@@ -183,7 +183,7 @@ html {
 }
 
 .dropdown::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 .dropdown::-webkit-scrollbar-track {
@@ -204,7 +204,7 @@ html {
 }
 
 .left::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 .right::-webkit-scrollbar-track {
@@ -372,7 +372,7 @@ color: grey;
 }
 
 .projectImg::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 .projectImg::-webkit-scrollbar-track {

@@ -2,18 +2,23 @@ let imgAttribute = document.querySelectorAll(".image");
 let imgdiv = document.querySelector(".actual");
 let arr = Array.from(imgAttribute);
 
+
+
 const leftBtn = document.querySelector(".left-icon");
 const rightBtn = document.querySelector(".right-icon");
 
 let i = 0;
-const totalImages = arr.length;
+let totalImages = arr.length;
 
 rightBtn.addEventListener("click", () => {
+    console.log(totalImages);
     i = (i + 1) % totalImages;
     imgdiv.src = arr[i].getAttribute('src');
+    console.log("hello");
 });
 
 leftBtn.addEventListener("click", () => {
+    console.log(totalImages);
     i = (i - 1 + totalImages) % totalImages;
     imgdiv.src = arr[i].getAttribute('src');
 });
@@ -107,15 +112,83 @@ selectedCategory.forEach((categoryElement) => {
         });
     });
 });
-document.querySelector('.clearfilters').addEventListener("click",()=>{
+document.querySelector('.clearfilters').addEventListener("click", () => {
     window.location.reload();
 })
 
 var currentUrl = window.location.href;
 
 var navLinks = document.querySelectorAll('.navlinks');
-navLinks.forEach(function(link) {
-  if (link.href === currentUrl) {
-    link.classList.add("text-[#43856F]");
-  }
+navLinks.forEach(function (link) {
+    if (link.href === currentUrl) {
+        link.classList.add("text-[#43856F]");
+    }
 });
+
+
+let project;
+let sidebar = document.querySelectorAll(".sidebar")
+let projectTitleHeading = document.querySelector(".projectTitle")
+let universityLogoHeading = document.querySelector(".universityLogo")
+let universityNameHeading = document.querySelector(".universityName")
+let projectCategoryHeading = document.querySelector(".projectCategory")
+let projectImagesHeading = document.querySelector(".projectImages")
+let projectDescriptionHeading = document.querySelector(".projectDescription")
+let studentDetailsHeading = document.querySelector(".studentDetails")
+let rightDiv = document.querySelector(".right")
+sidebar.forEach((e, i) => {
+    e.addEventListener("click", async () => {
+        let data=await JSON.parse(e.getAttribute('data-index'));
+        console.log(data);
+                        projectTitleHeading.innerHTML = data.projectTitle;
+                        universityLogoHeading.src = `temp/${data.universityLogo}`
+                        universityNameHeading.innerHTML = data.universityName;
+                        projectCategoryHeading.innerHTML = data.projectCategory;
+                        projectDescriptionHeading.innerHTML=data.projectDescription
+                        let img = "";
+                        let image = "";
+                        data.projectImages.forEach(function (e, i) {
+                            console.log(data.projectImages[i]);
+                            img = `<img src="temp/${data.projectImages[0]}"
+                            alt="" class="actual m-auto h-full  rounded-md">`
+                            image += `<img src="temp/${data.projectImages[i]}"
+                             alt="" class="imm image">`
+                            index++
+                            img += image
+                        })
+                        console.log(img);
+                        projectImagesHeading.innerHTML = img;
+                        imgAttribute = document.querySelectorAll(".image");
+                        imgdiv = document.querySelector(".actual");
+                        arr = Array.from(imgAttribute);
+                        i = 0
+                        totalImages = arr.length;
+
+                        let studentDetails;
+
+                        data.student.forEach(function(elem){
+                             studentDetails+=`<div class="flex justify-between items-center w-full h-[25%]">
+                            <div
+                                class="w-[45%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                <h1>${elem.studentName}</h1>
+                            </div>
+                            <div
+                                class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                <h1>${elem.studentStream}</h1>
+                            </div>
+                            <div
+                                class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                <h1>${elem.yearOfQualification }</h1>
+                            </div>
+                        </div>`
+                        })
+                        studentDetailsHeading.innerHTML = studentDetails;
+                    }
+                )}
+)
+            
+
+
+
+
+
