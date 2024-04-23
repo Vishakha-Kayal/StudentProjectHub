@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var userModel = require("./users")
+var projectModel = require("./project")
+var reviewModel = require("./review")
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv')
-
+const upload = require("./multer");
+const review = require('./review');
 
 dotenv.config({
   path: './.env'
@@ -68,18 +71,78 @@ router.get('/', function (req, res) {
   res.render('index', { nav: true, loggedIn: loggedIn, avatar: avatar });
 });
 
-router.get('/project', function (req, res) {
-  res.render('projects', { nav: true, loggedIn: false });
+router.get('/project', async function (req, res) {
+  const project = await projectModel.find()
+    .populate("createdBy")
+
+  res.render('projects', { nav: true, loggedIn: req.session.loggedIn, projects: project, avatar: req.session.avatar ,review:""});
+
 });
 
-router.get('/uploadProject', function (req, res) {
-  res.render('uploadProject', { nav: false, loggedIn: false });
+router.post('/comments', isAuthenticated, async function (req, res) {
+  console.log("req.body =",req.body);
+  const project = await projectModel.find()
+  .populate("createdBy")
+  const { comment , projectId } = req.body
+  const user = await userModel.findOne({username:req.session.username});
+  try {
+    const review = await reviewModel.create({
+      reviewContent: comment,
+      senderName: user._id,
+      receiverDetail: projectId,
+    })
+
+    console.log("review",review);
+    res.render("projects",{nav: true, loggedIn: true, projects: project, avatar: req.session.avatar,review:review})
+  }
+  catch (e) {
+    console.log(e);
+  }
+
+})
+
+
+
+// const project = await projectModel.find().populate('createdBy')
+//   loggedIn=req.session.loggedIn
+//   console.log(project);
+//   res.render('project',{project,nav:true,loggedIn:loggedIn});
+
+router.get('/uploadProject', isAuthenticated, async function (req, res) {
+
+  const user = await userModel.findOne({
+    username: req.session.username,
+  });
+  if (user) {
+    if (user.universityEmail) {
+      res.redirect("/form")
+    }
+  }
+  else {
+    res.render("uploadProject", { nav: false, loggedIn: false })
+  }
 });
 
 router.post('/uploadProject', async function (req, res) {
-  const {email}=req.body;
-  verificationCode = await sendMail(email)
-  res.redirect('/verify')
+  const { email } = req.body;
+  try {
+    verificationCode = await sendMail(email)
+    let username = req.session.username;
+    const user = await userModel.findOne({ username: username })
+
+    if (user.universityEmail === email) {
+      throw new Error("Enter unique email, email already exists.");
+    }
+
+    user.universityEmail = email;
+    await user.save();
+    console.log("user=", user);
+    res.redirect('/verify');
+  }
+  catch (error) {
+    console.error(error);
+    res.status(400).send(error.message);
+  }
 });
 
 router.get('/verify', function (req, res) {
@@ -87,8 +150,8 @@ router.get('/verify', function (req, res) {
 });
 
 router.post('/verify', function (req, res) {
-  const {otp_input1 , otp_input2 , otp_input3 , otp_input4} = req.body;
-  let userInput =  otp_input1 + otp_input2 + otp_input3 + otp_input4;
+  const { otp_input1, otp_input2, otp_input3, otp_input4 } = req.body;
+  let userInput = otp_input1 + otp_input2 + otp_input3 + otp_input4;
   if (userInput === verificationCode) {
     res.redirect('/form')
   }
@@ -104,21 +167,68 @@ router.get('/form', function (req, res) {
 });
 
 
-router.get('/projectUploaded', isAuthenticated, function (req, res) {
-  res.render('projectUploaded', { nav: false, loggedIn: false });
+router.get('/projectUploaded', function (req, res) {
+  res.render('projectUploaded', { nav: false, loggedIn: true });
 });
+
 
 router.post('/form', isAuthenticated, function (req, res) {
   res.redirect('/projectUploaded')
 });
 
-router.post('/submitForm', function (req, res) {
-  const projectTitle = req.body;
-  const file = req.file;
-  console.log(projectTitle);
-  console.log(file);
+
+
+router.post('/submitForm', upload.fields([{ name: 'projectImages' }, { name: 'universityLogo' }]), async function (req, res) {
+  const projectImages = req.files['projectImages'];
+  const universityLogo = req.files['universityLogo'];
+
+  const user = await userModel.findOne({
+    username: req.session.username,
+  });
+
+  console.log("req.files", req.files)
+  console.log("projectImages", projectImages);
+  console.log("universityLogo", universityLogo);
+
+  let inputData = req.body;
+  const students = [];
+
+  for (let i = 1; inputData[`studentName_${i}`]; i++) {
+    const student = {
+      studentName: inputData[`studentName_${i}`],
+      studentStream: inputData[`studentStream_${i}`],
+      yearOfQualification: inputData[`yearOfQualification_${i}`]
+    };
+    students.push(student);
+  }
+  const projectImagesArr = []
+  projectImages.forEach((image) => {
+    let file = image.filename
+    projectImagesArr.push(file)
+  })
+
+  const { projectTitle, projectCategory, universityName, projectDescription } = req.body
+  const approvedProjectt = true
+  const projectData = await projectModel.create({
+    projectTitle: projectTitle,
+    projectCategory: projectCategory,
+    projectDescription: projectDescription,
+    projectImages: projectImagesArr,
+    universityName: universityName,
+    universityLogo: universityLogo[0].filename,
+    student: students,
+    approvedproject: approvedProjectt,
+    createdBy: user._id
+  })
+  user.projects.push(projectData._id)
+  await user.save();
+  // console.log("form-data", inputData);
+  console.log("students data", students);
+  console.log("project data", projectData);
   res.json({ sucess: true, message: "Form submitted successfully" });
+
 });
+
 
 router.get('/signup', function (req, res) {
   res.render('signup', { nav: false, loggedIn: false, userExist: false, message: msg });
@@ -153,7 +263,8 @@ router.post('/signup', async function (req, res) {
         username: req.body.username,
         email: email,
         password: hashedPassword,
-        avatar: avatarUrl // Assign the generated avatar URL
+        avatar: avatarUrl,
+        universityEmail: ""// Assign the generated avatar URL
       });
       await user.save();
       req.session.username = user.username;
@@ -208,7 +319,7 @@ router.post('/signup', async function (req, res) {
 // });
 
 router.get('/login', function (req, res) {
-  res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false,passwordReseted:false });
+  res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false, passwordReseted: false });
 });
 
 router.post('/login', async (req, res) => {
@@ -219,14 +330,14 @@ router.post('/login', async (req, res) => {
   const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
 
   if (!user) {
-    res.render("login", { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: true,passwordReseted:false  });
+    res.render("login", { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: true, passwordReseted: false });
 
   }
 
   else {
     const validPassword = await bcrypt.compare(password, user.password)
     if (!validPassword) {
-      res.render("login", { nav: false, loggedIn: false, InvalidPassword: true, userNotFound: false,passwordReseted:false  });
+      res.render("login", { nav: false, loggedIn: false, InvalidPassword: true, userNotFound: false, passwordReseted: false });
     }
     else {
       req.session.username = user.username;
@@ -294,18 +405,18 @@ router.get('/createpsswd', function (req, res) {
 
 router.post('/createpsswd', async function (req, res) {
   const { confirmPassword } = req.body;
-try{
-  const user =await userModel.findOne({username: req.session.username })
-  if (!user) {
-    return res.status(404).send('User not found');
-  }
+  try {
+    const user = await userModel.findOne({ username: req.session.username })
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(confirmPassword, salt);
-  user.password = hashedPassword;
-  await user.save();
-  res.render('login',{nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false ,passwordReseted:true})
-}
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(confirmPassword, salt);
+    user.password = hashedPassword;
+    await user.save();
+    res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false, passwordReseted: true })
+  }
 
   catch (error) {
     res.status(500).send('Internal server error'); // Or redirect to an error page

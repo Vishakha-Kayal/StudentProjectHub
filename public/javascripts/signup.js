@@ -9,6 +9,5 @@ open.addEventListener("click",()=>{
     else{
         open.className="ri-eye-fill open point-cursor"
         password.type="password"
-        
     }
 })

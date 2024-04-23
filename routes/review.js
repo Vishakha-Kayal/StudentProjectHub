@@ -1,16 +1,18 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
-const reviewSchema = mongoose.Schema({
-    reviewContent : String,
-    senderName:{
-        type:mongoose.Schema.Types.ObjectId ,
-        ref : "user"
-    },
-    recieverDetails:{
-        type : mongoose.Schema.Types.ObjectId ,
-        ref:"project"
-    }
+const reviewSchema = new mongoose.Schema({
+   reviewContent: String,
+   senderName: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user"
+   },
+   receiverDetail: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "project"
+   },
+   timestamp:
+    { type: Date,
+    default: Date.now }
 })
 
-
-module.exports = mongoose.model("project",reviewSchema)
+module.exports = mongoose.model("review", reviewSchema)

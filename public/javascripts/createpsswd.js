@@ -26,3 +26,25 @@ form.addEventListener('submit', function(event) {
         alert('Passwords do not match. Please make sure they match before submitting.');
     }
 });
+
+const open = document.querySelectorAll(".open")
+console.log(open);
+
+open[0].addEventListener("click",()=>{
+    if(newPasswordInput.type == "password"){
+        open[0].className = "ri-eye-off-fill open point-cursor"
+        newPasswordInput.type="text";
+    }
+    else{
+        newPasswordInput.type="password";
+    }
+})
+open[1].addEventListener("click",()=>{
+    if(confirmPasswordInput.type == "password"){
+        open[1].className = "ri-eye-fill open point-cursor"
+        confirmPasswordInput.type="text";
+    }
+    else{
+        confirmPasswordInput.type="password";
+    }
+})

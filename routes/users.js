@@ -2,28 +2,36 @@ const mongoose = require('mongoose')
 mongoose.connect('mongodb://127.0.0.1:27017/StudentProjectHub')
 
 const userSchema = new mongoose.Schema({
-  username:{
-    type:String,
+  username: {
+    type: String,
     required: true,
-    lowercase:true,
+    lowercase: true,
   },
   email: {
     type: String,
     required: true,
-    lowercase:true
+    lowercase: true,
+    trim: true,
   },
-  password:{
-    type:String,
-    required:true
+  password: {
+    type: String,
+    required: true
   },
-  avatar:{
-    type:String,
-    required:false
+  avatar: {
+    type: String,
+    required: false
   },
-  projects:[
+  universityEmail: {
+    type: String,
+    required: false,
+    trim: true,
+    lowercase: true,
+    unique:false,
+  },
+  projects: [
     {
-      type:mongoose.Schema.Types.ObjectId,
-      ref:"project"
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "project"
     }
   ]
 

@@ -24,7 +24,7 @@ function uploadProjectImages() {
             if (image.size > maxSize) {
                 alert("Error: Image size exceeds 150kb. Please choose a smaller image.");
             }
-            else{
+            else {
                 const img = document.createElement('img');
                 img.src = URL.createObjectURL(image);
                 img.classList.add('style-img')
@@ -45,11 +45,11 @@ function uploaduniversityLogo() {
     });
     inputDiv.addEventListener("change", () => {
         const uniLogo = inputDiv.files;
-        console.log("uniLogo", uniLogo);
+        // console.log("uniLogo", uniLogo);
         // Iterate over each file in the array
         Array.from(uniLogo).forEach(file => {
             console.log("file", file);
-            const maxSize = 150 * 1024; // 150kb in bytes
+            const maxSize = 100 * 1024; // 1kb in bytes
             if (file.size > maxSize) {
                 alert("Error: Image size exceeds 150kb. Please choose a smaller image.");
             } else {
@@ -116,38 +116,40 @@ function projectInfo() {
     })
 }
 
+let studentCount = 3;
 function addField() {
+
     const another = document.querySelector(".another")
-    const studentInfo = document.querySelector(".studentInfo")
-    let field = `<div class="w-full mt-2">
-    <div class="flex mt-1 gap-4">
-        <div class="w-[35%]  ">
-            <input type="text"
-                class="rounded-md px-3 py-2 mt-3 w-full  border-2  border-[#000000b9]"
-                placeholder="Student Name">
-
-        </div>
-        <div class="w-[35%]  ">
-            <input type="text"
-                class="rounded-md px-3 py-2 mt-3 w-full  border-2  border-[#000000b9]"
-                placeholder="Student Stream">
-
-        </div>
-
-        <div class="w-[35%]  ">
-            <input type="number"
-                class="rounded-md px-3 py-2 mt-3 w-full  border-2  border-[#000000b9]"
-                placeholder="Year Of Qualification">
-
-        </div>
-
-    </div>
-</div>`
-
     another.addEventListener("click", () => {
+        const studentInfo = document.querySelector(".studentInfo")
+        let field = `<div class="w-full mt-2">
+            <div class="flex mt-1 gap-4">
+                <div class="w-[35%]  ">
+                    <input type="text" name="studentName_${studentCount}"
+                        class="rounded-md px-3 py-2 mt-3 w-full  border-2  border-[#000000b9]"
+                        placeholder="Student Name">
+        
+                </div>
+                <div class="w-[35%]  ">
+                    <input type="text" name="studentStream_${studentCount}" 
+                        class="rounded-md px-3 py-2 mt-3 w-full  border-2  border-[#000000b9]"
+                        placeholder="Student Stream">
+        
+                </div>
+        
+                <div class="w-[35%]  ">
+                    <input type="number" name="yearOfQualification_${studentCount}" 
+                        class="rounded-md px-3 py-2 mt-3 w-full  border-2  border-[#000000b9]"
+                        placeholder="Year Of Qualification">
+        
+                </div>
+        
+            </div>
+        </div>`
+        studentCount++
         studentInfo.insertAdjacentHTML('beforeend', field);
-    });
-}
+    })
+};
 
 function storeFormData() {
     const uniInfoUp = document.querySelector(".uniInfoUp")
@@ -165,55 +167,45 @@ function storeFormData() {
             window.scrollTo(0, document.body.scrollHeight);
         }
 
-        const formData = new FormData(e.target);
-
-        const combinedFormData = {};
-        console.log(formData.entries());
-        for (let entry of formData.entries()) {
-            console.log(entry);
-            combinedFormData[entry[0]] = entry[1];
-        }
-
         form2.addEventListener("submit", async (event) => {
             event.preventDefault();
+            //        
+            const formData = new FormData(e.target);
             const formData2 = new FormData(form2);
-
             for (let entry of formData2.entries()) {
-                if (combinedFormData.hasOwnProperty(entry[0])) {
-                    if (!Array.isArray(combinedFormData[entry[0]])) {
-                        combinedFormData[entry[0]] = [combinedFormData[entry[0]]];
-                    }
-                    combinedFormData[entry[0]].push(entry[1]);
-                } else {
-                    combinedFormData[entry[0]] = entry[1];
-                }
+                formData.append(entry[0], entry[1]);
             }
 
-            fetch('/submitForm', {
-                method: 'POST',
-                body: JSON.stringify(combinedFormData),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        console.log(data);
-                        window.location.href = '/projectUploaded';
-                    } else {
-                        // Handle error or show a message to the user
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+            try {
+                const response = await fetch('/submitForm', {
+                    method: 'POST',
+                    body: formData
                 });
-        })
 
-    })
+                if (!response.ok) {
+                    throw new Error(`Server responded with a status of ${response.status}`);
+                }
 
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Received non-JSON response from server");
+                }
 
+                const data = await response.json();
+                console.log(data);
+                window.location.href = "/projectUploaded"
+                // Redirect or handle response as needed
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+        )
+    }
+    )
 }
+
+
+
 
 uploadProjectImages()
 uploaduniversityLogo()
