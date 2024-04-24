@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var userModel = require("./users")
 var projectModel = require('./project');
+var reviewModel = require('./review');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const dotenv=require("dotenv")
@@ -12,6 +13,7 @@ dotenv.config({
 })
 
 let verificationCode="";
+
 
 async function sendMail(email) {
 
@@ -60,27 +62,66 @@ function generateRandomCode() {
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  loggedIn=req.session.loggedIn
+  
   const avatar=req.session.avatar
-  res.render('index',{nav:true,loggedIn:loggedIn,avatar:avatar});
+  res.render('index',{nav:true,loggedIn:req.session.loggedIn,avatar:avatar});
 });
 
 router.get('/project', async function(req, res) {
-  const project = await projectModel.find().populate('createdBy')
-  loggedIn=req.session.loggedIn
-  const avatar=req.session.avatar
-  console.log(project);
-  res.render('project',{project,nav:true,loggedIn:loggedIn,avatar:avatar});
+  try {
+    const project = await projectModel.find().populate('createdBy');
+    const review = await reviewModel.find().populate('senderName receiverDetail');
+    res.render('project', { project, review, nav: true, loggedIn: req.session.loggedIn, avatar: req.session.avatar });
+  } catch (error) {
+    // Handle any errors
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
+router.get('/projectData', async (req, res) => {
+  const project = await projectModel.find().populate('createdBy');
+  res.json(project);
+});
+router.get('/reviewData', async (req, res) => {
+  const review = await reviewModel.find().populate('senderName receiverDetail');
+  res.json(review);
+});
+
+router.post('/comments',isAuthenticated, async function (req, res) {
+  console.log("req.body =",req.body);
+  const project = await projectModel.find().populate('createdBy')
+  const { comment,projectId} = req.body
+  const user = await userModel.findOne({username:req.session.username});
+  try {
+     await reviewModel.create({
+      reviewContent: comment,
+      senderName: user._id,
+      receiverDetail: projectId,
+    })
+    const review = await reviewModel.find().populate('senderName receiverDetail');
+    res.json(review);
+  
+  }
+  catch (e) {
+    console.log(e);
+}
+
+})
 
 
-router.get('/uploadProject', async function(req, res) {
+
+router.get('/uploadProject',isAuthenticated, async function(req, res) {
   let username = req.session.username;
+  console.log(username);
   const user = await userModel.findOne({username:username})
+  console.log(user.universityEmail);
   if(user){
-    if(user.universityEmail){
+    if(user.universityEmail ){
       res.redirect("/form")
+    }
+    else{
+      res.render('uploadProject',{nav:false,loggedIn:false});
     }
   }
   else{
@@ -119,7 +160,7 @@ router.post('/uploadProject', async function(req, res) {
 //  res.redirect('/verify')
 });
 
-router.get('/verify', function(req, res) {
+router.get('/verify',isAuthenticated, function(req, res) {
   res.render('verification',{nav:false,loggedIn:false,invalidOtp:false});
 });
 
@@ -137,7 +178,7 @@ router.post('/verify', function(req, res) {
   
 });
 
-router.get('/form', function(req, res) {
+router.get('/form',isAuthenticated, function(req, res) {
   res.render('form',{nav:false,loggedIn:false});
 });
 
@@ -239,7 +280,6 @@ router.post('/signup', async function (req, res) {
         avatar: avatarUrl,
         universityEmail:universityEmail // Assign the generated avatar URL
       });
-  
       req.session.username = user.username;
       req.session.loggedIn = true;
       req.session.avatar = user.avatar;
@@ -330,8 +370,9 @@ const user = await userModel.findOne({ $or: [{ username: username }, { email: em
   // res.redirect('/')
 })
 
-router.get('/dashboard',isAuthenticated, function(req, res) {
-  res.render('dashboard',{nav:true ,loggedIn:true});
+router.get('/dashboard', function(req, res) {
+  const avatar=req.session.avatar
+  res.render('dashboard',{avatar:avatar,nav:true ,loggedIn:true});
 });
 
 router.get('/about', function(req, res) {
@@ -409,6 +450,7 @@ try{
 });
 
 function isAuthenticated(req, res, next) {
+  console.log(req.session.loggedIn);
   if (req.session.loggedIn) {
     return next();
   } else {

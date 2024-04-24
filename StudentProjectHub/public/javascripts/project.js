@@ -11,14 +11,12 @@ let i = 0;
 let totalImages = arr.length;
 
 rightBtn.addEventListener("click", () => {
-    console.log(totalImages);
     i = (i + 1) % totalImages;
     imgdiv.src = arr[i].getAttribute('src');
     console.log("hello");
 });
 
 leftBtn.addEventListener("click", () => {
-    console.log(totalImages);
     i = (i - 1 + totalImages) % totalImages;
     imgdiv.src = arr[i].getAttribute('src');
 });
@@ -126,6 +124,8 @@ navLinks.forEach(function (link) {
 });
 
 
+
+
 let project;
 let sidebar = document.querySelectorAll(".sidebar")
 let projectTitleHeading = document.querySelector(".projectTitle")
@@ -136,57 +136,160 @@ let projectImagesHeading = document.querySelector(".projectImages")
 let projectDescriptionHeading = document.querySelector(".projectDescription")
 let studentDetailsHeading = document.querySelector(".studentDetails")
 let rightDiv = document.querySelector(".right")
+let title = ""
+
+let currentElemId = "";
 sidebar.forEach((e, i) => {
     e.addEventListener("click", async () => {
-        let data=await JSON.parse(e.getAttribute('data-index'));
-        console.log(data);
-                        projectTitleHeading.innerHTML = data.projectTitle;
-                        universityLogoHeading.src = `temp/${data.universityLogo}`
-                        universityNameHeading.innerHTML = data.universityName;
-                        projectCategoryHeading.innerHTML = data.projectCategory;
-                        projectDescriptionHeading.innerHTML=data.projectDescription
+        title = e.getAttribute('data-index')
+        await fetch('/projectData')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach((elem) => {
+                    if (elem.projectTitle == title) {
+                        currentElemId = elem._id;
+                        projectTitleHeading.innerHTML = elem.projectTitle;
+                        universityLogoHeading.src = `temp/${elem.universityLogo}`;
+                        universityNameHeading.innerHTML = elem.universityName;
+                        projectCategoryHeading.innerText = elem.projectCategory;
+                        projectDescriptionHeading.innerHTML = elem.projectDescription;
+
+                        // Populate project images
                         let img = "";
                         let image = "";
-                        data.projectImages.forEach(function (e, i) {
-                            console.log(data.projectImages[i]);
-                            img = `<img src="temp/${data.projectImages[0]}"
-                            alt="" class="actual m-auto h-full  rounded-md">`
-                            image += `<img src="temp/${data.projectImages[i]}"
-                             alt="" class="imm image">`
-                            index++
+                        elem.projectImages.forEach(function (e, i) {
+
+                            img = `<img src="temp/${elem.projectImages[0]}"
+                                        alt="" class="actual m-auto h-full  rounded-md">`
+                            image += `<img src="temp/${elem.projectImages[i]}"
+                                         alt="" class="imm image">`
+
                             img += image
                         })
-                        console.log(img);
                         projectImagesHeading.innerHTML = img;
                         imgAttribute = document.querySelectorAll(".image");
                         imgdiv = document.querySelector(".actual");
                         arr = Array.from(imgAttribute);
                         i = 0
                         totalImages = arr.length;
-
-                        let studentDetails;
-
-                        data.student.forEach(function(elem){
-                             studentDetails+=`<div class="flex justify-between items-center w-full h-[25%]">
-                            <div
-                                class="w-[45%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
-                                <h1>${elem.studentName}</h1>
+                        // Populate student details
+                        let studentDetails = "";
+                        elem.student.forEach(student => {
+                            studentDetails += `<div class="flex justify-between items-center w-full h-[25%]">
+                            <div class="w-[45%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                <h1>${student.studentName}</h1>
                             </div>
-                            <div
-                                class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
-                                <h1>${elem.studentStream}</h1>
+                            <div class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                <h1>${student.studentStream}</h1>
                             </div>
-                            <div
-                                class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
-                                <h1>${elem.yearOfQualification }</h1>
+                            <div class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                <h1>${student.yearOfQualification}</h1>
                             </div>
-                        </div>`
-                        })
+                        </div>`;
+                        });
                         studentDetailsHeading.innerHTML = studentDetails;
+
+
                     }
-                )}
-)
-            
+                })
+
+
+            })
+            .catch(error => {
+                console.error('Error fetching project data:', error);
+            });
+    });
+});
+
+
+
+ function comments(data) {
+    let commentsDiv = document.querySelector(".comments")
+    console.log(data);
+    let comments = "";
+    console.log(title);
+    data.forEach(function (elem, i) {
+        if (title == elem.receiverDetail.projectTitle) {
+            comments += `  <div class="w-full h-[8vh]  mt-4 ">
+            <div class="w-full   flex">
+            <div class="w-12 h-12 rounded-full bg-[#43856F]">
+                   <img src="${elem.senderName.avatar}" class="w-full h-full" alt="">
+               </div>
+               <div class="w-full h-full flex flex-col ml-2">
+               <div class="flex"><h1 class="text-sm ">@${elem.senderName.username}</h1>
+               <h1 class="ml-2 opacity-50 text-sm">2 months ago</h1></div>
+               <div>
+               <h1>${elem.reviewContent}</h1>
+                       </div>
+                       </div>
+           </div>
+       </div>`
+        }
+        commentsDiv.innerHTML = comments
+    })
+
+}
+const commentBtn = document.querySelector(".commentbtn");
+const comment = document.querySelector(".comment");
+
+console.log(currentElemId);
+commentBtn.addEventListener("submit", async (e) => {
+    console.log(currentElemId);
+    e.preventDefault();
+    // Disable the submit button to prevent multiple submissions
+    const form = new FormData(e.target);
+    const formData = Object.fromEntries(form.entries());
+    formData.projectId = currentElemId;
+
+    try {
+        const response = await fetch("/comments", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        }).then(response => response.json())
+            .then(data => {
+                comments(data)
+
+            });
+        comment.value = "";
+        // Assuming this function is defined elsewhere
+    } catch (e) {
+        console.error(e);
+    } finally {
+        commentBtn.disabled = false; // Re-enable the submit button after submission
+    }
+});
+
+
+
+
+sidebar.forEach((e, i) => {
+    e.addEventListener("click", async () => {
+        await fetch('/reviewData')
+            .then(response => response.json())
+            .then(data => {
+                // Use the project data in your JavaScript code
+                comments(data)
+                console.log(data);
+
+            })
+            .catch(error => {
+                console.error('Error fetching review data:', error);
+            });
+    }
+    )
+})
+
+let commentsDiv = document.querySelector(".comment")
+commentsDiv.addEventListener("click", async () => {
+   let loggedIn=commentsDiv.getAttribute("data-index");
+   console.log(loggedIn);
+   if (loggedIn === "" || loggedIn === "false") {
+    window.location.href = "/signup";
+}
+})
 
 
 

@@ -91,7 +91,7 @@
             <div class="hero w-full border-gray-400 border-t-2 flex justify-center">
                 <div class="left w-[30%] py-4 overflow-auto prevent-select border-r-[1px] border-gray-400 pl-8">
                     <% project.forEach(function(element,i) { %>
-                        <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2 sidebar" data-index="<%= JSON.stringify(element)  %>" title="element.title">
+                        <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2 sidebar" data-index="<%= element.projectTitle  %>" >
                             <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
                                 <div class="lef w-[2.6vw] h-[2.6vw] rounded-full overflow-hidden mt-2">
                                     <img class="w-32 h-10 object-contain "
@@ -111,19 +111,19 @@
                 
 
                 <div class="right w-[70%]   overflow-auto">
-                    <div class="w-full h-full  m-auto px-8 py-7">
+                    <div class="w-full h-full  m-auto px-8 pt-7">
                         <div class="flex  justify-between items-center text-2xl gap-3 ">
                             <div>
-                                <h1 class="text-4xl text-zinc-700  uppercase tracking-tight projectTitle">SMARt DUSTBIN</h1>
+                                <h1 class="text-4xl text-zinc-700  uppercase tracking-tight projectTitle"><%= project[0].projectTitle %></h1>
                             </div>
                             <div class="flex gap-3 items-center w-[30vw]">
-                                <img src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
+                                <img src="temp/<%= project[0].universityLogo %>"
                                     alt="" class="h-10 universityLogo">
-                                <p class="text-base uppercase universityName">Poddar International College</p>
+                                <p class="text-base uppercase universityName"><%= project[0].universityName %></p>
                             </div>
                         </div>
                         <div>
-                            <h1 class="text-xl text-zinc-500 mt-2 mb-2 capitalize projectCategory">Technical project</h1>
+                            <div><span class="text-xl text-zinc-500 mt-2 mb-2 capitalize projectCategory inline-block"><%= project[0].projectCategory %></span><span class="text-xl text-zinc-500 mt-2 mb-2 capitalize inline-block">&nbsp;Project</span></div>
                             <button class="bg-[#43856F] px-2 py-2 rounded-md text-white point-cursor">
                                 <i class="ri-shake-hands-line"></i>
                                 Collaborate
@@ -187,66 +187,31 @@
                                 </div>                                                                                
                             </div>
 
-                            <div class="w-full max-h-60  flex flex-col gap-1 studentDetails">                                                                                                             
+                            <div class="w-full max-h-60  flex flex-col gap-1 studentDetails mt-1">                                                                                                             
                             </div>
                         </div>
                         <div class=" w-full  flex gap-4 flex-col mt-4 pb-4">
                             <div><h1 class="text-3xl font-medium">Comments</h1></div>
+                            <form action="/comments" method="post" class="commentbtn">
                             <div  class="w-full h-[10vh]  flex items-center gap-2">
                                 <div class="w-12 h-12 rounded-full bg-[#43856F]">
                                     <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=10" class="w-full h-full" alt="">
                                 </div>
                                 <div class="w-[80%] mb-3">
-                                <form action="" method="post" >
-                                    <input type="text" name="" id="" class="w-full bg-[#E4EBE8] border-b-[1px] border-black outline-none " placeholder="Add a comment">
-                                </form>
+                                    <input type="text" name="comment" id="" class="w-full bg-[#E4EBE8] border-b-[1px] border-black outline-none comment" placeholder="Add a comment" data-index="<%= JSON.stringify(loggedIn)%>">
+                               
                             </div>
-                                <div class="w-[15%] h-10 bg-[#43856F] rounded-2xl flex items-center justify-center">
-                                    <h1 class="text-white font-semibold">Comment</h1>
+                                <div class="w-[15%] h-10 bg-[#43856F] rounded-2xl flex items-center justify-center point-cursor">
+                                    <input type="submit" value="Comment" class="text-white font-semibold commentButton point-cursor">
                                 </div>
                             </div>
-                            <div class="w-full h-[8vh]  mt-4 ">
-                                <div class="w-full   flex">
-                                    <div class="w-12 h-12 rounded-full bg-[#43856F]">
-                                        <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=10" class="w-full h-full" alt="">
-                                    </div>
-                                    <div class="w-full h-full flex flex-col ml-2">
-                                        <div class="flex"><h1 class="text-sm">@anshi</h1>
-                                            <h1 class="ml-2 opacity-50 text-sm">2 months ago</h1></div>
-                                            <div>
-                                                <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, eligendi?</h1>
-                                            </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="w-full h-[8vh]  mt-4 ">
-                                <div class="w-full   flex">
-                                    <div class="w-12 h-12 rounded-full bg-[#43856F]">
-                                        <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=10" class="w-full h-full" alt="">
-                                    </div>
-                                    <div class="w-full h-full flex flex-col ml-2">
-                                        <div class="flex"><h1 class="text-sm">@anshi</h1>
-                                            <h1 class="ml-2 opacity-50 text-sm">2 months ago</h1></div>
-                                            <div>
-                                                <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, eligendi?</h1>
-                                            </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="w-full h-[8vh]  mt-4 ">
-                                <div class="w-full  flex">
-                                    <div class="w-12 h-12 rounded-full bg-[#43856F]">
-                                        <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=10" class="w-full h-full" alt="">
-                                    </div>
-                                    <div class="w-full h-full flex flex-col ml-2">
-                                        <div class="flex"><h1 class="text-sm">@anshi</h1>
-                                            <h1 class="ml-2 opacity-50 text-sm">2 months ago</h1></div>
-                                            <div>
-                                                <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, eligendi?</h1>
-                                            </div>
-                                    </div>
-                                </div>
-                            </div>
+                        </form>
+
+                        <div class="w-full comments "   >
+                           
+                        </div>
+                       
+
                         </div>
                     </div>
 
