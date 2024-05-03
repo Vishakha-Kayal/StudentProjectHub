@@ -183,8 +183,6 @@ router.get('/form',isAuthenticated, function(req, res) {
 });
 
 
-
-
 router.post('/submitForm',upload.fields([{ name: 'projectImages' }, { name: 'universityLogo' }]), async function(req, res) {
   const projectImages = req.files['projectImages'];
     const universityLogo = req.files['universityLogo'];
@@ -389,7 +387,6 @@ router.get('/forgotpsswd', function(req, res) {
 
 router.post('/forgotpsswd', async (req, res) => {
 const { username,email } = req.body
-
 
 const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
 console.log(user.email);

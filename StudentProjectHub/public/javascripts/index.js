@@ -39,75 +39,32 @@ gsap.to(".nav", {
     }
 })
 
-let tl=gsap.timeline();
 
-tl.to(".card-one", {
-    // y:"100%",
-    opacity: 1,
-    scale:1 ,
-    duration:2,
-    
-    ease:Power4,
-    scrollTrigger: {
-        trigger: ".cards-container",
-        scroller: "body",
+gsap.from(".cards",{
+    y:"100%",
+    stagger:0.4,
+    duration:1,
+    opacity:0,
+    ease:"none",
+    scrollTrigger:{
+        trigger:".cards-container",
+        scroller:"body",
         // markers:true,
-        start: "top 80%",
-        end: "top 50%",
-        scrub: 1
+        // start:"top 60%",
+        end:"top 20%",
+        scrub:2
     }
 })
-tl.to(".card-two", {
-    // y:"100%",
-    opacity: 1,
-    scale:1 ,
-    duration:2,
-   
-    ease:Power4,
-    scrollTrigger: {
-        trigger: ".cards-container",
-        scroller: "body",
-        // markers:true,
-        start: "top 80%",
-        end: "top 50%",
-        scrub: 1
-    }
-})
-tl.to(".card-three", {
-    // y:"100%",
-    opacity:1,
-    scale:1,
-    duration:2,
-   
-    ease:Power4,
-    scrollTrigger: {
-        trigger: ".cards-container",
-        scroller: "body",
-        // markers:true,
-        start: "top 80%",
-        end: "top 50%",
-        scrub: 1
-    }
-})
-
-
-
-
-
-
-
-
 
 
 function marquee() {
     const anim = document.querySelectorAll(".anim")
-    gsap.registerPlugin(ScrollTrigger);
-
 
     anim.forEach(function (e) {
         gsap.set(e, { x: '0%' });
         gsap.to(e, {
-            x: "-100%",
+            // x: "-100%",
+            transform:"translateX(-100%)",
             duration: 11,
             ease: 'linear',
             repeat: Infinity,

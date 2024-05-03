@@ -2,8 +2,6 @@ let imgAttribute = document.querySelectorAll(".image");
 let imgdiv = document.querySelector(".actual");
 let arr = Array.from(imgAttribute);
 
-
-
 const leftBtn = document.querySelector(".left-icon");
 const rightBtn = document.querySelector(".right-icon");
 
@@ -56,6 +54,7 @@ filters[4].addEventListener("click", () => {
 
 const icon = document.querySelectorAll('.ic')
 const universityname = document.querySelector('.uname')
+
 const selectedCollege = document.querySelectorAll('.dropdown div')
 
 
@@ -63,6 +62,9 @@ selectedCollege.forEach((collegeElement) => {
     collegeElement.addEventListener('click', (event) => {
         icon[0].className = 'ri-check-fill text-xl pl-2 ic mt-[1rem]'
         universityname.textContent = event.currentTarget.textContent;
+        let filterUniversityName = event.currentTarget.textContent.trim();
+        changeSidebar(filterUniversityName)
+
         // icon[0].remove();
         icon[1].className = 'ri-close-circle-line pr-2 text-xl text-black closeIc ';
         filters[1].style.backgroundColor = "#e4ebe8";
@@ -70,6 +72,7 @@ selectedCollege.forEach((collegeElement) => {
         filters[1].style.border = '1px solid black';
 
         icon[1].addEventListener("click", (event) => {
+            changeSidebar()
             event.stopPropagation();
             icon[0].className = "ri-school-fill text-xl pl-3 ic";
             universityname.textContent = "University";
@@ -126,7 +129,7 @@ navLinks.forEach(function (link) {
 
 
 
-let project;
+
 let sidebar = document.querySelectorAll(".sidebar")
 let projectTitleHeading = document.querySelector(".projectTitle")
 let universityLogoHeading = document.querySelector(".universityLogo")
@@ -135,89 +138,125 @@ let projectCategoryHeading = document.querySelector(".projectCategory")
 let projectImagesHeading = document.querySelector(".projectImages")
 let projectDescriptionHeading = document.querySelector(".projectDescription")
 let studentDetailsHeading = document.querySelector(".studentDetails")
-let rightDiv = document.querySelector(".right")
+let uploadProjectSteps = document.querySelector(".uploadProjectSteps")
+let projectDetails = document.querySelector(".projectDetails")
+let right = document.querySelector(".right")
 let title = ""
 
 let currentElemId = "";
-sidebar.forEach((e, i) => {
-    e.addEventListener("click", async () => {
-        title = e.getAttribute('data-index')
-        await fetch('/projectData')
-            .then(response => response.json())
-            .then(data => {
-                data.forEach((elem) => {
-                    if (elem.projectTitle == title) {
-                        currentElemId = elem._id;
-                        projectTitleHeading.innerHTML = elem.projectTitle;
-                        universityLogoHeading.src = `temp/${elem.universityLogo}`;
-                        universityNameHeading.innerHTML = elem.universityName;
-                        projectCategoryHeading.innerText = elem.projectCategory;
-                        projectDescriptionHeading.innerHTML = elem.projectDescription;
-
-                        // Populate project images
-                        let img = "";
-                        let image = "";
-                        elem.projectImages.forEach(function (e, i) {
-
-                            img = `<img src="temp/${elem.projectImages[0]}"
-                                        alt="" class="actual m-auto h-full  rounded-md">`
-                            image += `<img src="temp/${elem.projectImages[i]}"
-                                         alt="" class="imm image">`
-
-                            img += image
-                        })
-                        projectImagesHeading.innerHTML = img;
-                        imgAttribute = document.querySelectorAll(".image");
-                        imgdiv = document.querySelector(".actual");
-                        arr = Array.from(imgAttribute);
-                        i = 0
-                        totalImages = arr.length;
-                        // Populate student details
-                        let studentDetails = "";
-                        elem.student.forEach(student => {
-                            studentDetails += `<div class="flex justify-between items-center w-full h-[25%]">
-                            <div class="w-[45%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
-                                <h1>${student.studentName}</h1>
-                            </div>
-                            <div class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
-                                <h1>${student.studentStream}</h1>
-                            </div>
-                            <div class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
-                                <h1>${student.yearOfQualification}</h1>
-                            </div>
-                        </div>`;
-                        });
-                        studentDetailsHeading.innerHTML = studentDetails;
-
-
-                    }
-                })
-
-
-            })
-            .catch(error => {
-                console.error('Error fetching project data:', error);
+function showProjectDetails() {
+    showComments()
+    document.querySelectorAll(".sidebar").forEach((e, i) => {
+        console.log("hello");
+        e.addEventListener("click", async () => {
+            projectDetails.classList.remove('hidden')
+            uploadProjectSteps.classList.add('hidden')
+            right.scrollTop = 0
+            document.querySelectorAll(".sidebar").forEach((el) => {
+                el.classList.remove("bg-[#b1dac8]");
             });
+            e.classList.add("bg-[#b1dac8]")
+            title = e.getAttribute('data-index')
+            await fetch('/projectData')
+                .then(response => response.json())
+                .then(data => {
+
+                    data.forEach((elem) => {
+                        if (elem.projectTitle == title) {
+                            currentElemId = elem._id;
+                            projectTitleHeading.innerHTML = elem.projectTitle;
+                            universityLogoHeading.src = `temp/${elem.universityLogo}`;
+                            universityNameHeading.innerHTML = elem.universityName;
+                            projectCategoryHeading.innerText = elem.projectCategory;
+                            projectDescriptionHeading.innerHTML = elem.projectDescription;
+
+                            // Populate project images
+                            let img = "";
+                            let image = "";
+                            elem.projectImages.forEach(function (e, i) {
+
+                                img = `<img src="temp/${elem.projectImages[0]}"
+                                            alt="" class="actual m-auto h-full  rounded-md">`
+                                image += `<img src="temp/${elem.projectImages[i]}"
+                                             alt="" class="imm image">`
+
+                                img += image
+                            })
+                            projectImagesHeading.innerHTML = img;
+                            imgAttribute = document.querySelectorAll(".image");
+                            imgdiv = document.querySelector(".actual");
+                            arr = Array.from(imgAttribute);
+                            i = 0
+                            totalImages = arr.length;
+                            // Populate student details
+                            let studentDetails = "";
+                            elem.student.forEach(student => {
+                                studentDetails += `<div class="flex justify-between items-center w-full h-[25%]">
+                                <div class="w-[45%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <h1>${student.studentName}</h1>
+                                </div>
+                                <div class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <h1>${student.studentStream}</h1>
+                                </div>
+                                <div class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
+                                    <h1>${student.yearOfQualification}</h1>
+                                </div>
+                            </div>`;
+                            });
+                            studentDetailsHeading.innerHTML = studentDetails;
+
+
+                        }
+                    })
+
+
+                })
+                .catch(error => {
+                    console.error('Error fetching project data:', error);
+                });
+        });
     });
-});
+}
 
+showProjectDetails()
 
-
- function comments(data) {
+function comments(data) {
     let commentsDiv = document.querySelector(".comments")
-    console.log(data);
+    let totalCommentsDiv = document.querySelector(".totalComments")
     let comments = "";
-    console.log(title);
+    let commentTime = "";
+    let totalComments = 0;
     data.forEach(function (elem, i) {
         if (title == elem.receiverDetail.projectTitle) {
-            comments += `  <div class="w-full h-[8vh]  mt-4 ">
-            <div class="w-full   flex">
+            var currentDate = new Date();
+            var compareDate = new Date(`${elem.timestamp}`);
+            var differenceInMilliseconds = currentDate - compareDate;
+            var differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+            var differenceInMonths = (currentDate.getFullYear() - compareDate.getFullYear()) * 12;
+            differenceInMonths -= compareDate.getMonth();
+            differenceInMonths += currentDate.getMonth();
+            if (differenceInDays > 0) {
+                if (differenceInDays == 1) {
+                    commentTime = `${differenceInDays} day ago`
+                }
+                else {
+                    commentTime = `${differenceInDays} days ago`
+                }
+            } else if (differenceInMonths > 0) {
+                commentTime = `${Math.abs(differenceInMonths)} months ago`;
+            } else {
+                commentTime = "Today"
+            }
+            totalComments++
+
+            comments += `<div class="w-full h-[8vh] mt-4">
+            <div class="w-full flex gap-2">
             <div class="w-12 h-12 rounded-full bg-[#43856F]">
                    <img src="${elem.senderName.avatar}" class="w-full h-full" alt="">
                </div>
-               <div class="w-full h-full flex flex-col ml-2">
-               <div class="flex"><h1 class="text-sm ">@${elem.senderName.username}</h1>
-               <h1 class="ml-2 opacity-50 text-sm">2 months ago</h1></div>
+               <div class="w-full h-full flex flex-col ">
+               <div class="flex gap-2"><h1 class="text-sm ">@${elem.senderName.username}</h1>
+               <h1 class="ml-2 opacity-50 text-sm">${commentTime}</h1></div>
                <div>
                <h1>${elem.reviewContent}</h1>
                        </div>
@@ -226,17 +265,18 @@ sidebar.forEach((e, i) => {
        </div>`
         }
         commentsDiv.innerHTML = comments
+
+        totalCommentsDiv.innerHTML = totalComments
     })
 
 }
 const commentBtn = document.querySelector(".commentbtn");
 const comment = document.querySelector(".comment");
 
-console.log(currentElemId);
 commentBtn.addEventListener("submit", async (e) => {
     console.log(currentElemId);
     e.preventDefault();
-    // Disable the submit button to prevent multiple submissions
+
     const form = new FormData(e.target);
     const formData = Object.fromEntries(form.entries());
     formData.projectId = currentElemId;
@@ -254,6 +294,7 @@ commentBtn.addEventListener("submit", async (e) => {
 
             });
         comment.value = "";
+        right.scrollTop = right.scrollHeight;
         // Assuming this function is defined elsewhere
     } catch (e) {
         console.error(e);
@@ -264,33 +305,96 @@ commentBtn.addEventListener("submit", async (e) => {
 
 
 
+function showComments(){
+    document.querySelectorAll(".sidebar").forEach((e, i) => {
+        e.addEventListener("click", async () => {
+            await fetch('/reviewData')
+                .then(response => response.json())
+                .then(data => {
+                    comments(data)
+    
+                })
+                .catch(error => {
+                    console.error('Error fetching review data:', error);
+                });
+        }
+        )
+    })
+}
 
-sidebar.forEach((e, i) => {
-    e.addEventListener("click", async () => {
-        await fetch('/reviewData')
-            .then(response => response.json())
-            .then(data => {
-                // Use the project data in your JavaScript code
-                comments(data)
-                console.log(data);
+function checkLoggedIn() {
+    let commentsDiv = document.querySelector(".comment")
+    commentsDiv.addEventListener("click", async () => {
+        let loggedIn = commentsDiv.getAttribute("data-index");
+        console.log(loggedIn);
+        if (loggedIn === "" || loggedIn === "false") {
+            window.location.href = "/signup";
+        }
+    })
+}
+checkLoggedIn()
+
+const sidebarContainer = document.querySelector('.sidebarContainer')
+async function changeSidebar(universityName, Category) {
+    let universityNameByFilters = ""
+    
+    await fetch('/projectData')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach((elem) => {
+                // Normalize input and existing data
+                if (universityName) {
+                    const normalizeString = (str) => str.trim().replace(/\s+/g, ' ').toLowerCase();
+                    const formattedUniversityName = normalizeString(universityName);
+                    const formattedElemUniversityName = normalizeString(elem.universityName);
+
+                    if (formattedUniversityName === formattedElemUniversityName) {
+                        universityNameByFilters += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c] p-2 sidebar" data-index="${elem.projectTitle}" >
+                            <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                        <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
+                            <img class="w-32 h-10 object-cover "
+                                src="/temp/${elem.universityLogo}"
+                                alt="">
+                        </div>
+                        <div class="rig w-[90%] h-full ">
+                            <h1 class="text-xl font-semibold max-h-[4.5rem] uppercase "> ${elem.projectTitle} </h1>
+                            <h3 class="text-lg text-zinc-500"> ${elem.universityName} </h3>
+                            <h3 class="text-md text-zinc-500 capitalize "> ${elem.projectCategory}</h3>
+                        </div>
+                        </div>
+                        </div>`
+                    }
+                    sidebarContainer.innerHTML = universityNameByFilters
+                    showProjectDetails()
+                }
+                else {
+                    let universityNameWithoutFilter = ""
+                    data.forEach((elem) => {
+                        universityNameWithoutFilter += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c] p-2 sidebar" data-index="${elem.projectTitle}" >
+                <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                    <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
+                        <img class="w-32 h-10 object-cover "
+                            src="/temp/${elem.universityLogo}"
+                            alt="">
+                    </div>
+                    <div class="rig w-[90%] h-full ">
+                        <h1 class="text-xl font-semibold max-h-[4.5rem] uppercase "> ${elem.projectTitle} </h1>
+                        <h3 class="text-lg text-zinc-500"> ${elem.universityName} </h3>
+                        <h3 class="text-md text-zinc-500 capitalize "> ${elem.projectCategory}</h3>
+                    </div>
+                </div>
+            </div>`
+                    })
+                    sidebarContainer.innerHTML = universityNameWithoutFilter
+                    showProjectDetails()
+                }
 
             })
-            .catch(error => {
-                console.error('Error fetching review data:', error);
-            });
-    }
-    )
-})
-
-let commentsDiv = document.querySelector(".comment")
-commentsDiv.addEventListener("click", async () => {
-   let loggedIn=commentsDiv.getAttribute("data-index");
-   console.log(loggedIn);
-   if (loggedIn === "" || loggedIn === "false") {
-    window.location.href = "/signup";
+        })
+        .catch(error => {
+            console.error('Error fetching project data:', error);
+        });
 }
-})
-
 
 
 

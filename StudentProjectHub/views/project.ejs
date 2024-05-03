@@ -2,7 +2,7 @@
     <div class="main z-[10] relative">
         <div class="w-full h-screen  bg-[#e4ebe8] flex flex-col">
             <!-- upper div -->
-            <div class="w-full h-40 flex justify-between relative mt-16 prevent-select">
+            <div class="w-full h-24 flex justify-between relative mt-16 prevent-select">
                 <div class="w-[80%] h-full flex items-center gap-4 border-b-2  pl-20">
                     <div
                         class="filters  text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-3 bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
@@ -18,39 +18,14 @@
                         <i class="ri-arrow-drop-down-fill text-3xl mt-1 pr-3 ic"></i>
                         <!-- <p class="updated-uni-name"></p> -->
                         <div
-                            class="w-full h-[10.5rem] dropdown hidden bg-[#72af9b] absolute top-[101%]  overflow-auto pb-2">
+                            class="w-full max-h-[10.5rem] dropdown hidden bg-[#72af9b] absolute top-[101%]  overflow-auto ">
+                            <% const uniqueNames = [...new Set(project.map(item => item.universityName))] %>  
+                            <% uniqueNames.forEach(function(element,i) { %>
                             <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm ">Poddar International College</p>
+                                <p class="text-sm universityNameFilter"><%= element  %></p>
                             </div>
-                            <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm  ">Subodh College of law and science</p>
-                            </div>
-                            <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm  ">Subodh College of law and science</p>
-                            </div>
-                            <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm  ">Subodh College of law and science</p>
-                            </div>
-                            <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm  ">Subodh College of law and science</p>
-                            </div>
-                            <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm  ">Subodh College of law and science</p>
-                            </div>
-                            <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm  ">Subodh College of law and science</p>
-                            </div>
-                            <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm  ">Subodh College of law and science</p>
-                            </div>
-                            <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm ">Science</p>
-                            </div>
-                            <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm ">Science</p>
-                            </div>
-
-                        </div>
+                            <% })  %>
+                        </div>  
                     </div>
 
                     <div
@@ -89,17 +64,17 @@
             </div>
             <!-- bottom div -->
             <div class="hero w-full border-gray-400 border-t-2 flex justify-center">
-                <div class="left w-[30%] py-4 overflow-auto prevent-select border-r-[1px] border-gray-400 pl-8">
+                <div class="left w-[30%] py-4 overflow-auto prevent-select border-r-[1px] border-gray-400 pl-8 sidebarContainer">
                     <% project.forEach(function(element,i) { %>
-                        <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2 sidebar" data-index="<%= element.projectTitle  %>" >
+                        <div class="w-full max-h-32 rounded-l-lg  hover:bg-[#b7d6c97c] p-2 sidebar" data-index="<%= element.projectTitle  %>" >
                             <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
-                                <div class="lef w-[2.6vw] h-[2.6vw] rounded-full overflow-hidden mt-2">
-                                    <img class="w-32 h-10 object-contain "
+                                <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
+                                    <img class="w-32 h-10 object-cover "
                                         src="/temp/<%= element.universityLogo %>"
                                         alt="">
                                 </div>
                                 <div class="rig w-[90%] h-full ">
-                                    <h1 class="text-2xl font-medium max-h-[4.5rem] "><%= element.projectTitle  %></h1>
+                                    <h1 class="text-xl font-semibold max-h-[4.5rem] uppercase "><%= element.projectTitle  %></h1>
                                     <h3 class="text-lg text-zinc-500"><%= element.universityName  %></h3>
                                     <h3 class="text-md text-zinc-500 capitalize "><%= element.projectCategory  %></h3>
                                 </div>
@@ -111,19 +86,19 @@
                 
 
                 <div class="right w-[70%]   overflow-auto">
-                    <div class="w-full h-full  m-auto px-8 pt-7">
+                    <div class="w-full h-full  m-auto px-8 pt-7 hidden projectDetails">
                         <div class="flex  justify-between items-center text-2xl gap-3 ">
                             <div>
-                                <h1 class="text-4xl text-zinc-700  uppercase tracking-tight projectTitle"><%= project[0].projectTitle %></h1>
+                                <h1 class="text-3xl text-zinc-700  uppercase tracking-tight projectTitle"></h1>
                             </div>
                             <div class="flex gap-3 items-center w-[30vw]">
-                                <img src="temp/<%= project[0].universityLogo %>"
+                                <img src=""
                                     alt="" class="h-10 universityLogo">
-                                <p class="text-base uppercase universityName"><%= project[0].universityName %></p>
+                                <p class="text-base uppercase universityName"></p>
                             </div>
                         </div>
                         <div>
-                            <div><span class="text-xl text-zinc-500 mt-2 mb-2 capitalize projectCategory inline-block"><%= project[0].projectCategory %></span><span class="text-xl text-zinc-500 mt-2 mb-2 capitalize inline-block">&nbsp;Project</span></div>
+                            <div><span class="text-xl text-zinc-500 mt-2 mb-2 capitalize projectCategory inline-block"></span><span class="text-xl text-zinc-500 mt-2 mb-2 capitalize inline-block">&nbsp;Project</span></div>
                             <button class="bg-[#43856F] px-2 py-2 rounded-md text-white point-cursor">
                                 <i class="ri-shake-hands-line"></i>
                                 Collaborate
@@ -132,15 +107,13 @@
                         <div class="w-full h-[70%] flex items-center px-20">
                             <i class="left-icon ri-arrow-left-s-line text-6xl point-cursor"></i>
                             <div class="w-[60%] h-[80%] m-auto overflow-hidden projectImages">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D"
+                                <img src=""
                                     alt="" class="actual m-auto h-full  rounded-md">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D"
+                                <img src=""
                                     alt="" class="imm image">
-                                <img src="https://images.unsplash.com/photo-1706708316348-942c80a29576?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8"
+                                <img src=""
                                     alt="" class="image imm">
-                                <!-- <img src="/images/smart.jpg" alt="" class="image imm">
-                                <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D"
-                                    alt="" class="imm image"> -->
+                                
                             </div>
                             <i class="right-icon ri-arrow-right-s-line text-6xl point-cursor"></i>
                         </div>
@@ -148,23 +121,7 @@
 
                         <h1 class="text-3xl mb-4">Project Description :</h1>
                         <div class="projdesc w-full overflow-auto max-h-[40%] text-justify">
-                            <p class="projectDescription">Arduino Uno is an open-source microcontroller board based on the processor ATmega328P. It
-                                has 14 digital input/output pins (of which 6 can be used as PWM outputs), 6 analog
-                                inputs, a USB connection, a power jack, an ICSP header and a reset button. It contains
-                                everything needed to support the microcontroller. Just plug it into a computer with a
-                                USB cable or power it with an adapter to get started. You can experiment with your
-                                Arduino without worrying too much about it. In the event of a worst case scenario, you
-                                could buy a new one as the Uno is very economical.HC-SR04 is an ultrasonic distance
-                                sensor used for measuring the distance at which an object is located. The principle used
-                                by this sensor is called SONAR. It is perfect for small robotics projects such as
-                                obstacle avoiding robot, distance measuring device etc. It has two parts, one emits the
-                                ultrasound sonar to measure the distance to an object. The other part is the receiver
-                                which listens for the echo. As soon as the ultrasound hits the object it bounces back
-                                and is detected by the receiver. The time taken for the wave to come back decides the
-                                distance of the object being measured.The micro servo 9G is a light, good quality and
-                                very fast servo motor. This servo is designed to work with most radio control systems.
-                                It is perfect for small robotics projects. The SG90 mini servo with accessories is
-                                perfect for remote-controlled helicopters, planes, cars, boat,s and trucks.</p>
+                            <p class="projectDescription"></p>
                         </div>
                         <div class="mt-4 w-full ">
                             <H1 class="text-3xl mb-2">Student Details:</H1>
@@ -190,12 +147,21 @@
                             <div class="w-full max-h-60  flex flex-col gap-1 studentDetails mt-1">                                                                                                             
                             </div>
                         </div>
-                        <div class=" w-full  flex gap-4 flex-col mt-4 pb-4">
-                            <div><h1 class="text-3xl font-medium">Comments</h1></div>
+
+                        <div class=" w-full  flex gap-2 flex-col mt-4 pb-4">
+                            <div class="flex gap-2 items-center ">
+                                <h1 class="text-3xl font-medium totalComments"><%= review.length %></h1>
+                                <h1 class="text-3xl font-medium">Comments</h1>
+                            </div>
                             <form action="/comments" method="post" class="commentbtn">
                             <div  class="w-full h-[10vh]  flex items-center gap-2">
-                                <div class="w-12 h-12 rounded-full bg-[#43856F]">
-                                    <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=10" class="w-full h-full" alt="">
+                                <div class="w-12 h-12 rounded-full bg-[#43856F] overflow-hidden">
+
+                                    <% if(loggedIn){ %>
+                                        <img src="<%= avatar  %>" class="w-full h-full" alt="">
+                                    <% } else{ %>
+                                        <img src="https://yt3.ggpht.com/a/default-user=s88-c-k-c0x00ffffff-no-rj" class="w-full h-full" alt="">
+                                    <% } %>
                                 </div>
                                 <div class="w-[80%] mb-3">
                                     <input type="text" name="comment" id="" class="w-full bg-[#E4EBE8] border-b-[1px] border-black outline-none comment" placeholder="Add a comment" data-index="<%= JSON.stringify(loggedIn)%>">
@@ -207,11 +173,67 @@
                             </div>
                         </form>
 
-                        <div class="w-full comments "   >
+                        <div class="w-full comments"   >
                            
                         </div>
-                       
+                        </div>
+                    </div>
 
+                    <div class="w-full h-full flex items-center m-auto px-12  uploadProjectSteps">
+                        <div class="w-full h-[50vh] ">
+                            <div class="w-full h-[20%] flex flex-col items-center  ">
+                                <h1 class="font-semibold text-xl">Upload your Project</h1>
+                                <h3 class="text-sm">Upload your project and showcase your skills to a global audience.</h3>
+                            </div>
+                            <div class="w-full h-[65%] flex items-center justify-between flex-wrap ">
+                                <div class="w-[24%] h-[100%]  flex flex-col gap-2  rounded-md px-2 ">
+                                    <div class="flex  justify-center mt-4">
+                                        <div class="w-[3vw] h-[3vw] bg-[#43856F] rounded-full flex items-center justify-center"><span class="text-lg font-semibold mb-[0.2rem] text-white">1</span></div>
+                                    </div>
+                                    <div class="px-2 mt-3">
+                                        <h4 class="tracking-tight font-semibold text-center">Enter university email</h4>
+                                    </div>
+                                    <div class="">
+                                        <h4 class="text-sm text-center opacity-75">Enter your university email. This will be used to verify your affiliation with the university</h4>
+                                    </div>
+                                </div>
+                                <div class="w-[24%] h-[100%]  flex flex-col gap-2  px-2 ">
+                                    <div class="flex  justify-center mt-4">
+                                        <div class="w-[3vw] h-[3vw] bg-[#43856F] rounded-full flex items-center justify-center"><span class="text-lg font-semibold mb-[0.2rem] text-white">2</span></div>
+                                    </div>
+                                    <div class="px-2 mt-3">
+                                        <h4 class="tracking-tight font-semibold text-center">Verify OTP</h4>
+                                    </div>
+                                    <div class="">
+                                        <h4 class="text-sm text-center">Enter the verification code sent to your email. This code is used to verify your email.</h4>
+                                    </div>
+                                </div>
+                                <div class="w-[24%] h-[100%]  flex flex-col gap-2 px-2 ">
+                                    <div class="flex  justify-center mt-4">
+                                        <div class="w-[3vw] h-[3vw] bg-[#43856F] rounded-full flex items-center justify-center"><span class="text-lg font-semibold mb-[0.2rem] text-white">3</span></div>
+                                    </div>
+                                    <div class="px-2 mt-3">
+                                        <h4 class="tracking-tight font-semibold text-center">Fill project details</h4>
+                                    </div>
+                                    <div class="">
+                                        <h4 class="text-sm text-center">Shape your project by sharing its details, and we'll ensure it's presented beautifully for the world to see.</h4>
+                                    </div>
+                                </div>
+                                <div class="w-[24%] h-[100%]  flex flex-col gap-2  px-2 ">
+                                    <div class="flex  justify-center mt-4">
+                                        <div class="w-[3vw] h-[3vw] bg-[#43856F] rounded-full flex items-center justify-center"><span class="text-lg font-semibold mb-[0.2rem] text-white">4</span></div>
+                                    </div>
+                                    <div class="px-2 mt-3">
+                                        <h4 class="tracking-tight font-semibold text-center">Project uploaded </h4>
+                                    </div>
+                                    <div class="">
+                                        <h4 class="text-sm text-center">Success! Your project is now proudly displayed on our website, reaching audiences far and wide.</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full h-[15%] bg-[#43856F] rounded-md mt-2">
+                                <a href="/uploadProject" class="text-lg font-semibold text-white w-full h-full  flex items-center justify-center point-cursor transition-all duration-200 ease-in-out hover:bg-[#39705e]"><button>Get started</button></a>
+                            </div>
                         </div>
                     </div>
 
