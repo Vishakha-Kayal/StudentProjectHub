@@ -88,13 +88,15 @@
 
             </div>
             <!-- bottom div -->
+
+
             <div class="hero w-full border-gray-400 border-t-2 flex justify-center">
                 <div class="left w-[30%] py-4 overflow-auto prevent-select border-r-[1px] border-gray-400 pl-8">
                     <% projects.forEach((data,i)=>{ %>
                         <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2 sidebar"
-                            data-index='<%= JSON.stringify(data) %>'>
+                            data-index='<%= data.projectTitle %>'>
                             <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
-                                <div class="lef w-[2.6vw] h-[2.6vw] mt-2  rounded-full overflow-hidden">
+                                <div class="lef w-[2.6vw] h-[2.6vw] mt-2 rounded-full overflow-hidden">
                                     <img class="w-full h-full object-contain" src="/uploads/<%= data.universityLogo %>"
                                         alt="">
                                 </div>
@@ -114,14 +116,73 @@
 
                         <% }) %>
                 </div>
+
                 <div class="right  w-[70%] border-r-2 border-black overflow-auto">
-                    <div class="w-full h-full  m-auto px-7 py-7">
-                        <div class="flex justify-between items-center text-2xl gap-3 ">
-                            <div>
-                                <h1 class="text-4xl text-zinc-700 mb-3 uppercase tracking-tight projectTitle">SMART
-                                    DUSTBIN</h1>
+
+                    <div class="w-full h-full flex items-center m-auto px-12  uploadProjectSteps">
+                        <div class="w-full h-[50vh] ">
+                            <div class="w-full h-[20%] flex flex-col items-center  ">
+                                <h1 class="font-semibold text-xl">Upload your Project</h1>
+                                <h3 class="text-sm">Upload your project and showcase your skills to a global audience.</h3>
                             </div>
-                            <div class="flex gap-3 items-center w-[30vw]">
+                            <div class="w-full h-[65%] flex items-center justify-between flex-wrap ">
+                                <div class="w-[24%] h-[100%]  flex flex-col gap-2  rounded-md px-2 ">
+                                    <div class="flex  justify-center mt-4">
+                                        <div class="w-[3vw] h-[3vw] bg-[#43856F] rounded-full flex items-center justify-center"><span class="text-lg font-semibold mb-[0.2rem] text-white">1</span></div>
+                                    </div>
+                                    <div class="px-2 mt-3">
+                                        <h4 class="tracking-tight font-semibold text-center">Enter university email</h4>
+                                    </div>
+                                    <div class="">
+                                        <h4 class="text-sm text-center opacity-75">Enter your university email. This will be used to verify your affiliation with the university</h4>
+                                    </div>
+                                </div>
+                                <div class="w-[24%] h-[100%]  flex flex-col gap-2  px-2 ">
+                                    <div class="flex  justify-center mt-4">
+                                        <div class="w-[3vw] h-[3vw] bg-[#43856F] rounded-full flex items-center justify-center"><span class="text-lg font-semibold mb-[0.2rem] text-white">2</span></div>
+                                    </div>
+                                    <div class="px-2 mt-3">
+                                        <h4 class="tracking-tight font-semibold text-center">Verify OTP</h4>
+                                    </div>
+                                    <div class="">
+                                        <h4 class="text-sm text-center">Enter the verification code sent to your email. This code is used to verify your email.</h4>
+                                    </div>
+                                </div>
+                                <div class="w-[24%] h-[100%]  flex flex-col gap-2 px-2 ">
+                                    <div class="flex  justify-center mt-4">
+                                        <div class="w-[3vw] h-[3vw] bg-[#43856F] rounded-full flex items-center justify-center"><span class="text-lg font-semibold mb-[0.2rem] text-white">3</span></div>
+                                    </div>
+                                    <div class="px-2 mt-3">
+                                        <h4 class="tracking-tight font-semibold text-center">Fill project details</h4>
+                                    </div>
+                                    <div class="">
+                                        <h4 class="text-sm text-center">Shape your project by sharing its details, and we'll ensure it's presented beautifully for the world to see.</h4>
+                                    </div>
+                                </div>
+                                <div class="w-[24%] h-[100%]  flex flex-col gap-2  px-2 ">
+                                    <div class="flex  justify-center mt-4">
+                                        <div class="w-[3vw] h-[3vw] bg-[#43856F] rounded-full flex items-center justify-center"><span class="text-lg font-semibold mb-[0.2rem] text-white">4</span></div>
+                                    </div>
+                                    <div class="px-2 mt-3">
+                                        <h4 class="tracking-tight font-semibold text-center">Project uploaded </h4>
+                                    </div>
+                                    <div class="">
+                                        <h4 class="text-sm text-center">Success! Your project is now proudly displayed on our website, reaching audiences far and wide.</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full h-[15%] bg-[#43856F] rounded-md mt-2">
+                                <a href="/uploadProject" class="text-lg font-semibold text-white w-full h-full  flex items-center justify-center point-cursor transition-all duration-200 ease-in-out hover:bg-[#39705e]"><button>Get started</button></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full h-full  m-auto px-8 pt-7 hidden projectDetails">
+                        <div class="flex justify-between items-center text-2xl gap-3">
+                            <div>
+                                <h1 class="text-3xl text-zinc-700  uppercase tracking-tight projectTitle"></h1>
+                            </div>
+                            <div class="flex gap-3 items-center w-[30vw] rounded-full overflow-hidden">
                                 <img src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
                                     alt="" class="h-10 universityLogo">
                                 <h2 class="text-base uppercase universityName">Poddar International College</h2>
@@ -214,7 +275,7 @@
                                     </div>
                                     <div class="w-[80%] mb-3">
                                         <input type="text" name="comment" id=""
-                                            class="w-full bg-[#E4EBE8] border-b-[1px] border-black outline-none "
+                                            class="w-full bg-[#E4EBE8] border-b-[1px] border-black outline-none commentinp"
                                             placeholder="Add a comment">
 
                                     </div>
@@ -222,62 +283,10 @@
                                         <input type="submit" value="Comment" class="text-white font-semibold">
                                     </div>
                                 </div>
-                            </form>
-
-                            <div class="w-full h-[8vh]  mt-4 ">
-                                <div class="w-full   flex">
-                                    <div class="w-12 h-12 rounded-full bg-[#43856F]">
-                                        <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=10"
-                                            class="w-full h-full" alt="">
-                                    </div>
-                                    <div class="w-full h-full flex flex-col ml-2">
-                                        <div class="flex">
-                                            <h1 class="text-sm"><%=review.senderName%></h1>
-                                            <h1 class="ml-2 opacity-50 text-sm">2 months ago</h1>
-                                        </div>
-                                        <div>
-                                            <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, eligendi?
-                                            </h1>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="w-full h-[8vh]  mt-4 ">
-                                <div class="w-full   flex">
-                                    <div class="w-12 h-12 rounded-full bg-[#43856F]">
-                                        <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=10"
-                                            class="w-full h-full" alt="">
-                                    </div>
-                                    <div class="w-full h-full flex flex-col ml-2">
-                                        <div class="flex">
-                                            <h1 class="text-sm">@anshi</h1>
-                                            <h1 class="ml-2 opacity-50 text-sm">2 months ago</h1>
-                                        </div>
-                                        <div>
-                                            <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, eligendi?
-                                            </h1>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="w-full h-[8vh]  mt-4 ">
-                                <div class="w-full  flex">
-                                    <div class="w-12 h-12 rounded-full bg-[#43856F]">
-                                        <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=10"
-                                            class="w-full h-full" alt="">
-                                    </div>
-                                    <div class="w-full h-full flex flex-col ml-2">
-                                        <div class="flex">
-                                            <h1 class="text-sm">@anshi</h1>
-                                            <h1 class="ml-2 opacity-50 text-sm">2 months ago</h1>
-                                        </div>
-                                        <div>
-                                            <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, eligendi?
-                                            </h1>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </form>                          
+                                <div class="w-full commentsContainer">
+                                  
+                                </div>                        
                         </div>
                     </div>
 

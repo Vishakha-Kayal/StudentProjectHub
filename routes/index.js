@@ -72,28 +72,42 @@ router.get('/', function (req, res) {
 });
 
 router.get('/project', async function (req, res) {
-  const project = await projectModel.find()
-    .populate("createdBy")
-
-  res.render('projects', { nav: true, loggedIn: req.session.loggedIn, projects: project, avatar: req.session.avatar ,review:""});
-
+  try {
+    const project = await projectModel.find().populate("createdBy");
+    res.render('projects', { nav: true, loggedIn: req.session.loggedIn, projects: project, avatar: req.session.avatar, review: "" });
+  } catch (error) {
+    res.status(500).json({ error: error.message }); // Send error as JSON
+  }
+});
+router.get('/projectData', async (req, res) => {
+  const project = await projectModel.find().populate('createdBy');
+  res.json(project);
 });
 
+router.get("/dashboard", (req, res) => {
+  res.render("dashboard", { nav: true, loggedIn: req.session.loggedIn })
+})
+
+router.get("/comments", async (req, res) => {
+  const review = await reviewModel.find()
+    .populate('senderName receiverDetail');
+  res.json(review);
+})
+
 router.post('/comments', isAuthenticated, async function (req, res) {
-  console.log("req.body =",req.body);
-  const project = await projectModel.find()
-  .populate("createdBy")
-  const { comment , projectId } = req.body
-  const user = await userModel.findOne({username:req.session.username});
+  console.log("commeentspost route");
+  console.log("req.body =", await req.body);
+  // const project = await projectModel.find()
+  // .populate("createdBy")
+  const { comment, projectId } = req.body
+  const user = await userModel.findOne({ username: req.session.username });
   try {
     const review = await reviewModel.create({
       reviewContent: comment,
       senderName: user._id,
       receiverDetail: projectId,
     })
-
-    console.log("review",review);
-    res.render("projects",{nav: true, loggedIn: true, projects: project, avatar: req.session.avatar,review:review})
+    res.render("/project")
   }
   catch (e) {
     console.log(e);

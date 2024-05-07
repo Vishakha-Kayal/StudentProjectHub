@@ -1,0 +1,48 @@
+<% include ./partials/header.ejs%>
+<div class="profile w-full min-h-screen  bg-[#e4ebe8]  pt-1">
+    <form id="uploadform" hidden action="" method="post" >
+        <input type="file" name="image">
+    </form>
+   <div class="profdets flex flex-col items-center justify-start mt-[7rem] ">
+        <div class="relative">
+            <span  id="uploadicon" class="w-8 h-8 absolute bottom-0 right-0 rounded-full flex items-center justify-center bg-[#43856F] point-cursor">
+                <i class=" ri-pencil-fill text-white"></i>
+            </span>
+            <div class="w-32 h-32 bg-zinc-600 rounded-full overflow-hidden">
+                <img class="w-full h-full object-cover position-cover" src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png" alt=""> 
+            </div>
+        </div>
+        <h1 class="text-3xl font-semibold mt-4">Poddar International College</h1>
+        <h3 class="text-md mt-1">poddarinternational@org</h3>
+       
+   
+    </div>
+    
+    <div class="w-full h-[42vh]  mt-8">
+        <div class="w-full h-full  flex items-center  px-20">
+            <div class="w-[22%] h-[80%]  flex flex-col justify-center">
+                <div class="w-[15vw] h-[20vh] bg-slate-500 rounded-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1711636418389-1ee93ebd56fb?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="w-full h-full object-cover" alt="">
+                </div>
+                <div class="w-[15vw] h-[10vh] flex flex-col items-start justify-center">
+                    <h1 class="text-center text-xl font-semibold">Smart Dustbin</h1>
+                <h3 class="text-center text-md font-medium">Category</h3>
+                </div>
+            </div>
+            <div class="w-[22%] h-[80%]  flex flex-col justify-center">
+                <div class="w-[15vw] h-[20vh] bg-slate-500 rounded-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1711636418389-1ee93ebd56fb?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="w-full h-full object-cover" alt="">
+                </div>
+                <div class="w-[15vw] h-[10vh] flex flex-col items-start justify-center">
+                    <h1 class="text-center text-xl font-semibold">Smart Dustbin</h1>
+                <h3 class="text-center text-md font-medium">Category</h3>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+</div>
+
+<script src="javascripts/dashboard.js"></script>
+<script src="javascripts/header.js"></script>
