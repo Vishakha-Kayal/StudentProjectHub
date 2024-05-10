@@ -61,17 +61,18 @@ function generateRandomCode() {
 } 
 
 /* GET home page. */
-router.get('/', function(req, res) {
-  
+router.get('/', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
   const avatar=req.session.avatar
-  res.render('index',{nav:true,loggedIn:req.session.loggedIn,avatar:avatar});
+  res.render('index',{nav:true,loggedIn:req.session.loggedIn,avatar:avatar,user});
 });
 
 router.get('/project', async function(req, res) {
   try {
+    const user = await userModel.findOne({username:req.session.username});
     const project = await projectModel.find().populate('createdBy');
     const review = await reviewModel.find().populate('senderName receiverDetail');
-    res.render('project', { project, review, nav: true, loggedIn: req.session.loggedIn, avatar: req.session.avatar });
+    res.render('project', { project, review, nav: true, loggedIn: req.session.loggedIn, avatar: req.session.avatar,user });
   } catch (error) {
     // Handle any errors
     console.error(error);
@@ -121,11 +122,11 @@ router.get('/uploadProject',isAuthenticated, async function(req, res) {
       res.redirect("/form")
     }
     else{
-      res.render('uploadProject',{nav:false,loggedIn:false});
+      res.render('uploadProject',{nav:false,loggedIn:false,user});
     }
   }
   else{
-    res.render('uploadProject',{nav:false,loggedIn:false});
+    res.render('uploadProject',{nav:false,loggedIn:false,user});
   }
 });
 
@@ -160,11 +161,13 @@ router.post('/uploadProject', async function(req, res) {
 //  res.redirect('/verify')
 });
 
-router.get('/verify',isAuthenticated, function(req, res) {
-  res.render('verification',{nav:false,loggedIn:false,invalidOtp:false});
+router.get('/verify',isAuthenticated, async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
+  res.render('verification',{nav:false,loggedIn:false,invalidOtp:false,user});
 });
 
-router.post('/verify', function(req, res) {
+router.post('/verify', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
   const {otp_input1,otp_input2,otp_input3,otp_input4}= req.body;
   let otp = otp_input1+otp_input2+otp_input3+otp_input4;
   console.log("otp",otp);
@@ -173,13 +176,14 @@ router.post('/verify', function(req, res) {
     res.redirect('/form')
   }
   else{
-    res.render('verify',{nav:false,loggedIn:false,invalidOtp:true});
+    res.render('verify',{nav:false,loggedIn:false,invalidOtp:true,user});
   }
   
 });
 
-router.get('/form',isAuthenticated, function(req, res) {
-  res.render('form',{nav:false,loggedIn:false});
+router.get('/form',isAuthenticated, async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
+  res.render('form',{nav:false,loggedIn:false,user});
 });
 
 
@@ -238,15 +242,18 @@ console.log(students);
   res.json({sucess:true,message:"Form submitted successfully"});
 }); 
 
-router.get('/projectUploaded', function(req, res) {
-  res.render('projectUploaded',{nav:false,loggedIn:false});
+router.get('/projectUploaded', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
+  res.render('projectUploaded',{nav:false,loggedIn:false,user});
 });
 
-router.get('/signup', function(req, res) {
-  res.render('signup',{nav:false,loggedIn:false,userExist:false});
+router.get('/signup', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
+  res.render('signup',{nav:false,loggedIn:false,userExist:false,user});
 });
 
 router.post('/signup', async function (req, res) {
+  const user = await userModel.findOne({username:req.session.username});
   const { username, email, password } = req.body;
   const universityEmail="";
   try{
@@ -254,7 +261,7 @@ router.post('/signup', async function (req, res) {
     let userExist=false;
     if (existingUser) {
       userExist=true;
-      res.render('signup',{nav:false,loggedIn:false,userExist:userExist});
+      res.render('signup',{nav:false,loggedIn:false,userExist:userExist,user});
     }
 
     else{
@@ -334,24 +341,25 @@ router.post('/signup', async function (req, res) {
 //   }
 // });
 
-router.get('/login', function(req, res) {
-  res.render('login',{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:false,passwordReseted:false});
+router.get('/login', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
+  res.render('login',{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:false,passwordReseted:false,user});
 });
 
 router.post('/login', async (req, res) => {
   const { username,email, password } = req.body
-
+  const userData = await userModel.findOne({username:req.session.username});
 
 const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
   
   if (!user) {
-    res.render("login",{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:true,passwordReseted:false });
+    res.render("login",{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:true,passwordReseted:false,user:userData });
   }
   
  else{
   const validPassword = await bcrypt.compare(password, user.password)
   if (!validPassword) {
-     res.render("login",{nav:false,loggedIn:false,InvalidPassword:true,userNotFound:false,passwordReseted:false });
+     res.render("login",{nav:false,loggedIn:false,InvalidPassword:true,userNotFound:false,passwordReseted:false,user:userData });
   }
   else{
   req.session.username = user.username;
@@ -368,31 +376,35 @@ const user = await userModel.findOne({ $or: [{ username: username }, { email: em
   // res.redirect('/')
 })
 
-router.get('/dashboard', function(req, res) {
+router.get('/dashboard',isAuthenticated,async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username}).populate('projects');
   const avatar=req.session.avatar
-  res.render('dashboard',{avatar:avatar,nav:true ,loggedIn:true});
+  res.render('dashboard',{avatar:avatar,nav:true ,loggedIn:true,user});
 });
 
-router.get('/about', function(req, res) {
-  res.render('about',{nav:true,loggedIn:false});
+router.get('/about', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
+  res.render('about',{nav:true,loggedIn:false,user});
 });
 
-router.get('/contact', function(req, res) {
-  res.render('contact',{nav:true,loggedIn:false});
+router.get('/contact', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
+  res.render('contact',{nav:true,loggedIn:false,user});
 });
 
-router.get('/forgotpsswd', function(req, res) {
-  res.render('forgotpsswd',{nav:false,loggedIn:false,userNotFound:false});
+router.get('/forgotpsswd', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
+  res.render('forgotpsswd',{nav:false,loggedIn:false,userNotFound:false,user});
 });
 
 router.post('/forgotpsswd', async (req, res) => {
 const { username,email } = req.body
-
+const userData = await userModel.findOne({username:req.session.username});
 const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
 console.log(user.email);
   
   if (!user) {
-    res.render("forgotpsswd",{nav:false,loggedIn:false,userNotFound:true});
+    res.render("forgotpsswd",{nav:false,loggedIn:false,userNotFound:true,user:userData});
   }
   
   else{
@@ -404,11 +416,13 @@ console.log(user.email);
  
 })
 
-router.get('/verifypage', function(req, res) {
-  res.render('verifypage',{nav:false,loggedIn:false,invalidOtp:false});
+router.get('/verifypage', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
+  res.render('verifypage',{nav:false,loggedIn:false,invalidOtp:false,user});
 });
 
-router.post('/verifypage', function(req, res) {
+router.post('/verifypage', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
   const {otp_input1,otp_input2,otp_input3,otp_input4}= req.body;
   let otp = otp_input1+otp_input2+otp_input3+otp_input4;
   console.log("otp",otp);
@@ -417,17 +431,17 @@ router.post('/verifypage', function(req, res) {
   res.redirect("/createpsswd")
   }
   else{
-    res.render('verifypage',{nav:false,loggedIn:false,invalidOtp:true});
+    res.render('verifypage',{nav:false,loggedIn:false,invalidOtp:true,user});
   }
 });
 
 router.get('/createpsswd', function(req, res) {
-  res.render('createpsswd',{nav:false,loggedIn:false});
+  res.render('createpsswd',{nav:false,loggedIn:false,user});
 });
 
 router.post('/createpsswd', async function (req, res) {
   const { confirmPassword } = req.body;
-try{
+  try{
   const user =await userModel.findOne({username: req.session.username })
   if (!user) {
     return res.status(404).send('User not found');
@@ -437,7 +451,7 @@ try{
   const hashedPassword = await bcrypt.hash(confirmPassword, salt);
   user.password = hashedPassword;
   await user.save();
-  res.render('login',{nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false ,passwordReseted:true})
+  res.render('login',{nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false ,passwordReseted:true,user})
 }
 
   catch (error) {

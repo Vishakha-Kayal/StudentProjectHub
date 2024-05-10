@@ -57,13 +57,14 @@ const universityname = document.querySelector('.uname')
 
 const selectedCollege = document.querySelectorAll('.dropdown div')
 
-
+let filterProjectCategory = ""
+let filterUniversityName = "";
 selectedCollege.forEach((collegeElement) => {
     collegeElement.addEventListener('click', (event) => {
         icon[0].className = 'ri-check-fill text-xl pl-2 ic mt-[1rem]'
         universityname.textContent = event.currentTarget.textContent;
-        let filterUniversityName = event.currentTarget.textContent.trim();
-        changeSidebar(filterUniversityName)
+        filterUniversityName = event.currentTarget.textContent.trim();
+        changeSidebar(filterUniversityName, filterProjectCategory)
 
         // icon[0].remove();
         icon[1].className = 'ri-close-circle-line pr-2 text-xl text-black closeIc ';
@@ -72,7 +73,8 @@ selectedCollege.forEach((collegeElement) => {
         filters[1].style.border = '1px solid black';
 
         icon[1].addEventListener("click", (event) => {
-            changeSidebar()
+            filterUniversityName = ""
+            changeSidebar(filterUniversityName, filterProjectCategory)
             event.stopPropagation();
             icon[0].className = "ri-school-fill text-xl pl-3 ic";
             universityname.textContent = "University";
@@ -94,6 +96,8 @@ selectedCategory.forEach((categoryElement) => {
     categoryElement.addEventListener('click', (event) => {
         iconSnc[0].className = 'ri-check-fill text-xl pl-2 ic mt-[1rem]'
         category.textContent = event.currentTarget.textContent;
+        filterProjectCategory = event.currentTarget.textContent.trim();
+        changeSidebar(filterUniversityName, filterProjectCategory)
         // icon[0].remove();
         iconSnc[1].className = 'ri-close-circle-line pr-2 text-xl text-black closeIc ';
         filters[4].style.backgroundColor = "#e4ebe8";
@@ -101,6 +105,8 @@ selectedCategory.forEach((categoryElement) => {
         filters[4].style.border = '1px solid black';
 
         iconSnc[1].addEventListener("click", (event) => {
+            filterProjectCategory = ""
+            changeSidebar(filterUniversityName, filterProjectCategory);
             event.stopPropagation();
             iconSnc[0].className = "ri-list-indefinite text-xl pl-3 ic";
             category.textContent = "Category";
@@ -147,15 +153,14 @@ let currentElemId = "";
 function showProjectDetails() {
     showComments()
     document.querySelectorAll(".sidebar").forEach((e, i) => {
-        console.log("hello");
         e.addEventListener("click", async () => {
             projectDetails.classList.remove('hidden')
             uploadProjectSteps.classList.add('hidden')
             right.scrollTop = 0
             document.querySelectorAll(".sidebar").forEach((el) => {
-                el.classList.remove("bg-[#b1dac8]");
+                el.classList.remove("bg-[#bedcce]");
             });
-            e.classList.add("bg-[#b1dac8]")
+            e.classList.add("bg-[#bedcce]")
             title = e.getAttribute('data-index')
             await fetch('/projectData')
                 .then(response => response.json())
@@ -226,6 +231,7 @@ function comments(data) {
     let comments = "";
     let commentTime = "";
     let totalComments = 0;
+    data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     data.forEach(function (elem, i) {
         if (title == elem.receiverDetail.projectTitle) {
             var currentDate = new Date();
@@ -305,14 +311,14 @@ commentBtn.addEventListener("submit", async (e) => {
 
 
 
-function showComments(){
+function showComments() {
     document.querySelectorAll(".sidebar").forEach((e, i) => {
         e.addEventListener("click", async () => {
             await fetch('/reviewData')
                 .then(response => response.json())
                 .then(data => {
                     comments(data)
-    
+
                 })
                 .catch(error => {
                     console.error('Error fetching review data:', error);
@@ -335,21 +341,28 @@ function checkLoggedIn() {
 checkLoggedIn()
 
 const sidebarContainer = document.querySelector('.sidebarContainer')
-async function changeSidebar(universityName, Category) {
+async function changeSidebar(universityName, category) {
     let universityNameByFilters = ""
-    
+    // console.log(universityName, category);
     await fetch('/projectData')
         .then(response => response.json())
         .then(data => {
             data.forEach((elem) => {
                 // Normalize input and existing data
-                if (universityName) {
-                    const normalizeString = (str) => str.trim().replace(/\s+/g, ' ').toLowerCase();
-                    const formattedUniversityName = normalizeString(universityName);
-                    const formattedElemUniversityName = normalizeString(elem.universityName);
+                if (universityName || category) {
+                    const normalizeStringUniversity = (str) => str.trim().replace(/\s+/g, ' ').toLowerCase();
+                    const formattedUniversityName = normalizeStringUniversity(universityName);
+                    const formattedElemUniversityName = normalizeStringUniversity(elem.universityName);
 
-                    if (formattedUniversityName === formattedElemUniversityName) {
-                        universityNameByFilters += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c] p-2 sidebar" data-index="${elem.projectTitle}" >
+                    const normalizeStringCategory = (str) => str.trim().replace(/\s+/g, ' ').toLowerCase();
+                    const formattedCategory = normalizeStringCategory(category);
+                    const formattedElemCategory = normalizeStringCategory(elem.projectCategory);
+
+                    if (formattedUniversityName === formattedElemUniversityName || formattedCategory === formattedElemCategory) {
+                        if (formattedCategory === formattedElemCategory && formattedUniversityName != "") {
+                                if (formattedUniversityName === normalizeStringUniversity(elem.universityName)) {
+                                
+                                    universityNameByFilters += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c] p-2 sidebar" data-index="${elem.projectTitle}" >
                             <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
                         <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
                             <img class="w-32 h-10 object-cover "
@@ -363,6 +376,48 @@ async function changeSidebar(universityName, Category) {
                         </div>
                         </div>
                         </div>`
+                                }
+                            }
+
+                        else if(formattedCategory !="" ){
+                            if(formattedCategory != formattedElemCategory)
+                            {
+                                universityNameByFilters ="No Match Found"
+                            }
+                            else{
+                                universityNameByFilters += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c] p-2 sidebar" data-index="${elem.projectTitle}" >
+                                <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                            <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
+                                <img class="w-32 h-10 object-cover "
+                                    src="/temp/${elem.universityLogo}"
+                                    alt="">
+                            </div>
+                            <div class="rig w-[90%] h-full ">
+                                <h1 class="text-xl font-semibold max-h-[4.5rem] uppercase "> ${elem.projectTitle} </h1>
+                                <h3 class="text-lg text-zinc-500"> ${elem.universityName} </h3>
+                                <h3 class="text-md text-zinc-500 capitalize "> ${elem.projectCategory}</h3>
+                            </div>
+                            </div>
+                            </div>`
+                            }
+                        }   
+
+                        else {
+                            universityNameByFilters += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c] p-2 sidebar" data-index="${elem.projectTitle}" >
+                            <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+                        <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
+                            <img class="w-32 h-10 object-cover "
+                                src="/temp/${elem.universityLogo}"
+                                alt="">
+                        </div>
+                        <div class="rig w-[90%] h-full ">
+                            <h1 class="text-xl font-semibold max-h-[4.5rem] uppercase "> ${elem.projectTitle} </h1>
+                            <h3 class="text-lg text-zinc-500"> ${elem.universityName} </h3>
+                            <h3 class="text-md text-zinc-500 capitalize "> ${elem.projectCategory}</h3>
+                        </div>
+                        </div>
+                        </div>`
+                        }
                     }
                     sidebarContainer.innerHTML = universityNameByFilters
                     showProjectDetails()
