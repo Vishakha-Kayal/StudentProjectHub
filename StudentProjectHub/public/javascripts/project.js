@@ -341,116 +341,48 @@ function checkLoggedIn() {
 checkLoggedIn()
 
 const sidebarContainer = document.querySelector('.sidebarContainer')
+
+
 async function changeSidebar(universityName, category) {
-    let universityNameByFilters = ""
-    // console.log(universityName, category);
-    await fetch('/projectData')
-        .then(response => response.json())
-        .then(data => {
-            data.forEach((elem) => {
-                // Normalize input and existing data
-                if (universityName || category) {
-                    const normalizeStringUniversity = (str) => str.trim().replace(/\s+/g, ' ').toLowerCase();
-                    const formattedUniversityName = normalizeStringUniversity(universityName);
-                    const formattedElemUniversityName = normalizeStringUniversity(elem.universityName);
+    let universityNameByFilters = "";
+    try {
+        const response = await fetch('/projectData');
+        const data = await response.json();
 
-                    const normalizeStringCategory = (str) => str.trim().replace(/\s+/g, ' ').toLowerCase();
-                    const formattedCategory = normalizeStringCategory(category);
-                    const formattedElemCategory = normalizeStringCategory(elem.projectCategory);
+        // Normalize input
+        const normalizeString = (str) => str.trim().replace(/\s+/g, ' ').toLowerCase();
+        const formattedUniversityName = normalizeString(universityName);
+        const formattedCategory = normalizeString(category);
 
-                    if (formattedUniversityName === formattedElemUniversityName || formattedCategory === formattedElemCategory) {
-                        if (formattedCategory === formattedElemCategory && formattedUniversityName != "") {
-                                if (formattedUniversityName === normalizeStringUniversity(elem.universityName)) {
-                                
-                                    universityNameByFilters += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c] p-2 sidebar" data-index="${elem.projectTitle}" >
-                            <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+        data.forEach((elem) => {
+            const elemUniversityName = normalizeString(elem.universityName);
+            const elemCategory = normalizeString(elem.projectCategory);
+
+            const matchesUniversity = formattedUniversityName === elemUniversityName || formattedUniversityName === "";
+            const matchesCategory = formattedCategory === elemCategory || formattedCategory === "";
+
+            if (matchesUniversity && matchesCategory) {
+                universityNameByFilters += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c]  p-2 sidebar" data-index="${elem.projectTitle}">
+                    <div class="fir flex w-full h-full gap-7 cursor-pointer point-cursor">
                         <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
-                            <img class="w-32 h-10 object-cover "
-                                src="/temp/${elem.universityLogo}"
-                                alt="">
+                            <img class="w-32 h-10 object-cover" src="/temp/${elem.universityLogo}" alt="">
                         </div>
-                        <div class="rig w-[90%] h-full ">
-                            <h1 class="text-xl font-semibold max-h-[4.5rem] uppercase "> ${elem.projectTitle} </h1>
-                            <h3 class="text-lg text-zinc-500"> ${elem.universityName} </h3>
-                            <h3 class="text-md text-zinc-500 capitalize "> ${elem.projectCategory}</h3>
+                        <div class="rig w-[90%] h-full">
+                            <h1 class="text-xl font-semibold max-h-[4.5rem] uppercase">${elem.projectTitle}</h1>
+                            <h3 class="text-lg text-zinc-500">${elem.universityName}</h3>
+                            <h3 class="text-md text-zinc-500 capitalize">${elem.projectCategory}</h3>
                         </div>
-                        </div>
-                        </div>`
-                                }
-                            }
-
-                        else if(formattedCategory !="" ){
-                            if(formattedCategory != formattedElemCategory)
-                            {
-                                universityNameByFilters ="No Match Found"
-                            }
-                            else{
-                                universityNameByFilters += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c] p-2 sidebar" data-index="${elem.projectTitle}" >
-                                <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
-                            <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
-                                <img class="w-32 h-10 object-cover "
-                                    src="/temp/${elem.universityLogo}"
-                                    alt="">
-                            </div>
-                            <div class="rig w-[90%] h-full ">
-                                <h1 class="text-xl font-semibold max-h-[4.5rem] uppercase "> ${elem.projectTitle} </h1>
-                                <h3 class="text-lg text-zinc-500"> ${elem.universityName} </h3>
-                                <h3 class="text-md text-zinc-500 capitalize "> ${elem.projectCategory}</h3>
-                            </div>
-                            </div>
-                            </div>`
-                            }
-                        }   
-
-                        else {
-                            universityNameByFilters += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c] p-2 sidebar" data-index="${elem.projectTitle}" >
-                            <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
-                        <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
-                            <img class="w-32 h-10 object-cover "
-                                src="/temp/${elem.universityLogo}"
-                                alt="">
-                        </div>
-                        <div class="rig w-[90%] h-full ">
-                            <h1 class="text-xl font-semibold max-h-[4.5rem] uppercase "> ${elem.projectTitle} </h1>
-                            <h3 class="text-lg text-zinc-500"> ${elem.universityName} </h3>
-                            <h3 class="text-md text-zinc-500 capitalize "> ${elem.projectCategory}</h3>
-                        </div>
-                        </div>
-                        </div>`
-                        }
-                    }
-                    sidebarContainer.innerHTML = universityNameByFilters
-                    showProjectDetails()
-                }
-                else {
-                    let universityNameWithoutFilter = ""
-                    data.forEach((elem) => {
-                        universityNameWithoutFilter += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c] p-2 sidebar" data-index="${elem.projectTitle}" >
-                <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
-                    <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
-                        <img class="w-32 h-10 object-cover "
-                            src="/temp/${elem.universityLogo}"
-                            alt="">
                     </div>
-                    <div class="rig w-[90%] h-full ">
-                        <h1 class="text-xl font-semibold max-h-[4.5rem] uppercase "> ${elem.projectTitle} </h1>
-                        <h3 class="text-lg text-zinc-500"> ${elem.universityName} </h3>
-                        <h3 class="text-md text-zinc-500 capitalize "> ${elem.projectCategory}</h3>
-                    </div>
-                </div>
-            </div>`
-                    })
-                    sidebarContainer.innerHTML = universityNameWithoutFilter
-                    showProjectDetails()
-                }
-
-            })
-        })
-        .catch(error => {
-            console.error('Error fetching project data:', error);
+                </div>`;
+            }
         });
-}
 
+        sidebarContainer.innerHTML = universityNameByFilters;
+        showProjectDetails();
+    } catch (error) {
+        console.error('Error fetching project data:', error);
+    }
+}
 
 
 
