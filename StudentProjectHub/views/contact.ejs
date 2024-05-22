@@ -5,29 +5,30 @@
             <div><h1 class="text-4xl font-bold">Contact Us</h1></div>
             <div><p class="text-lg font-medium">Need to get in touch with us? Either fill out the form with your inquiry or find the <a href="mailto:malpanianshi@gmail.com" class="point-cursor font-semibold underline text-[#43856F]">email</a> you'd like to contact below</p></div>
         </div>
-     <div class="w-[50%] h-full right  flex items-center justify-center">
-        <div class="w-[70%] h-[82%] bg-[#B8D4CF] rounded-lg overflow-hidden contactForm">
-            <form action="">
+     <div class="w-[50%] h-full right flex items-center justify-center">
+        <% if(query==false){ %>
+        <div class="w-[70%] h-[82%] bg-[#B8D4CF] rounded-lg overflow-hidden contactFormDiv ">
+            <form action="/contact" method="post" class="contactForm">
                 <div class="w-full h-[16vh]  px-6 pt-4 flex gap-7" >
                     <div class="w-[50%] h-full  flex flex-col gap-1">
                         <h3 class="text-lg font-semibold">First Name</h3>
-                        <input type="text" name="firstName" class="w-full h-[7vh] rounded-md border-[1px] px-2   border-black outline-none">
+                        <input type="text" name="firstName" class="w-full h-[7vh] rounded-md border-[1px] px-2   border-black outline-none" required>
                     </div>
                     <div class="w-[50%] h-full  flex flex-col gap-1">
                         <h3 class="text-lg font-semibold">Last Name</h3>
-                        <input type="text" name="firstName" class="w-full h-[7vh] rounded-md border-[1px] px-2   border-black outline-none">
+                        <input type="text" name="lastName" class="w-full h-[7vh] rounded-md border-[1px] px-2   border-black outline-none" required>
                     </div>
                 </div>
                 <div class="w-full h-[15vh]  px-6 pt-1" >
                     <div class="w-full h-full  flex flex-col gap-1">
                         <h3 class="text-lg font-semibold">Email</h3>
-                        <input type="email" name="useremail" class="w-full h-[7vh] rounded-md border-[1px] px-2  border-black outline-none">
+                        <input type="email" name="email" class="w-full h-[7vh] rounded-md border-[1px] px-2  border-black outline-none" required>
                     </div>                 
                 </div>
                 <div class="w-full h-[15vh] px-6 " >
                     <div class="w-full h-full  flex flex-col gap-1">
                         <h3 class="text-lg font-semibold">What can we help you with?</h3>
-                        <textarea name="query" id="" cols="20" rows="3" class="rounded-md w-full h-full px-2 py-1 outline-none text-black border-[1px] border-black"></textarea>
+                        <textarea name="query" id="" cols="20" rows="3" class="rounded-md w-full h-full px-2 py-1 outline-none text-black border-[1px] border-black" required></textarea>
                     </div>
                    
                 </div>
@@ -36,6 +37,9 @@
                 </div>
             </form>
         </div>
+        <% } else{ %>
+        <div class="responseDiv"><h1 class="bg-[#B8D4CF] p-5 text-center text-xl font-semibold rounded-md ">Thanks we will be in touch</h1></div>
+        <% } %>
      </div>
     </div>
     <div class="w-full h-[12.3vh] bg-[#43856F]"></div>

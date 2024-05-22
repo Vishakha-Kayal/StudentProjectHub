@@ -9,8 +9,8 @@ const collaborationSchema = new mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId ,
     ref  : "user"
    },
-   collaborationDetails: String,
-   reqResponse:Boolean
+   // collaborationDetails: String,
+   // reqResponse:Boolean
 })
 
 module.exports=mongoose.model("collaboration",collaborationSchema)

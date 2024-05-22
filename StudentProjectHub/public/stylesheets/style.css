@@ -96,19 +96,20 @@ html {
 
 } */
 
-/* .anim{
+ .anim{
 
-  animation : infinity-marquee 11s linear infinite;
+  /* animation : infinity-marquee 11s linear infinite; */
+  transform: translateX(0%);
 }
 
-@keyframes infinity-marquee{
+/* @keyframes infinity-marquee{
   0%{
     transform: translateX(0);
   }
   100%{
     transform: translateX(-100%);
   }
-}  */
+}   */
 
 .movingtext::-webkit-scrollbar {
   display: none;
@@ -151,7 +152,7 @@ html {
 } */
 
 /* projects.ejs css */
-.search:hover input {
+/* .search:hover input {
   background-color: #e4ebe8;
 }
 
@@ -160,21 +161,39 @@ html {
   color: black;
 }
 
-.search input::placeholder {
+.placeholder-gray::placeholder {
+  color: gray;
+  background-color: transparent;
+}
+
+.placeholder-white::placeholder {
+  background-color: transparent;
   color: white;
 }
 
 .search:hover input::placeholder {
   color: black;
-}
+} */
 
 .filters {
-  transition: all 0.5s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+
+}
+
+.clearfilters>div{
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.searchFilterinput{
+  box-shadow: 0 0 0;
 }
 
 .hero {
   height: calc(100% - 10rem);
 }
+
+
 
 .projdesc::-webkit-scrollbar {
   display: none;

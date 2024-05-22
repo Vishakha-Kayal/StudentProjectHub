@@ -18,29 +18,34 @@
                         <i class="ri-arrow-drop-down-fill text-3xl mt-1 pr-3 ic"></i>
                         <!-- <p class="updated-uni-name"></p> -->
                         <div
-                            class="w-full max-h-[10.5rem] dropdown hidden bg-[#72af9b] absolute top-[101%]  overflow-auto ">
+                            class="w-full max-h-[10.5rem] dropdown hidden bg-[#64a38c]  absolute top-[101%]  overflow-auto ">
                             <% const uniqueNames = [...new Set(project.map(item => item.universityName))] %>  
                             <% uniqueNames.forEach(function(element,i) { %>
                             <div class="w-full  py-2 border-b-2  text-white px-2">
-                                <p class="text-sm universityNameFilter"><%= element  %></p>
+                                <p class="text-sm universityNameFilter "><%= element  %></p>
                             </div>
                             <% })  %>
                         </div>  
                     </div>
 
                     <div
-                        class="filters text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-2 bg-[#43856F]  hover:bg-[#e4ebe8] hover:border-black hover:text-black search cursor-pointer">
-                        <i class="ri-search-eye-line text-xl"></i>
+                        class="filters relative text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-2 bg-[#43856F]  search cursor-pointer">
+                        <i class="ri-search-eye-line text-xl search-icon"></i>
                         <input
-                            class="w-28 bg-[#43856F] text-md outline-none cursor-pointer hover:bg-[#e4ebe8] filters point-cursor"
-                            type="text" name="search" placeholder="Search">
+                            class="searchFilterinput placeholder-white w-32 bg-[#43856F]  px-2 text-md outline-none cursor-pointer  filters point-cursor"
+                            type="text" name="search" placeholder="Search for Title">
+                            <i class="ri-close-circle-line hidden text-xl text-black close-search-icon "></i>
+                            <div class="w-full dropdown-search hidden  bg-[#64a38c] absolute top-[101%]   overflow-hidden">
+                                
+                            </div>
                     </div>
+
                     <div
                         class="filters relative text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center  bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
                         <i class="ri-list-indefinite text-xl pl-2 icons"></i>
                         <h3 class="text-md mb-1 category">Category</h3>
                         <i class="ri-arrow-drop-down-fill text-3xl pr-2 icons"></i>
-                        <div class="w-full dropdown-scnd hidden bg-[#72af9b] absolute top-[101%]   overflow-hidden">
+                        <div class="w-full dropdown-scnd hidden bg-[#64a38c] absolute top-[101%]   overflow-hidden">
                             <div class="w-full py-2 border-b-2 text-white">
                                 <h5 class="text-sm text-center">Technical</h5>
                             </div>
@@ -69,7 +74,7 @@
                         <div class="w-full max-h-32 rounded-l-lg  hover:bg-[#b7d6c97c] p-2 sidebar" data-index="<%= element.projectTitle  %>" >
                             <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
                                 <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
-                                    <img class="w-32 h-10 object-cover "
+                                    <img class="w-[3vw] h-[3vw] object-cover "
                                         src="/temp/<%= element.universityLogo %>"
                                         alt="">
                                 </div>
@@ -93,15 +98,13 @@
                             </div>
                             <div class="flex gap-3 items-center w-[30vw]">
                                 <img src=""
-                                    alt="" class="h-10 universityLogo">
+                                    alt="" class="h-10 universityLogo rounded-full overflow-hidden">
                                 <p class="text-base uppercase universityName"></p>
                             </div>
                         </div>
                         <div>
                             <div><span class="text-xl text-zinc-500 mt-2 mb-2 capitalize projectCategory inline-block"></span><span class="text-xl text-zinc-500 mt-2 mb-2 capitalize inline-block">&nbsp;Project</span></div>
-                            <button class="bg-[#43856F] px-2 py-2 rounded-md text-white point-cursor">
-                                <i class="ri-shake-hands-line"></i>
-                                Collaborate
+                            <button class=" collab-btn bg-[#43856F] px-2 py-2 rounded-md text-white point-cursor"  data-index="<%= JSON.stringify(loggedIn)%>">
                             </button>
                         </div>
                         <div class="w-full h-[70%] flex items-center px-20">

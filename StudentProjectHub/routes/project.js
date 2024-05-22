@@ -19,6 +19,10 @@ const projectSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
     },
+    collaborations:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "collaboration"
+    }],
     approvedProject: Boolean
 }, { timestamps: true })
 

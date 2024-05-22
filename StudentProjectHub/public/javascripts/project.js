@@ -1,3 +1,4 @@
+const sidebarContainer = document.querySelector('.sidebarContainer')
 let imgAttribute = document.querySelectorAll(".image");
 let imgdiv = document.querySelector(".actual");
 let arr = Array.from(imgAttribute);
@@ -22,15 +23,27 @@ leftBtn.addEventListener("click", () => {
 
 const dropdown = document.querySelector(".dropdown");
 const dropdownScnd = document.querySelector(".dropdown-scnd");
+const dropdownSearch = document.querySelector(".dropdown-search");
+const searchFilterinput = document.querySelector(".searchFilterinput");
 const filters = document.querySelectorAll(".filters");
 
 
-function toggleDropdown(dropdownToHide, dropdownToShow, filter) {
-    if (!dropdownToShow.classList.contains("hidden")) {
-        dropdownToShow.classList.add("hidden");
+function toggleDropdown(dropdownToShow, filter) {
+    // Check if the dropdown to show is already visible
+    const isAlreadyVisible = !dropdownToShow.classList.contains("hidden");
+
+    // Hide all dropdowns first
+    [dropdown, dropdownScnd, dropdownSearch].forEach(d => {
+        d.classList.add("hidden");
+    });
+
+    // Toggle the specific dropdown based on its previous state
+    if (!isAlreadyVisible) {
+        dropdownToShow.classList.remove("hidden");
+        updateFilterStyle(filter, false); // Since we are showing the dropdown, isHidden should be false
+    } else {
+        updateFilterStyle(filter, true); // Since we are hiding the dropdown, isHidden should be true
     }
-    dropdownToHide.classList.toggle("hidden");
-    updateFilterStyle(filter, dropdownToHide.classList.contains("hidden"));
 }
 
 
@@ -44,27 +57,94 @@ function updateFilterStyle(filter, isHidden) {
     }
 }
 
+// function updateFilterVisibility() {
+//     if (!dropdownSearch.classList.contains("hidden")){
+//         searchFilterinput.classList.add("text-black","bg-[#e4ebe8]");
+//         searchFilterinput.classList.add("placeholder-gray");
+//         searchFilterinput.classList.remove("placeholder-white");
+        
+//     } else {
+//         searchFilterinput.classList.remove("text-black", "bg-[#e4ebe8]");
+//         searchFilterinput.classList.remove("placeholder-gray");
+//         searchFilterinput.classList.add("placeholder-white");
+//     }
+// }
+
 filters[1].addEventListener("click", () => {
-    toggleDropdown(dropdown, dropdownScnd, filters[1]);
+    toggleDropdown(dropdown,  filters[1]);
 });
+
+searchFilterinput.addEventListener("click", () => {
+    if (dropdownSearch.classList.contains("hidden")) {
+        searchFilterinput.focus();
+    } else {
+        searchFilterinput.blur(); 
+    }
+});
+
+const searchIcon=document.querySelector(".search-icon")
+filters[2].addEventListener("click", () => {
+    searchIcon.className=""
+    toggleDropdown(dropdownSearch, filters[2]);
+});
+
 
 filters[4].addEventListener("click", () => {
-    toggleDropdown(dropdownScnd, dropdown, filters[4]);
+    toggleDropdown(dropdownScnd,  filters[4]);
 });
 
-const icon = document.querySelectorAll('.ic')
+let sidebarValues = [];
+
+function populateSidebarValues() {
+    sidebarValues = [];
+    Array.from(sidebarContainer.children).forEach((element) => {
+        let value = element.getAttribute("data-index");
+        if (value && !sidebarValues.includes(value)) {
+            sidebarValues.push(value);
+        }
+    });
+}
+
+let searchValues="";
+searchFilterinput.addEventListener("input",()=>{
+    populateSidebarValues();
+    dropdownSearch.innerHTML=""
+    searchValues=""
+    sidebarValues.forEach((elem)=>{
+        let projectTitle=elem.toLowerCase()
+        let filteredProject=projectTitle.startsWith(`${searchFilterinput.value}`)
+       
+        if(filteredProject==true){
+            searchValues+=`
+            <div class="w-full py-2 border-b-2 text-white px-2">
+                <h5 class="text-sm ">${elem}</h5>
+            </div>`
+            dropdownSearch.innerHTML=searchValues
+        }
+        if(searchFilterinput.value==""){
+            dropdownSearch.innerHTML=""
+        }
+    }
+)
+filteredTitle()
+})
+
+let filterProjectCategory = ""
+let filterUniversityName = "";
+let filterTitleName = "";
+
+function filteredUniversity(){
+    const icon = document.querySelectorAll('.ic')
 const universityname = document.querySelector('.uname')
 
 const selectedCollege = document.querySelectorAll('.dropdown div')
 
-let filterProjectCategory = ""
-let filterUniversityName = "";
 selectedCollege.forEach((collegeElement) => {
     collegeElement.addEventListener('click', (event) => {
         icon[0].className = 'ri-check-fill text-xl pl-2 ic mt-[1rem]'
         universityname.textContent = event.currentTarget.textContent;
         filterUniversityName = event.currentTarget.textContent.trim();
-        changeSidebar(filterUniversityName, filterProjectCategory)
+        changeSidebar(filterUniversityName, filterProjectCategory,filterTitleName)
 
         // icon[0].remove();
         icon[1].className = 'ri-close-circle-line pr-2 text-xl text-black closeIc ';
@@ -74,7 +154,7 @@ selectedCollege.forEach((collegeElement) => {
 
         icon[1].addEventListener("click", (event) => {
             filterUniversityName = ""
-            changeSidebar(filterUniversityName, filterProjectCategory)
+            changeSidebar(filterUniversityName, filterProjectCategory,filterTitleName)
             event.stopPropagation();
             icon[0].className = "ri-school-fill text-xl pl-3 ic";
             universityname.textContent = "University";
@@ -87,38 +167,89 @@ selectedCollege.forEach((collegeElement) => {
         });
     });
 });
+}
+filteredUniversity();
 
-const iconSnc = document.querySelectorAll('.icons')
-const category = document.querySelector('.category')
-const selectedCategory = document.querySelectorAll('.dropdown-scnd div')
-
-selectedCategory.forEach((categoryElement) => {
-    categoryElement.addEventListener('click', (event) => {
-        iconSnc[0].className = 'ri-check-fill text-xl pl-2 ic mt-[1rem]'
-        category.textContent = event.currentTarget.textContent;
-        filterProjectCategory = event.currentTarget.textContent.trim();
-        changeSidebar(filterUniversityName, filterProjectCategory)
-        // icon[0].remove();
-        iconSnc[1].className = 'ri-close-circle-line pr-2 text-xl text-black closeIc ';
-        filters[4].style.backgroundColor = "#e4ebe8";
-        filters[4].style.color = 'black';
-        filters[4].style.border = '1px solid black';
-
-        iconSnc[1].addEventListener("click", (event) => {
-            filterProjectCategory = ""
-            changeSidebar(filterUniversityName, filterProjectCategory);
-            event.stopPropagation();
-            iconSnc[0].className = "ri-list-indefinite text-xl pl-3 ic";
-            category.textContent = "Category";
-            iconSnc[1].className = "ri-arrow-drop-down-fill text-3xl mt-1 pr-3 ic";
-            filters[4].style.backgroundColor = "#43856F";
-            filters[4].style.color = 'white';
-            filters[4].style.border = 'none';
-
-
+function filteredTitle(){
+    // const icon = document.querySelector('.search-icon')
+    const closeIc = document.querySelector('.close-search-icon ')
+    
+    const selectedTitle = document.querySelectorAll('.dropdown-search div')
+    
+    selectedTitle.forEach((titleElement) => {
+        titleElement.addEventListener('click', (event) => {
+            // icon.className = 'ri-check-fill text-xl pl-2 ic mt-[1rem]'
+            searchFilterinput.value = event.currentTarget.textContent.trim();
+            filterTitleName = event.currentTarget.textContent.trim();
+            changeSidebar(filterUniversityName, filterProjectCategory,filterTitleName)
+    
+            // icon[0].remove();
+            closeIc.classList.remove("hidden")
+            filters[2].style.backgroundColor = "#e4ebe8";
+            filters[3].style.backgroundColor = "#e4ebe8";
+            filters[3].style.color = 'black';
+            filters[2].style.color = 'black';
+            filters[2].style.border = '1px solid black';
+    
+            closeIc.addEventListener("click", (event) => {
+                dropdownSearch.innerHTML=""
+                filterTitleName = ""
+                changeSidebar(filterUniversityName, filterProjectCategory,filterTitleName)
+                event.stopPropagation();
+                // icon.className = "ri-search-eye-line text-xl search-icon";
+                searchFilterinput.value = "";
+               closeIc.classList.add("hidden")
+                filters[2].style.backgroundColor = "#43856F";
+                filters[2].style.color = 'white';
+                filters[3].style.backgroundColor = "#43856F";
+                filters[3].style.color = 'white';
+                filters[2].style.border = 'none';
+    
+    
+            });
         });
     });
-});
+}
+
+
+function filteredCategory(){
+
+    const iconSnc = document.querySelectorAll('.icons')
+    const category = document.querySelector('.category')
+    const selectedCategory = document.querySelectorAll('.dropdown-scnd div')
+    
+    selectedCategory.forEach((categoryElement) => {
+        categoryElement.addEventListener('click', (event) => {
+            iconSnc[0].className = 'ri-check-fill text-xl pl-2 ic mt-[1rem]'
+            category.textContent = event.currentTarget.textContent;
+            filterProjectCategory = event.currentTarget.textContent.trim();
+            changeSidebar(filterUniversityName, filterProjectCategory,filterTitleName)
+            // icon[0].remove();
+            iconSnc[1].className = 'ri-close-circle-line pr-2 text-xl text-black closeIc ';
+            filters[4].style.backgroundColor = "#e4ebe8";
+            filters[4].style.color = 'black';
+            filters[4].style.border = '1px solid black';
+    
+            iconSnc[1].addEventListener("click", (event) => {
+                filterProjectCategory = ""
+                changeSidebar(filterUniversityName, filterProjectCategory,filterTitleName);
+                event.stopPropagation();
+                iconSnc[0].className = "ri-list-indefinite text-xl pl-3 ic";
+                category.textContent = "Category";
+                iconSnc[1].className = "ri-arrow-drop-down-fill text-3xl mt-1 pr-3 ic";
+                filters[4].style.backgroundColor = "#43856F";
+                filters[4].style.color = 'white';
+                filters[4].style.border = 'none';
+    
+    
+            });
+        });
+    });
+}
+
+filteredCategory()
+
+
 document.querySelector('.clearfilters').addEventListener("click", () => {
     window.location.reload();
 })
@@ -147,6 +278,7 @@ let studentDetailsHeading = document.querySelector(".studentDetails")
 let uploadProjectSteps = document.querySelector(".uploadProjectSteps")
 let projectDetails = document.querySelector(".projectDetails")
 let right = document.querySelector(".right")
+let collabButton = document.querySelector(".collab-btn")
 let title = ""
 
 let currentElemId = "";
@@ -165,8 +297,7 @@ function showProjectDetails() {
             await fetch('/projectData')
                 .then(response => response.json())
                 .then(data => {
-
-                    data.forEach((elem) => {
+                    data.project.forEach((elem) => {
                         if (elem.projectTitle == title) {
                             currentElemId = elem._id;
                             projectTitleHeading.innerHTML = elem.projectTitle;
@@ -175,6 +306,24 @@ function showProjectDetails() {
                             projectCategoryHeading.innerText = elem.projectCategory;
                             projectDescriptionHeading.innerHTML = elem.projectDescription;
 
+                            collabButton.innerHTML=`<i class="ri-shake-hands-line"></i>
+                            Collaborate`
+                           elem.collaborations.forEach((element)=>{
+                            if(data.user!=null){
+                                if(element.collabReqSend == data.user._id){
+                                   collabButton.innerHTML=`Request Send`
+                                }
+                                else{
+                                    collabButton.innerHTML=`<i class="ri-shake-hands-line"></i>
+                                    Collaborate`
+                                }
+                            }
+                            else{
+                                collabButton.innerHTML=`<i class="ri-shake-hands-line"></i>
+                                Collaborate`
+                            }
+                           
+                           })
                             // Populate project images
                             let img = "";
                             let image = "";
@@ -280,7 +429,6 @@ const commentBtn = document.querySelector(".commentbtn");
 const comment = document.querySelector(".comment");
 
 commentBtn.addEventListener("submit", async (e) => {
-    console.log(currentElemId);
     e.preventDefault();
 
     const form = new FormData(e.target);
@@ -332,7 +480,6 @@ function checkLoggedIn() {
     let commentsDiv = document.querySelector(".comment")
     commentsDiv.addEventListener("click", async () => {
         let loggedIn = commentsDiv.getAttribute("data-index");
-        console.log(loggedIn);
         if (loggedIn === "" || loggedIn === "false") {
             window.location.href = "/signup";
         }
@@ -340,28 +487,28 @@ function checkLoggedIn() {
 }
 checkLoggedIn()
 
-const sidebarContainer = document.querySelector('.sidebarContainer')
 
-
-async function changeSidebar(universityName, category) {
+async function changeSidebar(universityName,category,title) {
     let universityNameByFilters = "";
     try {
         const response = await fetch('/projectData');
         const data = await response.json();
 
-        // Normalize input
         const normalizeString = (str) => str.trim().replace(/\s+/g, ' ').toLowerCase();
         const formattedUniversityName = normalizeString(universityName);
         const formattedCategory = normalizeString(category);
+        const formattedTitle = normalizeString(title);
 
-        data.forEach((elem) => {
+        data.project.forEach((elem) => {
             const elemUniversityName = normalizeString(elem.universityName);
             const elemCategory = normalizeString(elem.projectCategory);
+            const elemTitle = normalizeString(elem.projectTitle);
 
             const matchesUniversity = formattedUniversityName === elemUniversityName || formattedUniversityName === "";
             const matchesCategory = formattedCategory === elemCategory || formattedCategory === "";
+            const matchesTitle = formattedTitle === elemTitle || formattedTitle === "";
 
-            if (matchesUniversity && matchesCategory) {
+            if (matchesUniversity && matchesCategory && matchesTitle) {
                 universityNameByFilters += `<div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c97c]  p-2 sidebar" data-index="${elem.projectTitle}">
                     <div class="fir flex w-full h-full gap-7 cursor-pointer point-cursor">
                         <div class="lef w-[3.6vw] h-[3.6vw] rounded-full overflow-hidden mt-2">
@@ -386,3 +533,36 @@ async function changeSidebar(universityName, category) {
 
 
 
+let collabBtn= document.querySelector(".collab-btn")
+let collabProjectId={};
+collabBtn.addEventListener("click",async()=>{
+    let loggedIn = collabBtn.getAttribute("data-index");
+    let textInsideCollab=collabBtn.innerText.trim()
+    console.log(loggedIn);
+    if (loggedIn === "" || loggedIn === "false") {
+        window.location.href = "/signup";
+    }
+    else{
+        collabProjectId.id=currentElemId;
+        if(textInsideCollab =="Collaborate"){
+            console.log("collab");
+        try {
+            const response = await fetch("/collaborate", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(collabProjectId)
+            }).then(response => response.json())
+                .then(data => {
+                   if(data.success== true){
+                    collabBtn.innerText="Request Send"
+                   }
+    
+                });
+            // Assuming this function is defined elsewhere
+        } catch (e) {
+            console.error(e);
+        }}
+    }
+})

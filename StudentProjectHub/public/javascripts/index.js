@@ -58,13 +58,11 @@ gsap.from(".cards",{
 
 
 function marquee() {
-    const anim = document.querySelectorAll(".anim")
+    const anim = document.querySelectorAll(".anim");
 
-    anim.forEach(function (e) {
-        gsap.set(e, { x: '0%' });
+    anim.forEach(function (e) { // Set initial transform
         gsap.to(e, {
-            // x: "-100%",
-            transform:"translateX(-100%)",
+            transform: "translateX(-100%)", // Ensure consistent property usage
             duration: 11,
             ease: 'linear',
             repeat: Infinity,
@@ -73,13 +71,11 @@ function marquee() {
                 scroller: "body",
                 // markers:true,
                 start: "top 80%",
-                end: "top 70%",
-                // scrub:true
+                end: "top 80%",
+                
             }
-        },
-
-        );
-    })
+        });
+    });
 }
 marquee();
 

@@ -3,6 +3,8 @@ var router = express.Router();
 var userModel = require("./users")
 var projectModel = require('./project');
 var reviewModel = require('./review');
+var contactModel = require('./contact');
+var collaborationModel = require('./collaboration');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const dotenv=require("dotenv")
@@ -55,6 +57,36 @@ async function sendMail(email) {
   }
 }
 
+async function sendCollabRequest(receiverMail,senderMail) {
+  // Configure nodemailer with secure settings
+  const transporter = nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    auth: {
+      user: 'studentprojecthub11@gmail.com',  // This may need to be the authorized sender by 'smtp-relay.brevo.com'
+      pass: `${process.env.SECERT_KEY}`,
+    },
+  });
+
+  try {
+    
+
+    let info = await transporter.sendMail({
+      from: 'studentprojecthub11@gmail.com', // corrected sender address
+      to: receiverMail,
+      subject: `Collaboration Request From ${senderMail}`,
+      text: `Collaboration Request from ${senderMail}`,
+    });
+
+    console.log('Message sent: %s', info.messageId);
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    // await res.json(info);
+  } catch (error) {
+    console.error(error);
+    // res.status(500).send('Internal Server Error');
+  }
+}
+
 function generateRandomCode() {
   const randomNum = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
   return randomNum.toString();
@@ -81,8 +113,9 @@ router.get('/project', async function(req, res) {
 });
 
 router.get('/projectData', async (req, res) => {
-  const project = await projectModel.find().populate('createdBy');
-  res.json(project);
+  const project = await projectModel.find().populate('createdBy').populate('collaborations');
+  const user = await userModel.findOne({username:req.session.username});
+  res.json({project,user});
 });
 router.get('/reviewData', async (req, res) => {
   const review = await reviewModel.find().populate('senderName receiverDetail');
@@ -90,7 +123,6 @@ router.get('/reviewData', async (req, res) => {
 });
 
 router.post('/comments',isAuthenticated, async function (req, res) {
-  console.log("req.body =",req.body);
   const project = await projectModel.find().populate('createdBy')
   const { comment,projectId} = req.body
   const user = await userModel.findOne({username:req.session.username});
@@ -108,6 +140,30 @@ router.post('/comments',isAuthenticated, async function (req, res) {
     console.log(e);
 }
 
+})
+
+router.post('/collaborate', async function (req, res) {
+  const collabProjectId = req.body; // Assuming the ID is sent under the key 'collabProjectId'
+  console.log(collabProjectId);
+  const user = await userModel.findOne({username: req.session.username});
+  let project = await projectModel.findOne({_id: collabProjectId.id}).populate('createdBy').populate('collaborations');
+  let collabReqReceiver=project.createdBy.universityEmail;
+ let collabReqSender=user.email;
+  if (!project) {
+    return res.status(404).json({ message: "Project not found" });
+  }
+  else{
+    const collaboration=await collaborationModel.create({
+      collabReqRec: project._id,
+      collabReqSend: user._id
+    });
+    project.collaborations.push(collaboration._id)
+    await project.save();
+    sendCollabRequest(collabReqReceiver,collabReqSender)
+    project = await projectModel.findOne({_id: collabProjectId.id}).populate('createdBy').populate('collaborations');
+  }
+
+  res.json({ success: true, message: "Collaboration initiated successfully", project });
 })
 
 
@@ -205,8 +261,6 @@ router.post('/submitForm',upload.fields([{ name: 'projectImages' }, { name: 'uni
 
     });
 
-  console.log(projectImagesFilename);
-  console.log(UniversityImageFilename);
 
   const{projectTitle,projectDescription,universityName,projectCategory}=req.body
   const approvedProject=true
@@ -232,7 +286,8 @@ let project = await projectModel.create({
   approvedProject:approvedProject,
   projectImages:projectImagesFilename,
   universityLogo:UniversityImageFilename,
-  student:students
+  student:students,
+  collaborations:[]
 });
 
 user.projects.push(project._id)
@@ -288,7 +343,6 @@ router.post('/signup', async function (req, res) {
       req.session.username = user.username;
       req.session.loggedIn = true;
       req.session.avatar = user.avatar;
-      console.log(user.avatar)
     
       res.redirect("/");
     }
@@ -389,7 +443,19 @@ router.get('/about', async function(req, res) {
 
 router.get('/contact', async function(req, res) {
   const user = await userModel.findOne({username:req.session.username});
-  res.render('contact',{nav:true,loggedIn:false,user});
+  res.render('contact',{nav:true,loggedIn:false,user,query:false});
+});
+
+router.post('/contact', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
+  const{firstName,lastName,email,query}=req.body
+  await contactModel.create({
+    firstName,
+    lastName,
+    email,
+    query
+  })
+  res.render('contact',{nav:true,loggedIn:false,user,query:true});
 });
 
 router.get('/forgotpsswd', async function(req, res) {
@@ -435,7 +501,8 @@ router.post('/verifypage', async function(req, res) {
   }
 });
 
-router.get('/createpsswd', function(req, res) {
+router.get('/createpsswd', async function(req, res) {
+  const user = await userModel.findOne({username:req.session.username});
   res.render('createpsswd',{nav:false,loggedIn:false,user});
 });
 
@@ -461,7 +528,6 @@ router.post('/createpsswd', async function (req, res) {
 });
 
 function isAuthenticated(req, res, next) {
-  console.log(req.session.loggedIn);
   if (req.session.loggedIn) {
     return next();
   } else {

@@ -6,3 +6,4 @@ navLinks.forEach(function(link) {
     link.classList.add("text-[#43856F]");
   }
 });
+
