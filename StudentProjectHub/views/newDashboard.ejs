@@ -1,0 +1,119 @@
+<% include ./partials/header.ejs%>
+    <div class="w-full h-full flex items-center justify-center">
+        <div class="w-full h-full bg-[#93c2af] overflow-hidden flex dashboard">
+            <div class="left w-[20vw] h-full bg-[#43856F]">
+                <div class="w-full h-[12vh]  flex items-center justify-center gap-2 border-b-[1px] border-gray-300">
+                    <div class="w-[3vw] h-[3vw] bg-[#f1f8f5] rounded-xl flex items-center justify-center"><img
+                            class="w-[80%] h-[80%] object-cover" src="/images/logo1.png" alt=""></div>
+                    <div>
+                        <h1 class=" text-white tracking-tight">StudentProjectHub</h1>
+                    </div>
+                </div>
+                <div class="w-full h-[60vh] flex flex-col  mt-6">
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 ">
+                        <a href="/dashboard/dashboard" class="point-cursor relative w-[80%] h-[80%] bg-[#e4ebe8] rounded-md flex items-center justify-center gap-2">
+                        <i
+                                class="ri-dashboard-fill text-xl"></i>
+                            <h1 class="font-semibold">Dashboard</h1>
+                            <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[40%] hidden"></div>
+                        </a>
+                    </div>
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 text-white">
+                        <a href="/dashboard/notification/comments" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                        
+                            <i class="ri-notification-2-fill text-xl inline-block ml-2"></i>
+                            <h1 class="font-semibold">Notifications</h1>
+                            <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[40%] "></div>
+                        </a>
+                    </div>
+                    <div class="w-full h-[10vh]  flex items-center justify-center  text-white">
+                        <a href="/dashboard/queries" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                       
+                            <i class="ri-questionnaire-fill text-xl inline-block ml-2 mt-2"></i>
+                            <h1 class="mt-1 font-semibold">Your Queries</h1>
+                            <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[47%] hidden"></div>
+                        </a>
+                    </div>
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 text-white">
+                        <a href="/logout" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                        
+                            <i class="ri-shut-down-line text-xl inline-block -ml-[1.7rem]"></i>
+                            <h1 class="ml-[0.2rem] font-semibold">LogOut</h1>
+                        </a>
+                    </div>
+
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 text-white">
+                        <a href="/" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                        
+                            <i class="ri-logout-box-line text-xl inline-block -ml-[3.6rem]"></i>
+                            <h1 class="ml-[0.2rem] font-semibold">Exit</h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="w-full h-[25vh]">
+                    <div class="w-full h-full flex items-center justify-center flex-col text-white gap-1">
+                        <div class="w-[3.5vw] h-[3.5vw] rounded-full bg-[#64a38c] flex items-center justify-center">
+                            <img class="w-full h-full object-cover"
+                                src="<%= avatar %>" alt="">
+                        </div>
+                        <h1 class="text-lg"><%= user.username %></h1>
+                        <h1 class="text-sm opacity-90 tracking-tight"><%= user.email %></h1>
+                    </div>
+
+                </div>
+            </div>
+            <div class="right w-[80vw] h-full bg-[#f1f8f5] flex flex-col">
+                <div class="w-full h-[12vh] bg-[#bedcce] flex items-center border-b-[1px] border-[#a3dbc1]">
+                    <h1 class="text-[#43856F] text-2xl font-semibold ml-4">Dashboard</h1>
+                </div>
+                <div class="w-full h-[88vh] flex items-center justify-center  overflow-hidden">
+
+                    <% if(user !=null && user.projects.length > 0){ %> 
+                    <div class="profile w-[95%] h-[95%] bg-[#e4ebe8] rounded-md pt-1">
+                            <div class="profdets flex flex-col items-center justify-start  ">
+                                <div class="relative">
+                                    <div class="w-24 h-24 bg-zinc-600 rounded-full overflow-hidden mt-4">
+                                        <img class="w-full h-full object-cover position-cover"
+                                            src="/temp/<%= user.projects[0].universityLogo %>" alt="">
+                                    </div>
+                                </div>
+                                <h1 class="text-2xl font-semibold mt-4">
+                                    <%= user.projects[0].universityName %>
+                                </h1>
+                                <h3 class="text-sm mt-1">
+                                    <%= user.universityEmail %>
+                                </h3>
+
+                            </div>
+
+                            <div class="w-full h-[40vh] mt-8">
+                                <div class="w-full h-full  flex items-center gap-5 px-20">
+                                    <% user.projects.forEach(function(element,i) { %>
+                                        <div class="w-[11vw] h-[32vh]  flex flex-col justify-center mt-10">
+                                            <div class="w-[10vw] h-[17vh] bg-slate-500 rounded-lg overflow-hidden">
+                                                <img src="/temp/<%= element.projectImages[0] %>"
+                                                    class="w-full h-full object-cover" alt="">
+                                            </div>
+                                            <div class="w-[10vw] h-[17vh] mt-2">
+                                                <h1
+                                                    class=" overflow-hidden  font-semibold text-left text-sm text-[#1c3831]">
+                                                    <%= element.projectTitle %>
+                                                </h1>
+                                                <h3 class="text-left text-sm font-medium">
+                                                    <%= element.projectCategory %>
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <% }) %>
+
+                                </div>
+
+                            </div>
+                    </div>
+                    <% } else{ %>
+                        <div><h1 class="text-3xl text-[#43856F] font-semibold">No project uploaded</h1></div>
+                        <% } %>
+                </div>
+            </div>
+        </div>
+    </div>

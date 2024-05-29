@@ -538,14 +538,12 @@ let collabProjectId={};
 collabBtn.addEventListener("click",async()=>{
     let loggedIn = collabBtn.getAttribute("data-index");
     let textInsideCollab=collabBtn.innerText.trim()
-    console.log(loggedIn);
     if (loggedIn === "" || loggedIn === "false") {
         window.location.href = "/signup";
     }
     else{
         collabProjectId.id=currentElemId;
         if(textInsideCollab =="Collaborate"){
-            console.log("collab");
         try {
             const response = await fetch("/collaborate", {
                 method: 'POST',
@@ -565,4 +563,7 @@ collabBtn.addEventListener("click",async()=>{
             console.error(e);
         }}
     }
+})
+document.querySelector(".main").addEventListener("contextmenu",(e)=>{
+e.preventDefault();
 })

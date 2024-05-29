@@ -1,0 +1,139 @@
+<% include ./partials/header.ejs%>
+    <div class="w-full h-full flex items-center justify-center">
+        <div class="w-fh-full h-full bg-[#93c2af] overflow-hidden flex  dashboard">
+            <div class="left w-[20vw] h-full bg-[#43856F]">
+                <div class="w-full h-[12vh]  flex items-center justify-center gap-2 border-b-[1px] border-gray-300">
+                    <div class="w-[3vw] h-[3vw] bg-[#f1f8f5] rounded-xl flex items-center justify-center"><img
+                            class="w-[80%] h-[80%] object-cover" src="/images/logo1.png" alt=""></div>
+                    <div>
+                        <h1 class=" text-white tracking-tight">StudentProjectHub</h1>
+                    </div>
+                </div>
+                <div class="w-full h-[60vh] flex flex-col  mt-6">
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 text-white">
+                        <a href="/dashboard/dashboard" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                        <i
+                                class="ri-dashboard-fill text-xl"></i>
+                            <h1 class="font-semibold">Dashboard</h1>
+                            <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[40%] hidden"></div>
+                        </a>
+                    </div>
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 ">
+                        <a href="/dashboard/notification/comments" class="point-cursor relative w-[80%] h-[80%] bg-[#e4ebe8] rounded-md flex items-center justify-center gap-2">
+                        
+                            <i class="ri-notification-2-fill text-xl inline-block ml-2"></i>
+                            <h1 class="font-semibold">Notifications</h1>
+                            <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[40%] "></div>
+                        </a>
+                    </div>
+                    <div class="w-full h-[10vh]  flex items-center justify-center  text-white">
+                        <a href="/dashboard/queries" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                       
+                            <i class="ri-questionnaire-fill text-xl inline-block ml-2 mt-2"></i>
+                            <h1 class="mt-1 font-semibold">Your Queries</h1>
+                            <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[47%] hidden"></div>
+                        </a>
+                    </div>
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 text-white">
+                        <a href="/logout" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                        
+                            <i class="ri-shut-down-line text-xl inline-block -ml-[1.7rem]"></i>
+                            <h1 class="ml-[0.2rem] font-semibold">LogOut</h1>
+                        </a>
+                    </div>
+
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 text-white">
+                        <a href="/" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                        
+                            <i class="ri-logout-box-line text-xl inline-block -ml-[3.6rem]"></i>
+                            <h1 class="ml-[0.2rem] font-semibold">Exit</h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="w-full h-[25vh]">
+                    <div class="w-full h-full flex items-center justify-center flex-col text-white gap-1">
+                        <div class="w-[3.5vw] h-[3.5vw] rounded-full bg-[#64a38c] flex items-center justify-center">
+                            <img class="w-full h-full object-cover"
+                                src="<%= user.avatar %>" alt="">
+                        </div>
+                        <h1 class="text-lg"><%= user.username %></h1>
+                        <h1 class="text-sm opacity-90 tracking-tight"><%= user.email %></h1>
+                    </div>
+
+                </div>
+            </div>
+            <div class="right w-[80vw] h-full bg-[#f1f8f5] flex flex-col">
+                <div class="w-full h-[12vh] bg-[#bedcce] flex items-center border-b-[1px] border-[#a3dbc1]">
+                    <h1 class="text-[#43856F] text-2xl font-semibold ml-4">Notifications</h1>
+                </div>
+                <div class="w-full h-[88vh] flex items-center justify-center  ">
+                    <div class="w-[95%] h-[95%] bg-[#e4ebe8] rounded-md overflow-hidden">
+                        <div class="w-full h-[13%]  border-b-[1px] border-gray-300 flex gap-4 px-4">
+                            <div class="w-[13vw]">
+                                <a class="w-full point-cursor" href="/dashboard/notification/comments">
+                                <div
+                                    class="w-[90%] h-full flex items-center justify-center gap-2 border-b-[2px] border-gray-800">
+                                    <h1 class="text-lg font-semibold">Comments</h1>
+                                    <div
+                                        class="w-[1.7vw] h-[1.7vw] rounded-lg text-white flex items-center justify-center bg-red-600">
+                                        <h1 class="text-sm"><%= commentCount %></h1>
+                                    </div>
+                                </div>
+                            </a>
+                            </div>
+                            <div class="w-[13vw]">
+                                <a class="w-full point-cursor" href="/dashboard/notification/collaborations">
+                                <div class="w-[90%] h-full flex items-center justify-center gap-2 ">
+                                    <h1 class="text-lg font-semibold">Collaboration</h1>
+                                    <div
+                                        class="w-[1.7vw] h-[1.7vw] rounded-lg  flex items-center justify-center bg-gray-300">
+                                        <h1 class="text-sm"><%= collabCount %></h1>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-[87%]  overflow-auto commentSection ">
+                            <% commentData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); %>
+                            <% commentData.forEach(function(element,i) { %>
+                                <div class=" relative w-[95%] h-[15vh] bg-[#d0d8d5] my-2 mx-5  rounded-md flex flex-col px-3">
+                                    <div class="w-full h-[67%] flex gap-3">
+                                        <div class="w-[6%] h-full flex mt-3 justify-center">
+                                            <div
+                                                class="w-[3.5vw] h-[3.5vw] rounded-full bg-[#64a38c] flex items-center justify-center">
+                                                <img class="w-full h-full object-cover"
+                                                    src="<%= element.senderName.avatar %>" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="w-[92%] h-full  ">
+                                            <div class="w-full mt-3 "><span class="font-bold capitalize"><%= element.senderName.username %></span><span> has
+                                                    commented on the project</span><span class="font-bold"> <%= element.receiverDetail.projectTitle %></span></div>
+                                            <div class="w-full flex gap-2"><span class="opacity-50 font-semibold text-sm">1
+                                                    day ago</span><span
+                                                    class="opacity-50 font-semibold text-sm">@<%= element.senderName.username %></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="w-full h-[33%] ">
+                                        <h1 class="ml-[4.1rem] font-bold"><%= element.reviewContent %>.
+                                        </h1>
+                                    </div>
+                                    <% if(previousTime) { %>
+                                        <% if(previousTime < new Date(element.timestamp)) { %>
+                                            <div class="absolute w-[1vw] h-[1vw] bg-red-600 rounded-full left-[95%] top-[14%]"></div>
+                                        <% } %>
+                                    <% } else { %>
+                                        <% if(new Date() > new Date(element.timestamp)) { %>
+                                            <div class="absolute w-[1vw] h-[1vw] bg-red-600 rounded-full left-[95%] top-[14%]"></div>
+                                        <% } %>
+                                    <% } %>
+                                            
+
+                                </div>
+                                <% }) %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

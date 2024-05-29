@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,47 +11,60 @@
     <link rel="shortcut icon" href="/images/logo1.png" type="image/x-icon">
     <link rel="stylesheet" href="/stylesheets/output.css">
 </head>
-<body>
-     <!-- navbar started -->
-    <% if(nav==true){ %><div class="w-full h-16 px-20 fixed z-50 top-[0%] bottom-auto left-auto right-auto ">
-        <div class="w-full h-16 px-20 py-10 flex items-center justify-between mt-2 nav rounded-md">
-            <div class="w-[8vw] h-12 flex items-center">
-                <img class="w-[40%]" src="/images/logo1.png" alt="">
-                <h1 class="text-xl font-bold text-[#43856F]">StudentProjectHub</h1>
-            </div>
-            <div class="flex h-12 gap-1 mid relative left-[3.7rem]">
-                <h1 class=" px-7 py-2  rounded-3xl font-medium  relative text-lg  point-cursor"><a href="/"
-                        class="decoration-none relative point-cursor navlinks  ">Home
-                </h1></a>
-                <h1 class=" px-5 py-2 rounded-3xl font-medium relative text-lg point-cursor"><a href="/project"
-                        class="decoration-none relative point-cursor navlinks ">Projects
-                </h1></a>
-                <h1 class=" px-5 py-2 rounded-3xl font-medium relative text-lg point-cursor"><a
-                        href="/about" class="decoration-none relative point-cursor navlinks ">About
-                </h1></a>
-                <h1 class=" px-5 py-2 rounded-3xl font-medium relative text-lg point-cursor"><a href="/contact"
-                        class="decoration-none relative point-cursor navlinks ">Contact
-                        Us</h1></a>
-            </div>
-            <div class="h-12">
-                <% if(!loggedIn){ %>
-                    <a href="/signup" ><button class=" w-36 h-[7vh] rounded-md text-white bg-[#43856F] point-cursor hover:bg-[#316a58] transition-all duration-150 ease-in-out">SignUp</button></a>
-                <% } else{ %>
-                    <div class="flex w-[11.5vw] h-[100%] items-center justify-center point-cursor  gap-3">
-                        <div class="w-[35%] bg-[#43856F] rounded-full flex justify-center gap-2  overflow-hidden hover:bg-[#316a58] transition-all duration-150 ease-in-out">
-                            <% if(user.projects.length>=1){ %><a href="/dashboard"><img src="<%= avatar  %>" alt="" class="w-full h-full object-cover avatar "></a>
-                            <% } else{ %>
-                                <img src="<%= avatar  %>" alt="" class="w-full h-full object-cover avatar ">
-                                <% } %>
-                        </div>
-                        <div class="w-[70%] bg-[#43856F] rounded-md flex gap-2 items-center justify-center py-2 px-1 point-cursor hover:bg-[#316a58] transition-all duration-150 ease-in-out ">
-                            <i class="ri-shut-down-line text-white"></i>
-                            <button class="point-cursor "><a href="/logout" class="text-white point-cursor">LogOut</a></button>
-                        </div>
-                    </div>
-                <% } %>
 
+<body>
+    <!-- navbar started -->
+    <% if(nav==true){ %>
+        <div class="w-full h-16 px-20 fixed z-50 top-[0%] bottom-auto left-auto right-auto ">
+            <div class="w-full h-16 px-20 py-10 flex items-center justify-between mt-2 nav rounded-md">
+                <div class="w-[8vw] h-12 flex items-center">
+                    <img class="w-[40%]" src="/images/logo1.png" alt="">
+                    <h1 class="text-xl font-bold text-[#43856F]">StudentProjectHub</h1>
+                </div>
+                <div class="flex h-12 gap-1 mid relative left-[3.7rem]">
+                    <h1 class=" px-7 py-2  rounded-3xl font-medium  relative text-lg  point-cursor"><a href="/"
+                            class="decoration-none relative point-cursor navlinks  ">Home
+                    </h1></a>
+                    <h1 class=" px-5 py-2 rounded-3xl font-medium relative text-lg point-cursor"><a href="/project"
+                            class="decoration-none relative point-cursor navlinks ">Projects
+                    </h1></a>
+                    <h1 class=" px-5 py-2 rounded-3xl font-medium relative text-lg point-cursor"><a href="/about"
+                            class="decoration-none relative point-cursor navlinks ">About
+                    </h1></a>
+                    <h1 class=" px-5 py-2 rounded-3xl font-medium relative text-lg point-cursor"><a href="/contact"
+                            class="decoration-none relative point-cursor navlinks ">Contact
+                            Us</h1></a>
+                </div>
+                <div class="h-12">
+                    <% if(!loggedIn){ %>
+                        <a href="/signup"><button
+                                class=" w-36 h-[7vh] rounded-md text-white bg-[#43856F] point-cursor hover:bg-[#316a58] transition-all duration-150 ease-in-out">SignUp</button></a>
+                        <% } else{ %>
+                            <div class="flex w-[14.5vw] h-[100%] items-center justify-center point-cursor  gap-3">
+                                <div
+                                    class="relative w-[4vw] h-[2.5vw] bg-[#43856F] flex items-center justify-center rounded-lg hover:bg-[#316a58] transition-all duration-150 ease-in-out">
+                                    <a href="/dashboard/notification/comments" class="point-cursor w-full h-full flex items-center justify-center ">
+                                    <i class="ri-notification-2-line text-white"></i>
+                                    <div
+                                        class="absolute left-[76%] -top-[6%] rounded-full w-[0.8vw] h-[0.8vw] bg-red-500">
+                                    </div>
+                                </a>
+                                </div>
+                                <div
+                                    class="w-[35%] bg-[#43856F] rounded-full flex justify-center gap-2  overflow-hidden hover:bg-[#316a58] transition-all duration-150 ease-in-out">
+                                    <a href="/dashboard/dashboard"><img src="<%= user.avatar  %>"
+                                                alt="" class="w-full h-full object-cover avatar "></a>
+                                </div>
+                                <div
+                                    class="w-[70%] bg-[#43856F] rounded-md flex gap-2 items-center justify-center py-2 px-2 point-cursor hover:bg-[#316a58] transition-all duration-150 ease-in-out ">
+                                    <i class="ri-shut-down-line text-white"></i>
+                                    <button class="point-cursor "><a href="/logout"
+                                            class="text-white point-cursor">LogOut</a></button>
+                                </div>
+                            </div>
+                            <% } %>
+
+                </div>
             </div>
         </div>
-    </div>
-    <% } %>
+        <% } %>

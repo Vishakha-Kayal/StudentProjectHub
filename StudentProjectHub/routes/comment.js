@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const reviewSchema = new mongoose.Schema({
+const commentSchema = new mongoose.Schema({
    reviewContent: String,
    senderName: {
       type: mongoose.Schema.Types.ObjectId,
@@ -15,4 +15,4 @@ const reviewSchema = new mongoose.Schema({
     default: Date.now }
 })
 
-module.exports = mongoose.model("review", reviewSchema)
+module.exports = mongoose.model("comment", commentSchema)

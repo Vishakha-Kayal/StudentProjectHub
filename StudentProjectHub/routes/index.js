@@ -2,19 +2,19 @@ var express = require('express');
 var router = express.Router();
 var userModel = require("./users")
 var projectModel = require('./project');
-var reviewModel = require('./review');
+var commentModel = require('./comment');
 var contactModel = require('./contact');
 var collaborationModel = require('./collaboration');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
-const dotenv=require("dotenv")
-const upload=require("./multer")
+const dotenv = require("dotenv")
+const upload = require("./multer");
 
 dotenv.config({
   path: './.env'
 })
 
-let verificationCode="";
+let verificationCode = "";
 
 
 async function sendMail(email) {
@@ -57,7 +57,7 @@ async function sendMail(email) {
   }
 }
 
-async function sendCollabRequest(receiverMail,senderMail) {
+async function sendCollabRequest(receiverMail, senderMail) {
   // Configure nodemailer with secure settings
   const transporter = nodemailer.createTransport({
     host: "smtp-relay.brevo.com",
@@ -69,7 +69,7 @@ async function sendCollabRequest(receiverMail,senderMail) {
   });
 
   try {
-    
+
 
     let info = await transporter.sendMail({
       from: 'studentprojecthub11@gmail.com', // corrected sender address
@@ -90,21 +90,21 @@ async function sendCollabRequest(receiverMail,senderMail) {
 function generateRandomCode() {
   const randomNum = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
   return randomNum.toString();
-} 
+}
 
 /* GET home page. */
-router.get('/', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  const avatar=req.session.avatar
-  res.render('index',{nav:true,loggedIn:req.session.loggedIn,avatar:avatar,user});
+router.get('/', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  const avatar = req.session.avatar
+  res.render('index', { nav: true, loggedIn: req.session.loggedIn, avatar: avatar, user });
 });
 
-router.get('/project', async function(req, res) {
+router.get('/project', async function (req, res) {
   try {
-    const user = await userModel.findOne({username:req.session.username});
+    const user = await userModel.findOne({ username: req.session.username });
     const project = await projectModel.find().populate('createdBy');
-    const review = await reviewModel.find().populate('senderName receiverDetail');
-    res.render('project', { project, review, nav: true, loggedIn: req.session.loggedIn, avatar: req.session.avatar,user });
+    const review = await commentModel.find().populate('senderName receiverDetail');
+    res.render('project', { project, review, nav: true, loggedIn: req.session.loggedIn, avatar: req.session.avatar, user });
   } catch (error) {
     // Handle any errors
     console.error(error);
@@ -114,53 +114,53 @@ router.get('/project', async function(req, res) {
 
 router.get('/projectData', async (req, res) => {
   const project = await projectModel.find().populate('createdBy').populate('collaborations');
-  const user = await userModel.findOne({username:req.session.username});
-  res.json({project,user});
+  const user = await userModel.findOne({ username: req.session.username });
+  res.json({ project, user });
 });
 router.get('/reviewData', async (req, res) => {
-  const review = await reviewModel.find().populate('senderName receiverDetail');
+  const review = await commentModel.find().populate('senderName receiverDetail');
   res.json(review);
 });
 
-router.post('/comments',isAuthenticated, async function (req, res) {
+router.post('/comments', isAuthenticated, async function (req, res) {
   const project = await projectModel.find().populate('createdBy')
-  const { comment,projectId} = req.body
-  const user = await userModel.findOne({username:req.session.username});
+  const { comment, projectId } = req.body
+  const user = await userModel.findOne({ username: req.session.username });
   try {
-     await reviewModel.create({
+    await commentModel.create({
       reviewContent: comment,
       senderName: user._id,
       receiverDetail: projectId,
     })
-    const review = await reviewModel.find().populate('senderName receiverDetail');
+    const review = await commentModel.find().populate('senderName receiverDetail');
     res.json(review);
-  
+
   }
   catch (e) {
     console.log(e);
-}
+  }
 
 })
 
 router.post('/collaborate', async function (req, res) {
   const collabProjectId = req.body; // Assuming the ID is sent under the key 'collabProjectId'
-  console.log(collabProjectId);
-  const user = await userModel.findOne({username: req.session.username});
-  let project = await projectModel.findOne({_id: collabProjectId.id}).populate('createdBy').populate('collaborations');
-  let collabReqReceiver=project.createdBy.universityEmail;
- let collabReqSender=user.email;
+  const user = await userModel.findOne({ username: req.session.username });
+  let project = await projectModel.findOne({ _id: collabProjectId.id }).populate('createdBy').populate('collaborations');
+  let collabReqReceiver = project.createdBy.universityEmail;
+  let collabReqSender = user.email;
   if (!project) {
     return res.status(404).json({ message: "Project not found" });
   }
-  else{
-    const collaboration=await collaborationModel.create({
+  else {
+    const collaboration = await collaborationModel.create({
       collabReqRec: project._id,
-      collabReqSend: user._id
+      collabReqSend: user._id,
+      reqResponse:""
     });
     project.collaborations.push(collaboration._id)
     await project.save();
-    sendCollabRequest(collabReqReceiver,collabReqSender)
-    project = await projectModel.findOne({_id: collabProjectId.id}).populate('createdBy').populate('collaborations');
+    sendCollabRequest(collabReqReceiver, collabReqSender)
+    project = await projectModel.findOne({ _id: collabProjectId.id }).populate('createdBy').populate('collaborations');
   }
 
   res.json({ success: true, message: "Collaboration initiated successfully", project });
@@ -168,26 +168,26 @@ router.post('/collaborate', async function (req, res) {
 
 
 
-router.get('/uploadProject',isAuthenticated, async function(req, res) {
+router.get('/uploadProject', isAuthenticated, async function (req, res) {
   let username = req.session.username;
   console.log(username);
-  const user = await userModel.findOne({username:username})
+  const user = await userModel.findOne({ username: username })
   console.log(user.universityEmail);
-  if(user){
-    if(user.universityEmail ){
+  if (user) {
+    if (user.universityEmail) {
       res.redirect("/form")
     }
-    else{
-      res.render('uploadProject',{nav:false,loggedIn:false,user});
+    else {
+      res.render('uploadProject', { nav: false, loggedIn: false, user });
     }
   }
-  else{
-    res.render('uploadProject',{nav:false,loggedIn:false,user});
+  else {
+    res.render('uploadProject', { nav: false, loggedIn: false, user });
   }
 });
 
-router.post('/uploadProject', async function(req, res) {
-  const{universityEmail}=req.body;
+router.post('/uploadProject', async function (req, res) {
+  const { universityEmail } = req.body;
   try {
     verificationCode = await sendMail(universityEmail)
     let username = req.session.username;
@@ -207,143 +207,142 @@ router.post('/uploadProject', async function(req, res) {
     res.status(400).send(error.message);
   }
 
-//   verificationCode = await sendMail(universityEmail);
-//   let username = req.session.username;
-//   const user = await userModel.findOne({username:username})
-//   user.universityEmail = universityEmail;
-//   await user.save();
-//   console.log(verificationCode);
+  //   verificationCode = await sendMail(universityEmail);
+  //   let username = req.session.username;
+  //   const user = await userModel.findOne({username:username})
+  //   user.universityEmail = universityEmail;
+  //   await user.save();
+  //   console.log(verificationCode);
 
-//  res.redirect('/verify')
+  //  res.redirect('/verify')
 });
 
-router.get('/verify',isAuthenticated, async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  res.render('verification',{nav:false,loggedIn:false,invalidOtp:false,user});
+router.get('/verify', isAuthenticated, async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  res.render('verification', { nav: false, loggedIn: false, invalidOtp: false, user });
 });
 
-router.post('/verify', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  const {otp_input1,otp_input2,otp_input3,otp_input4}= req.body;
-  let otp = otp_input1+otp_input2+otp_input3+otp_input4;
-  console.log("otp",otp);
+router.post('/verify', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  const { otp_input1, otp_input2, otp_input3, otp_input4 } = req.body;
+  let otp = otp_input1 + otp_input2 + otp_input3 + otp_input4;
+  console.log("otp", otp);
   console.log(verificationCode);
-  if(otp == verificationCode){
+  if (otp == verificationCode) {
     res.redirect('/form')
   }
-  else{
-    res.render('verify',{nav:false,loggedIn:false,invalidOtp:true,user});
+  else {
+    res.render('verify', { nav: false, loggedIn: false, invalidOtp: true, user });
   }
-  
+
 });
 
-router.get('/form',isAuthenticated, async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  res.render('form',{nav:false,loggedIn:false,user});
+router.get('/form', isAuthenticated, async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  res.render('form', { nav: false, loggedIn: false, user });
 });
 
 
-router.post('/submitForm',upload.fields([{ name: 'projectImages' }, { name: 'universityLogo' }]), async function(req, res) {
+router.post('/submitForm', upload.fields([{ name: 'projectImages' }, { name: 'universityLogo' }]), async function (req, res) {
   const projectImages = req.files['projectImages'];
-    const universityLogo = req.files['universityLogo'];
-    const user = await userModel.findOne({ username: req.session.username });
+  const universityLogo = req.files['universityLogo'];
+  const user = await userModel.findOne({ username: req.session.username });
 
-    let projectImagesFilename=[]
-    projectImages.forEach(element => {
-      let filename=element.filename
-      projectImagesFilename.push(filename)
-    });
+  let projectImagesFilename = []
+  projectImages.forEach(element => {
+    let filename = element.filename
+    projectImagesFilename.push(filename)
+  });
 
-    let UniversityImageFilename=""
-    universityLogo.forEach(element => {
-      let filename=element.filename
-      UniversityImageFilename=filename
+  let UniversityImageFilename = ""
+  universityLogo.forEach(element => {
+    let filename = element.filename
+    UniversityImageFilename = filename
 
-    });
+  });
 
 
-  const{projectTitle,projectDescription,universityName,projectCategory}=req.body
-  const approvedProject=true
-  const inputData=req.body;
+  const { projectTitle, projectDescription, universityName, projectCategory } = req.body
+  const approvedProject = true
+  const inputData = req.body;
 
   const students = [];
 
-for (let i = 1; inputData[`studentName_${i}`]; i++) {
-  const student = {
-    studentName: inputData[`studentName_${i}`],
-    studentStream: inputData[`studentStream_${i}`],
-    yearOfQualification: inputData[`yearOfQualification_${i}`]
-  };
-  students.push(student);
-}
+  for (let i = 1; inputData[`studentName_${i}`]; i++) {
+    const student = {
+      studentName: inputData[`studentName_${i}`],
+      studentStream: inputData[`studentStream_${i}`],
+      yearOfQualification: inputData[`yearOfQualification_${i}`]
+    };
+    students.push(student);
+  }
 
-let project = await projectModel.create({
-  createdBy:user._id,
-  projectTitle:projectTitle,
-  projectDescription:projectDescription,
-  universityName:universityName,
-  projectCategory:projectCategory,
-  approvedProject:approvedProject,
-  projectImages:projectImagesFilename,
-  universityLogo:UniversityImageFilename,
-  student:students,
-  collaborations:[]
+  let project = await projectModel.create({
+    createdBy: user._id,
+    projectTitle: projectTitle,
+    projectDescription: projectDescription,
+    universityName: universityName,
+    projectCategory: projectCategory,
+    approvedProject: approvedProject,
+    projectImages: projectImagesFilename,
+    universityLogo: UniversityImageFilename,
+    student: students,
+    collaborations: []
+  });
+
+  user.projects.push(project._id)
+  await user.save();
+
+  res.json({ sucess: true, message: "Form submitted successfully" });
 });
 
-user.projects.push(project._id)
-await user.save();
-
-console.log(students);
-  res.json({sucess:true,message:"Form submitted successfully"});
-}); 
-
-router.get('/projectUploaded', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  res.render('projectUploaded',{nav:false,loggedIn:false,user});
+router.get('/projectUploaded', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  res.render('projectUploaded', { nav: false, loggedIn: false, user });
 });
 
-router.get('/signup', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  res.render('signup',{nav:false,loggedIn:false,userExist:false,user});
+router.get('/signup', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  res.render('signup', { nav: false, loggedIn: false, userExist: false, user });
 });
 
 router.post('/signup', async function (req, res) {
-  const user = await userModel.findOne({username:req.session.username});
+  const user = await userModel.findOne({ username: req.session.username });
   const { username, email, password } = req.body;
-  const universityEmail="";
-  try{
+  const universityEmail = "";
+  try {
     const existingUser = await userModel.findOne({ username: username });
-    let userExist=false;
+    let userExist = false;
     if (existingUser) {
-      userExist=true;
-      res.render('signup',{nav:false,loggedIn:false,userExist:userExist,user});
+      userExist = true;
+      res.render('signup', { nav: false, loggedIn: false, userExist: userExist, user });
     }
 
-    else{
+    else {
       let random = Math.floor(Math.random() * 16);
-    let avatarUrl = await fetch(`https://api.dicebear.com/7.x/lorelei/svg?seed=${random}`)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`Error fetching avatar: ${res.statusText}`);
-        }
-        return res.url;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      let avatarUrl = await fetch(`https://api.dicebear.com/7.x/lorelei/svg?seed=${random}`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(`Error fetching avatar: ${res.statusText}`);
+          }
+          return res.url;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
       const salt = await bcrypt.genSalt(7);
       const hashedPassword = await bcrypt.hash(password, salt);
       let user = await userModel.create({
         username: req.body.username,
-        email:email,
+        email: email,
         password: hashedPassword,
         avatar: avatarUrl,
-        universityEmail:universityEmail // Assign the generated avatar URL
+        universityEmail: universityEmail // Assign the generated avatar URL
       });
       req.session.username = user.username;
       req.session.loggedIn = true;
       req.session.avatar = user.avatar;
-    
+
       res.redirect("/");
     }
   }
@@ -352,12 +351,12 @@ router.post('/signup', async function (req, res) {
     // Handle errors appropriately
     res.redirect("/signup");
   }
-  
-  
+
+
 
 
   // Create a new user with the avatar URL
-  
+
 });
 
 // router.post('/api/user/signup', async function(req, res) {
@@ -368,7 +367,7 @@ router.post('/signup', async function (req, res) {
 //         password: req.body.password, // Consider hashing the password
 //     });
 //     const savedUser = await newUser.save();
-    
+
 //     // Respond with the user ID (or another unique identifier)
 //     res.status(201).json({ userId: savedUser._id });
 // } catch (error) {
@@ -384,7 +383,7 @@ router.post('/signup', async function (req, res) {
 //   try {
 //       // Find the user by ID and update the avatar
 //       const updatedUser = await userModel.findByIdAndUpdate(userId, { avatar }, { new: true });
-      
+
 //       if (!updatedUser) {
 //           return res.status(404).send({ message: 'User not found' });
 //       }
@@ -395,136 +394,257 @@ router.post('/signup', async function (req, res) {
 //   }
 // });
 
-router.get('/login', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  res.render('login',{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:false,passwordReseted:false,user});
+router.get('/login', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false, passwordReseted: false, user });
 });
 
 router.post('/login', async (req, res) => {
-  const { username,email, password } = req.body
-  const userData = await userModel.findOne({username:req.session.username});
+  const { username, email, password } = req.body
+  const userData = await userModel.findOne({ username: req.session.username });
 
-const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
-  
+  const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
+
   if (!user) {
-    res.render("login",{nav:false,loggedIn:false,InvalidPassword:false,userNotFound:true,passwordReseted:false,user:userData });
+    res.render("login", { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: true, passwordReseted: false, user: userData });
   }
-  
- else{
-  const validPassword = await bcrypt.compare(password, user.password)
-  if (!validPassword) {
-     res.render("login",{nav:false,loggedIn:false,InvalidPassword:true,userNotFound:false,passwordReseted:false,user:userData });
+
+  else {
+    const validPassword = await bcrypt.compare(password, user.password)
+    if (!validPassword) {
+      res.render("login", { nav: false, loggedIn: false, InvalidPassword: true, userNotFound: false, passwordReseted: false, user: userData });
+    }
+    else {
+      req.session.username = user.username;
+      req.session.loggedIn = true;
+      req.session.avatar = user.avatar;
+      res.redirect('/');
+    }
   }
-  else{
-  req.session.username = user.username;
-  req.session.loggedIn = true;
-  req.session.avatar = user.avatar;
-  res.redirect('/');
-  }
- }
-  
-  
+
+
 
   // res.render({user})
   // res.send('User authenticated and logged in successfully')
   // res.redirect('/')
 })
 
-router.get('/dashboard',isAuthenticated,async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username}).populate('projects');
-  const avatar=req.session.avatar
-  res.render('dashboard',{avatar:avatar,nav:true ,loggedIn:true,user});
+router.get('/dashboard', isAuthenticated, async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username }).populate('projects');
+  const avatar = req.session.avatar
+  res.render('dashboard', { avatar: avatar, nav: true, loggedIn: true, user });
 });
 
-router.get('/about', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  res.render('about',{nav:true,loggedIn:false,user});
+router.get('/about', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  res.render('about', { nav: true, loggedIn: false, user });
 });
 
-router.get('/contact', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  res.render('contact',{nav:true,loggedIn:false,user,query:false});
+router.get('/contact', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  res.render('contact', { nav: true, loggedIn: req.session.loggedIn, user, query: false });
 });
 
-router.post('/contact', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  const{firstName,lastName,email,query}=req.body
+router.post('/contact', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  const { firstName, lastName, email, query } = req.body
   await contactModel.create({
+    user:user._id,
     firstName,
     lastName,
     email,
-    query
+    query,
+    queryResolved:""
   })
-  res.render('contact',{nav:true,loggedIn:false,user,query:true});
+  res.render('contact', { nav: true, loggedIn: req.session.loggedIn, user, query: true });
 });
 
-router.get('/forgotpsswd', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  res.render('forgotpsswd',{nav:false,loggedIn:false,userNotFound:false,user});
+router.get('/forgotpsswd', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  res.render('forgotpsswd', { nav: false, loggedIn: false, userNotFound: false, user });
 });
 
 router.post('/forgotpsswd', async (req, res) => {
-const { username,email } = req.body
-const userData = await userModel.findOne({username:req.session.username});
-const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
-console.log(user.email);
-  
+  const { username, email } = req.body
+  const userData = await userModel.findOne({ username: req.session.username });
+  const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
+  console.log(user.email);
+
   if (!user) {
-    res.render("forgotpsswd",{nav:false,loggedIn:false,userNotFound:true,user:userData});
+    res.render("forgotpsswd", { nav: false, loggedIn: false, userNotFound: true, user: userData });
   }
-  
-  else{
+
+  else {
     req.session.username = user.username
-  verificationCode = await sendMail(user.email)
-  console.log(verificationCode);
-  res.redirect('/verifypage');
+    verificationCode = await sendMail(user.email)
+    console.log(verificationCode);
+    res.redirect('/verifypage');
   }
- 
+
 })
 
-router.get('/verifypage', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  res.render('verifypage',{nav:false,loggedIn:false,invalidOtp:false,user});
+router.get('/verifypage', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  res.render('verifypage', { nav: false, loggedIn: false, invalidOtp: false, user });
 });
 
-router.post('/verifypage', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  const {otp_input1,otp_input2,otp_input3,otp_input4}= req.body;
-  let otp = otp_input1+otp_input2+otp_input3+otp_input4;
-  console.log("otp",otp);
+router.post('/verifypage', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  const { otp_input1, otp_input2, otp_input3, otp_input4 } = req.body;
+  let otp = otp_input1 + otp_input2 + otp_input3 + otp_input4;
+  console.log("otp", otp);
   console.log(verificationCode);
-  if(otp == verificationCode){
-  res.redirect("/createpsswd")
+  if (otp == verificationCode) {
+    res.redirect("/createpsswd")
   }
-  else{
-    res.render('verifypage',{nav:false,loggedIn:false,invalidOtp:true,user});
+  else {
+    res.render('verifypage', { nav: false, loggedIn: false, invalidOtp: true, user });
   }
 });
 
-router.get('/createpsswd', async function(req, res) {
-  const user = await userModel.findOne({username:req.session.username});
-  res.render('createpsswd',{nav:false,loggedIn:false,user});
+router.get('/createpsswd', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  res.render('createpsswd', { nav: false, loggedIn: false, user });
 });
 
 router.post('/createpsswd', async function (req, res) {
   const { confirmPassword } = req.body;
-  try{
-  const user =await userModel.findOne({username: req.session.username })
-  if (!user) {
-    return res.status(404).send('User not found');
-  }
+  try {
+    const user = await userModel.findOne({ username: req.session.username })
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(confirmPassword, salt);
-  user.password = hashedPassword;
-  await user.save();
-  res.render('login',{nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false ,passwordReseted:true,user})
-}
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(confirmPassword, salt);
+    user.password = hashedPassword;
+    await user.save();
+    res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false, passwordReseted: true, user })
+  }
 
   catch (error) {
     res.status(500).send('Internal server error'); // Or redirect to an error page
   }
 
+});
+
+router.get('/dashboard/dashboard', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username }).populate('projects');
+  const avatar = req.session.avatar
+  res.render('newDashboard', { avatar: avatar, nav: false, loggedIn: true, user });
+});
+
+let routeTime = null;
+let commentCount = 0;
+let collabCount=0;
+
+router.get('/dashboard/notification/comments', async function (req, res) {
+  let commentData = [];
+  commentCount=0
+  const comments = await commentModel.find().populate("receiverDetail").populate("senderName")
+  const user = await userModel.findOne({ username: req.session.username });
+  if (comments) {
+    comments.forEach((comment) => {
+      const isSameUser = user._id.toString() === comment.receiverDetail.createdBy.toString();
+      if (isSameUser) {
+        if (routeTime) {
+          // console.log("iftime",routeTime);
+          // console.log("iftimestamp",comment.timestamp);
+          if (routeTime < comment.timestamp) {
+            commentCount++;
+          }
+        }
+        else {
+          // console.log("elsetime",new Date());
+          // console.log("elsetimestamp",comment.timestamp);
+          if (new Date() > comment.timestamp) {
+            commentCount++;
+          }
+        }
+        commentData.push(comment)
+      }
+    })
+  }
+  let previousTime=routeTime;
+  routeTime = new Date()
+  res.render('comments', { nav: false, loggedIn: true, user, commentData, commentCount,previousTime,collabCount });
+});
+
+
+let collabRouteTime = null;
+
+router.get('/dashboard/notification/collaborations', async function (req, res) {
+  let collabData=[]
+  collabCount=0
+  const user = await userModel.findOne({ username: req.session.username });
+  const collaborations = await collaborationModel.find().populate("collabReqRec").populate("collabReqSend")
+  if (collaborations) {
+    collaborations.forEach((collab) => {
+      const isSameUser = user._id.toString() === collab.collabReqRec.createdBy.toString();
+      if (isSameUser) {
+        if(collab.reqResponse == ""){
+        if (collabRouteTime) {
+          // console.log("ifcollabtime",collabRouteTime);
+          // console.log("ifcollabtimestamp",collab.timestamp);
+          if (collabRouteTime < collab.timestamp) {
+            collabCount++;
+          }
+        }
+        else {
+          // console.log("elsecollabtime",new Date());
+          // console.log("elsecollabtimestamp",collab.timestamp);
+          if (new Date() > collab.timestamp) {
+            collabCount++;
+          }
+        }
+        collabData.push(collab)
+      }
+      }
+    })
+  }
+  let previousTime=collabRouteTime;
+  collabRouteTime = new Date()
+  // console.log(collabRouteTime);
+  // console.log(previousTime);
+  res.render('collaborations', { nav: false, loggedIn: true, user,commentCount,collabData,collabCount,previousTime });
+});
+
+router.post('/dashboard/notification/collaborations', async function (req, res) {
+  const data = req.body;
+  try {
+    // Find the collaboration document by ID and update the reqResponse field
+    const collaboration = await collaborationModel.findOneAndUpdate(
+      { _id: data.id },
+      { $set: { reqResponse: data.response } },
+      { new: true }   
+    );
+
+    if (!collaboration) {
+      return res.status(404).send({ message: 'Collaboration not found' });
+    }
+
+    console.log('Updated Collaboration:', collaboration);
+    res.json({ success: true, message: 'Collaboration updated successfully', collaboration });
+  } catch (error) {
+    console.error('Error updating collaboration:', error);
+    res.status(500).send({ message: 'Failed to update collaboration', error: error.message });
+  }
+});
+
+
+router.get('/dashboard/queries', async function (req, res) {
+  const user = await userModel.findOne({ username: req.session.username });
+  let contactData=[]
+  const contacts = await contactModel.find();
+  if (contacts) {
+    contacts.forEach((contact) => {
+      const isSameUser = user._id.toString() === contact.user.toString();
+      if (isSameUser) {
+        contactData.push(contact)
+      }
+    })
+  }
+  res.render('queries', { nav: false, loggedIn: true, user,contactData });
 });
 
 function isAuthenticated(req, res, next) {

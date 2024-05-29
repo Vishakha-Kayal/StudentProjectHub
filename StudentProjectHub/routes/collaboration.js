@@ -9,8 +9,11 @@ const collaborationSchema = new mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId ,
     ref  : "user"
    },
+   reqResponse:String,
+   timestamp:
+    { type: Date,
+    default: Date.now }
    // collaborationDetails: String,
-   // reqResponse:Boolean
 })
 
 module.exports=mongoose.model("collaboration",collaborationSchema)

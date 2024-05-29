@@ -1,0 +1,98 @@
+<% include ./partials/header.ejs%>
+    <div class="w-full h-full flex items-center justify-center">
+        <div class="w-full h-full bg-[#93c2af] overflow-hidden flex  dashboard">
+            <div class="left w-[20vw] h-full bg-[#43856F]">
+                <div class="w-full h-[12vh]  flex items-center justify-center gap-2 border-b-[1px] border-gray-300">
+                    <div class="w-[3vw] h-[3vw] bg-[#f1f8f5] rounded-xl flex items-center justify-center"><img
+                            class="w-[80%] h-[80%] object-cover" src="/images/logo1.png" alt=""></div>
+                    <div>
+                        <h1 class=" text-white tracking-tight">StudentProjectHub</h1>
+                    </div>
+                </div>
+                <div class="w-full h-[60vh] flex flex-col  mt-6">
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 text-white">
+                        <a href="/dashboard/dashboard" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                        <i
+                                class="ri-dashboard-fill text-xl"></i>
+                            <h1 class="font-semibold">Dashboard</h1>
+                            <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[40%] hidden"></div>
+                        </a>
+                    </div>
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 text-white">
+                        <a href="/dashboard/notification/comments" class="point-cursor relative w-[80%] h-[80%] rounded-md flex items-center justify-center gap-2">
+                        
+                            <i class="ri-notification-2-fill text-xl inline-block ml-2"></i>
+                            <h1 class="font-semibold">Notifications</h1>
+                            <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[40%] "></div>
+                        </a>
+                    </div>
+                    <div class="w-full h-[10vh]  flex items-center justify-center  ">
+                        <a href="/dashboard/queries" class="point-cursor relative w-[80%] h-[80%] bg-[#e4ebe8]  rounded-md flex items-center justify-center gap-2">
+                       
+                            <i class="ri-questionnaire-fill text-xl inline-block ml-2 mt-2"></i>
+                            <h1 class="mt-1 font-semibold">Your Queries</h1>
+                            <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[47%] hidden"></div>
+                        </a>
+                    </div>
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 text-white">
+                        <a href="/logout" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                        
+                            <i class="ri-shut-down-line text-xl inline-block -ml-[1.7rem]"></i>
+                            <h1 class="ml-[0.2rem] font-semibold">LogOut</h1>
+                        </a>
+                    </div>
+
+                    <div class="w-full h-[10vh]  flex items-center justify-center gap-3 text-white">
+                        <a href="/" class="point-cursor relative w-[80%] h-[80%]  rounded-md flex items-center justify-center gap-2">
+                        
+                            <i class="ri-logout-box-line text-xl inline-block -ml-[3.6rem]"></i>
+                            <h1 class="ml-[0.2rem] font-semibold">Exit</h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="w-full h-[25vh]">
+                    <div class="w-full h-full flex items-center justify-center flex-col text-white gap-1">
+                        <div class="w-[3.5vw] h-[3.5vw] rounded-full bg-[#64a38c] flex items-center justify-center">
+                            <img class="w-full h-full object-cover"
+                                src="<%= user.avatar %>" alt="">
+                        </div>
+                        <h1 class="text-lg"><%= user.username %></h1>
+                        <h1 class="text-sm opacity-90 tracking-tight"><%= user.email %></h1>
+                    </div>
+
+                </div>
+            </div>
+            <div class="right w-[80vw] h-full bg-[#f1f8f5] flex flex-col">
+                <div class="w-full h-[12vh] bg-[#bedcce] flex items-center border-b-[1px] border-[#a3dbc1]">
+                    <h1 class="text-[#43856F] text-2xl font-semibold ml-4">Your Queries</h1>
+                </div>
+                <div class="w-full h-[88vh] flex items-center justify-center  ">
+                    <div class="w-[95%] h-[95%] bg-[#e4ebe8] rounded-md overflow-hidden">
+                        <% contactData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); %>
+                            <% contactData.forEach(function(element,i) { %>
+                        <div class=" relative w-[95%]  bg-[#d0d8d5] my-2 mx-5  rounded-md flex flex-col gap-1 px-3 py-2">
+                            <div class="w-full flex gap-3">
+                                <div
+                                    class="w-[2.5vw] h-[2.5vw] border-[2px] flex items-center justify-center border-[#43856F] rounded-full">
+                                    <i class="ri-question-answer-fill text-[#43856F]"></i>
+                                </div>
+                                <h1 class="text-[#43856F] font-bold">Query <span>1</span></h1>
+                            </div>
+                            <div class="flex items-center justify-between"><h1 class="text-[#43856F] font-semibold "><%= element.query %> ?</h1>
+                                <% if(element.queryResolved !="") { %>
+                                <i class="ri-arrow-drop-down-fill inline-block mr-[0.6vw] text-3xl text-[#43856F] point-cursor"></i>
+                                <% } %>
+                            </div>
+                            <% if(element.queryResolved !="") { %>
+                                <div class="w-full  ">
+                                    <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem sit quidem inventore incidunt. Iste, unde quod reiciendis consectetur ipsa nam praesentium nostrum magni aut odit reprehenderit, quis mollitia alias voluptatibus?</h1>
+                                </div>
+                                <% } %>
+                            <div class="absolute w-[1vw] h-[1vw] bg-red-600 rounded-full left-[95%] top-[12%]"></div>
+                        </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

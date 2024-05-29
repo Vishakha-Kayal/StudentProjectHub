@@ -7,3 +7,12 @@ navLinks.forEach(function(link) {
   }
 });
 
+document.querySelectorAll(".contactField").forEach((element)=>{
+element.addEventListener("click",(e)=>{
+let loggedIn=element.getAttribute("data-index")
+if (loggedIn === "" || loggedIn === "false") {
+  window.location.href = "/signup";
+}
+})
+})
+

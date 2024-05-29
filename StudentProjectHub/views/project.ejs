@@ -1,4 +1,8 @@
 <% include ./partials/header.ejs%>
+<style type="text/css" media="print">
+    body { visibility: hidden; display: none }
+</style>
+
     <div class="main z-[10] relative">
         <div class="w-full h-screen  bg-[#e4ebe8] flex flex-col">
             <!-- upper div -->
@@ -123,8 +127,8 @@
 
 
                         <h1 class="text-3xl mb-4">Project Description :</h1>
-                        <div class="projdesc w-full overflow-auto max-h-[40%] text-justify">
-                            <p class="projectDescription"></p>
+                        <div class="projdesc w-full overflow-auto max-h-[40%] text-justify prevent-select ">
+                            <p class="projectDescription "></p>
                         </div>
                         <div class="mt-4 w-full ">
                             <H1 class="text-3xl mb-2">Student Details:</H1>
@@ -208,7 +212,7 @@
                                         <h4 class="tracking-tight font-semibold text-center">Verify OTP</h4>
                                     </div>
                                     <div class="">
-                                        <h4 class="text-sm text-center">Enter the verification code sent to your email. This code is used to verify your email.</h4>
+                                        <h4 class="text-sm text-center opacity-75">Enter the verification code sent to your email. This code is used to verify your email.</h4>
                                     </div>
                                 </div>
                                 <div class="w-[24%] h-[100%]  flex flex-col gap-2 px-2 ">
@@ -219,7 +223,7 @@
                                         <h4 class="tracking-tight font-semibold text-center">Fill project details</h4>
                                     </div>
                                     <div class="">
-                                        <h4 class="text-sm text-center">Shape your project by sharing its details, and we'll ensure it's presented beautifully for the world to see.</h4>
+                                        <h4 class="text-sm text-center opacity-75">Shape your project by sharing its details, and we'll ensure it's presented beautifully for the world to see.</h4>
                                     </div>
                                 </div>
                                 <div class="w-[24%] h-[100%]  flex flex-col gap-2  px-2 ">
@@ -230,7 +234,7 @@
                                         <h4 class="tracking-tight font-semibold text-center">Project uploaded </h4>
                                     </div>
                                     <div class="">
-                                        <h4 class="text-sm text-center">Success! Your project is now proudly displayed on our website, reaching audiences far and wide.</h4>
+                                        <h4 class="text-sm text-center opacity-75">Success! Your project is now proudly displayed on our website, reaching audiences far and wide.</h4>
                                     </div>
                                 </div>
                             </div>
