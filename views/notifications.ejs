@@ -1,0 +1,54 @@
+<% include ./partials/notificationTemplate.ejs%>
+<div class="w-full h-[13%] flex items-center justify-start border-b-2 border-white bg-[#93c2af]">
+    <h1 class="text-2xl text-[#43856F] font-semibold pl-4">
+      Notifications
+    </h1>
+    </div>
+          <div class="w-[97%] h-[84%] flex flex-col justify-center items-center bg-[#bdc0bf48] m-auto rounded-xl">
+            <div class="w-[95%] h-[95%] rounded-lg overflow-hidden">
+                <div class="w-full h-[13%] flex items-center">
+                  <div class="w-[13vw] h-full flex justify-center items-center border-b-[2.5px] border-slate-600 gap-2 ml-3 comment">
+                    <h1 class="text-xl font-semibold"> <a href="/dashboard/notifications/comments">Comments</a> </h1>
+                  <h1 class="bg-red-500 rounded-lg px-1"><span class="text-md p-1 text-white">1</span></h1>   
+                  </div>
+                  <div class="w-[13vw] h-full flex justify-center items-center gap-2 ml-3 colaborate">
+                    <h1 class="text-xl font-semibold"> <a href="/dashboard/notifications/collaboration">Collaboration</a> </h1>
+                    <h1 class="bg-gray-500 rounded-lg px-1"><span class="text-md p-1 text-gray-200">1</span></h1>   
+                  </div>
+                </div>
+                <!-- comments div-->
+                <div class="w-full h-[87%] flex flex-col items-center">
+                  <% review.forEach(data => { %>
+                    <% if(user._id.toString() === data.receiverDetail.createdBy.toString()) { %>
+                      <div class="w-[95%] h-[15vh] bg-[#c1c5c4d3] mt-2 rounded-md flex items-start gap-2 px-3 py-2">
+                        <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
+                            <img
+                                src="<%= data.senderName.avatar %>" alt=""
+                                class="w-full h-full object-cover avatar"
+                            />
+                        </div>
+            
+                        <div class="w-[90%] h-full flex flex-col px-2">
+                            <div class="w-full ">
+                                <h2 class="text-[#000000e3] text-lg "><span class="capitalize text-[#000] text-lg font-semibold"><%= data.senderName.username %> </span>has commented on the project <span class="capitalize text-[#000] text-lg font-semibold"><%= data.receiverDetail.projectTitle %> </span></h2> <!-- Adjusted to access receiverDetail.projectTitle -->
+                                <h2 class="text-base font-medium text-gray-500"><span>1 day ago </span><span>@<%= data.senderName.username %> </span></h2>
+                            </div>
+                            <div class="w-full ">
+                                <p class="text-lg font-semibold text-[#000] "><%= data.reviewContent %></p>
+                            </div>
+                        </div>
+            
+                    </div>
+                    <%} %>
+                  <% }) %> 
+              </div>
+                
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/uniDashboard.js"></script>
+  </body>
+</html>

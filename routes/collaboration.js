@@ -10,8 +10,7 @@ const collaborationSchema = mongoose.Schema({
         ref : "user"
     },
     reqResponse:Boolean 
-
 })
 
 
-module.exports = mongoose.model("collaboration",collaborationSchema)
+module.exports = mongoose.model("collaboration",collaborationSchema);

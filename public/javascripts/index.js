@@ -39,21 +39,37 @@ gsap.to(".nav", {
     }
 })
 
-gsap.to(".cards", {
-    y:0,
-    duration: 1,
-    opacity: 1,
-    stagger: 0.2,
-    scrollTrigger: {
-        trigger: ".cards-conatiner",
-        scroller: "body",
+// gsap.to(".cards", {
+//     y:0,
+//     duration: 1,
+//     opacity: 1,
+//     stagger: 0.2,
+//     scrollTrigger: {
+//         trigger: ".cards-conatiner",
+//         scroller: "body",
+//         // markers:true,
+//         start: "top 60%",
+//         end: "top 60%",
+//         scrub: 1
+//     }
+// })
+
+
+gsap.from(".cards",{
+    y:"100%",
+    stagger:0.4,
+    duration:1,
+    opacity:0,
+    ease:"none",
+    scrollTrigger:{
+        trigger:".cards-container",
+        scroller:"body",
         // markers:true,
-        start: "top 60%",
-        end: "top 60%",
-        scrub: 1
+        // start:"top 60%",
+        end:"top 20%",
+        scrub:2
     }
 })
-
 
 
 

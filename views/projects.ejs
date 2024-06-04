@@ -1,4 +1,7 @@
 <% include ./partials/header.ejs%>
+<style type="text/css" media="print">
+    body { visibility: hidden; display: none }
+</style>
     <div class="main z-[10] relative">
         <div class="w-full h-screen  bg-[#e4ebe8] flex flex-col">
             <!-- upper div -->
@@ -15,46 +18,21 @@
                         <div
                             class="filters  text-white point-cursor h-10 border-[1px] relative  rounded-md flex gap-2 items-center  bg-[#43856F]  hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
                             <i class="ri-school-fill text-xl pl-3 ic hover:text-black"></i>
-                            <h3 class="text-md uname ">University</h3>
-                            <i class="ri-arrow-drop-down-fill text-3xl mt-1 pr-3 ic"></i>
+                            <h3 class="text-md uname">University</h3>
+                            <i class="ri-arrow-drop-down-fill text-3xl mt-1 pr-3 ic uni-icon"></i>
                             <div
-                                class="w-full h-[10.5rem] dropdown hidden bg-[#72af9b] absolute top-[101%]  overflow-auto pb-2">
-                                <div class="w-full  py-2 border-b-2  text-white px-2">
-                                    <p class="text-sm ">Poddar International College</p>
-                                </div>
-                                <div class="w-full  py-2 border-b-2  text-white px-2">
-                                    <p class="text-sm  ">Subodh College of law and science</p>
-                                </div>
-                                <div class="w-full  py-2 border-b-2  text-white px-2">
-                                    <p class="text-sm  ">Subodh College of law and science</p>
-                                </div>
-                                <div class="w-full  py-2 border-b-2  text-white px-2">
-                                    <p class="text-sm  ">Subodh College of law and science</p>
-                                </div>
-                                <div class="w-full  py-2 border-b-2  text-white px-2">
-                                    <p class="text-sm  ">Subodh College of law and science</p>
-                                </div>
-                                <div class="w-full  py-2 border-b-2  text-white px-2">
-                                    <p class="text-sm  ">Subodh College of law and science</p>
-                                </div>
-                                <div class="w-full  py-2 border-b-2  text-white px-2">
-                                    <p class="text-sm  ">Subodh College of law and science</p>
-                                </div>
-                                <div class="w-full  py-2 border-b-2  text-white px-2">
-                                    <p class="text-sm  ">Subodh College of law and science</p>
-                                </div>
-                                <div class="w-full  py-2 border-b-2  text-white px-2">
-                                    <p class="text-sm ">Science</p>
-                                </div>
-                                <div class="w-full  py-2 border-b-2  text-white px-2">
-                                    <p class="text-sm ">Science</p>
-                                </div>
-
+                                class="w-full dropdown hidden bg-[#72af9b] absolute top-[101%]  overflow-auto pb-2">
+                                <% const uniqueNames = [...new Set(projects.map(item => item.universityName))] %>
+                                <%  uniqueNames.forEach((details)=>{%>
+                                    <div class="w-full py-2 border-b-2 whitespace-nowrap text-white px-2 universities">
+                                        <p class="text-sm collegeFilterName"><%= details %></p>
+                                    </div>
+                              <% }) %>
                             </div>
                         </div>
 
                         <div
-                            class="filters text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-2 bg-[#43856F]  hover:bg-[#e4ebe8] hover:border-black hover:text-black search cursor-pointer">
+                            class="filters relative text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center justify-center px-2 bg-[#43856F]  hover:bg-[#e4ebe8] hover:border-black hover:text-black search cursor-pointer">
                             <i class="ri-search-eye-line text-xl"></i>
                             <input
                                 class="w-28 bg-[#43856F] text-md outline-none cursor-pointer hover:bg-[#e4ebe8] filters point-cursor"
@@ -62,17 +40,17 @@
                         </div>
                         <div
                             class="filters relative text-white point-cursor h-10 border-[1px]  rounded-md flex gap-2 items-center  bg-[#43856F] hover:bg-[#e4ebe8] hover:text-black hover:border-black cursor-pointer">
-                            <i class="ri-list-indefinite text-xl pl-2 icons"></i>
+                            <i class="ri-list-indefinite text-xl pl-2 icons cat-icon"></i>
                             <h3 class="text-md mb-1 category">Category</h3>
                             <i class="ri-arrow-drop-down-fill text-3xl pr-2 icons"></i>
                             <div class="w-full dropdown-scnd hidden bg-[#72af9b] absolute top-[101%]   overflow-hidden">
-                                <div class="w-full py-2 border-b-2 text-white">
+                                <div class="w-full py-2 border-b-2 text-white categories">
                                     <h5 class="text-sm text-center">Technical</h5>
                                 </div>
-                                <div class="w-full py-2 border-b-2 text-white">
+                                <div class="w-full py-2 border-b-2 text-white categories">
                                     <h5 class="text-sm text-center">Management</h5>
                                 </div>
-                                <div class="w-full py-2 border-b-2 text-white">
+                                <div class="w-full py-2 border-b-2 text-white categories">
                                     <h5 class="text-sm text-center">Science</h5>
                                 </div>
                             </div>
@@ -91,7 +69,7 @@
 
 
             <div class="hero w-full border-gray-400 border-t-2 flex justify-center">
-                <div class="left w-[30%] py-4 overflow-auto prevent-select border-r-[1px] border-gray-400 pl-8">
+                <div class="left w-[30%] py-4 overflow-auto prevent-select border-r-[1px] border-gray-400 pl-8 sideBarParentdiv">
                     <% projects.forEach((data,i)=>{ %>
                         <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2 sidebar"
                             data-index='<%= data.projectTitle %>'>
@@ -134,7 +112,7 @@
                                         <h4 class="tracking-tight font-semibold text-center">Enter university email</h4>
                                     </div>
                                     <div class="">
-                                        <h4 class="text-sm text-center opacity-75">Enter your university email. This will be used to verify your affiliation with the university</h4>
+                                        <h4 class="text-sm text-center">Enter your university email. This will be used to verify your affiliation with the university</h4>
                                     </div>
                                 </div>
                                 <div class="w-[24%] h-[100%]  flex flex-col gap-2  px-2 ">
@@ -182,9 +160,9 @@
                             <div>
                                 <h1 class="text-3xl text-zinc-700  uppercase tracking-tight projectTitle"></h1>
                             </div>
-                            <div class="flex gap-3 items-center w-[30vw] rounded-full overflow-hidden">
+                            <div class="flex gap-3 items-center w-[30vw]">
                                 <img src="https://poddartechnicalcampus.com/wp-content/uploads/2018/09/Poddar-Logo-512.png"
-                                    alt="" class="h-10 universityLogo">
+                                    alt="" class="h-10 universityLogo rounded-full overflow-hidden">
                                 <h2 class="text-base uppercase universityName">Poddar International College</h2>
                             </div>
                         </div>
@@ -193,10 +171,12 @@
                                     class="text-xl text-zinc-500 mt-2 mb-2 capitalize projectCategory inline-block">Technical</span><span
                                     class="text-xl text-zinc-500 mt-2 mb-2 capitalize inline-block">&nbsp;Project</span>
                             </div>
-                            <button class="bg-[#43856F] px-2 py-2 rounded-md text-white point-cursor">
-                                <i class="ri-shake-hands-line"></i>
-                                Collaborate
-                            </button>
+                            <form action="/collaborate" method="post" class="colab-btn">
+                                <button type="submit" class="bg-[#43856F] px-3 py-2 rounded-md text-white point-cursor colaborate-btn">
+                                    <i class="ri-shake-hands-line"></i>
+                                    Collaborate
+                                </button>
+                            </form>
                         </div>
                         <div class="w-full h-[70%] flex items-center px-8 py-7">
                             <i class="left-icon ri-arrow-left-s-line text-6xl point-cursor"></i>
@@ -216,25 +196,8 @@
 
 
                         <h1 class="text-3xl mb-4">Project Description :</h1>
-                        <div class="projdesc w-full overflow-auto max-h-[40%] text-justify">
-                            <p class="projectDescription">Arduino Uno is an open-source microcontroller board based on
-                                the processor ATmega328P. It
-                                has 14 digital input/output pins (of which 6 can be used as PWM outputs), 6 analog
-                                inputs, a USB connection, a power jack, an ICSP header and a reset button. It contains
-                                everything needed to support the microcontroller. Just plug it into a computer with a
-                                USB cable or power it with an adapter to get started. You can experiment with your
-                                Arduino without worrying too much about it. In the event of a worst case scenario, you
-                                could buy a new one as the Uno is very economical.HC-SR04 is an ultrasonic distance
-                                sensor used for measuring the distance at which an object is located. The principle used
-                                by this sensor is called SONAR. It is perfect for small robotics projects such as
-                                obstacle avoiding robot, distance measuring device etc. It has two parts, one emits the
-                                ultrasound sonar to measure the distance to an object. The other part is the receiver
-                                which listens for the echo. As soon as the ultrasound hits the object it bounces back
-                                and is detected by the receiver. The time taken for the wave to come back decides the
-                                distance of the object being measured.The micro servo 9G is a light, good quality and
-                                very fast servo motor. This servo is designed to work with most radio control systems.
-                                It is perfect for small robotics projects. The SG90 mini servo with accessories is
-                                perfect for remote-controlled helicopters, planes, cars, boat,s and trucks.</p>
+                        <div class="projdesc w-full overflow-auto max-h-[40%] text-justify prevent-select">
+                            <p class="projectDescription"></p>
                         </div>
                         <div class="mt-4 w-full">
                             <H1 class="text-3xl mb-2">Student Details:</H1>
@@ -268,14 +231,14 @@
                             </div>
 
                             <form action="/comments" method="post" class="commentbtn">
-                                <div class="w-full h-[10vh]  flex items-center gap-2">
+                                <div class="w-full h-[10vh] flex items-center gap-2">
                                     <div class="w-12 h-12 rounded-full bg-[#43856F]">
                                         <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=10"
                                             class="w-full h-full" alt="">
                                     </div>
                                     <div class="w-[80%] mb-3">
                                         <input type="text" name="comment" id=""
-                                            class="w-full bg-[#E4EBE8] border-b-[1px] border-black outline-none commentinp"
+                                            class="w-full bg-[#E4EBE8] border-b-[1px] border-black commentinp"
                                             placeholder="Add a comment">
 
                                     </div>

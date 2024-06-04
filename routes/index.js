@@ -2,12 +2,14 @@ var express = require('express');
 var router = express.Router();
 var userModel = require("./users")
 var projectModel = require("./project")
-var reviewModel = require("./review")
+var commentModel = require("./comment")
+var collaborateModel = require('./collaboration')
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv')
 const upload = require("./multer");
-const review = require('./review');
+const review = require('./comment');
+const contact = require('./contact');
 
 dotenv.config({
   path: './.env'
@@ -66,56 +68,163 @@ function generateRandomCode() {
 /* GET home page. */
 router.get('/', function (req, res) {
   loggedIn = req.session.loggedIn
+  // console.log(loggedIn);
   const avatar = req.session.avatar
   console.log(avatar);
   res.render('index', { nav: true, loggedIn: loggedIn, avatar: avatar });
 });
 
 router.get('/project', async function (req, res) {
+loggedIn = req.session.loggedIn || false;
   try {
     const project = await projectModel.find().populate("createdBy");
+    console.log("loggedInValue tru",req.session.loggedIn)
     res.render('projects', { nav: true, loggedIn: req.session.loggedIn, projects: project, avatar: req.session.avatar, review: "" });
   } catch (error) {
     res.status(500).json({ error: error.message }); // Send error as JSON
   }
 });
-router.get('/projectData', async (req, res) => {
-  const project = await projectModel.find().populate('createdBy');
-  res.json(project);
-});
 
-router.get("/dashboard", (req, res) => {
-  res.render("dashboard", { nav: true, loggedIn: req.session.loggedIn })
+
+async function sendColabMail(userEmail , recieveremail) {
+
+  // Configure nodemailer with secure settings
+  const transporter = nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    auth: {
+      user: 'studentprojecthub11@gmail.com',  // This may need to be the authorized sender by 'smtp-relay.brevo.com'
+      pass: process.env.SECRET_KEY,
+    },
+  });
+
+  // Temporary storage for verification codes (replace with a database)
+  // const verificationCodes = new Map();
+  // console.log("verificationCodes = ",verificationCodes);
+
+  try {
+    // Removed the testAccount creation as it's not being used
+
+    let info = await transporter.sendMail({
+      from: userEmail, // corrected sender address
+      to: recieveremail,
+      subject: 'We want to collaborate with you.',
+      text: `We hope this message finds you well. As part of our commitment to ensuring the security of your account, we are providing you with a verification code. Please use the code below to complete the verification process:      
+      If you have any questions or concerns, please don't hesitate to reach out to our support team. We're here to help!`,
+    });
+    console.log('Message sent: %s', info.messageId);
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+  } catch (error) {
+    console.error(error);
+    // res.status(500).send('Internal Server Error');
+  }
+
+}
+
+router.post('/collaborate',isAuthenticated,async function(req,res){
+  console.log(req.body);
+  const {projectId} =req.body;
+  console.log("clicked");
+  const user = await userModel.findOne({username:req.session.username});
+  if(!user){
+    res.status(500).send("something went wrong")
+  }
+ try{
+
+  const collaborate = await collaborateModel.create({
+    collabReqSend:user._id,
+    collabReqRec:projectId,
+    reqResponse:null,
+  })
+
+  const project = await projectModel.findOne({_id:projectId}).populate("createdBy");
+  console.log("p",project);
+  let userEmail = user.universityEmail;
+  let recieveremail = project.createdBy.universityEmail;
+  await project.collaboration.push(collaborate._id);
+  project.save();
+  sendColabMail(userEmail , recieveremail);
+  console.log("user email",userEmail)
+  console.log("reciever email",recieveremail)
+ }
+ catch(e){
+  console.log(e);
+ }
 })
 
+router.post('/colabResponse',isAuthenticated,async function(req,res){
+  console.log("req.body",req.body);
+})
+
+router.get("/collaborationData",async(req,res)=>{
+  const colabData = await collaborateModel.find();
+  res.json(colabData);
+})
+
+router.get('/projectData', async (req, res) => {
+  const project = await projectModel.find().populate('createdBy');
+  const user = await userModel.findOne({username:req.session.username});
+  res.json({project,user});
+});
+
+router.get("/dashboard",isAuthenticated,async (req, res) => {
+  const project = await userModel.findOne({username:req.session.username}).populate('projects');
+  console.log("project",project);
+  res.render("dashboard", { nav: false, loggedIn: req.session.loggedIn ,user:project,avatar : req.session.avatar})
+})
+
+router.get("/dashboard/notifications/comments",isAuthenticated,async(req,res)=>{
+  const user = await userModel.findOne({username:req.session.username});
+  const review = await commentModel.find()
+  .populate('senderName receiverDetail');
+  console.log("project_user_id",review)
+  res.render("notifications", { nav: false, loggedIn: req.session.loggedIn ,avatar : req.session.avatar,review:review,user})
+})
+
+router.get("/dashboard/notifications/collaboration",isAuthenticated,async(req,res)=>{
+  const user = await userModel.findOne({username:req.session.username});
+  const colab  = await collaborateModel.find()
+  .populate('collabReqRec collabReqSend');
+  // res.json(colab)
+  res.render("notificationcollaborate", { nav: false, loggedIn: req.session.loggedIn ,avatar : req.session.avatar,colab,user})
+})
+
+
+router.get("/dashboard/queries",isAuthenticated,async(req,res)=>{
+  res.render("queries", { nav: false, loggedIn: req.session.loggedIn ,avatar : req.session.avatar})
+})
+
+// router.get('/dashboard', function (req, res) {
+//   res.render('dashboard', { nav: true, loggedIn: true });
+// });
+
+// router.get('/notifications', function (req, res) {
+//   res.render('notifications', { nav: false, loggedIn: true ,avatar:req.session.avatar});
+// });
+
 router.get("/comments", async (req, res) => {
-  const review = await reviewModel.find()
+  const review = await commentModel.find()
     .populate('senderName receiverDetail');
   res.json(review);
 })
 
 router.post('/comments', isAuthenticated, async function (req, res) {
-  console.log("commeentspost route");
-  console.log("req.body =", await req.body);
-  // const project = await projectModel.find()
-  // .populate("createdBy")
   const { comment, projectId } = req.body
   const user = await userModel.findOne({ username: req.session.username });
   try {
-    const review = await reviewModel.create({
+    const review = await commentModel.create({
       reviewContent: comment,
       senderName: user._id,
       receiverDetail: projectId,
     })
-    res.render("/project")
+    res.render("project")
   }
   catch (e) {
     console.log(e);
   }
 
 })
-
-
 
 // const project = await projectModel.find().populate('createdBy')
 //   loggedIn=req.session.loggedIn
@@ -131,6 +240,9 @@ router.get('/uploadProject', isAuthenticated, async function (req, res) {
     if (user.universityEmail) {
       res.redirect("/form")
     }
+    else {
+      res.render("uploadProject", { nav: false, loggedIn: false })
+    }
   }
   else {
     res.render("uploadProject", { nav: false, loggedIn: false })
@@ -141,6 +253,7 @@ router.post('/uploadProject', async function (req, res) {
   const { email } = req.body;
   try {
     verificationCode = await sendMail(email)
+    console.log("verificationCode =", verificationCode);
     let username = req.session.username;
     const user = await userModel.findOne({ username: username })
 
@@ -150,7 +263,6 @@ router.post('/uploadProject', async function (req, res) {
 
     user.universityEmail = email;
     await user.save();
-    console.log("user=", user);
     res.redirect('/verify');
   }
   catch (error) {
@@ -180,29 +292,25 @@ router.get('/form', function (req, res) {
   res.render('form', { nav: false, loggedIn: false });
 });
 
-
 router.get('/projectUploaded', function (req, res) {
   res.render('projectUploaded', { nav: false, loggedIn: true });
 });
-
 
 router.post('/form', isAuthenticated, function (req, res) {
   res.redirect('/projectUploaded')
 });
 
-
-
 router.post('/submitForm', upload.fields([{ name: 'projectImages' }, { name: 'universityLogo' }]), async function (req, res) {
-  const projectImages = req.files['projectImages'];
-  const universityLogo = req.files['universityLogo'];
+  let projectImages = req.files['projectImages'];
+  let universityLogo = req.files['universityLogo'];
 
   const user = await userModel.findOne({
     username: req.session.username,
   });
 
-  console.log("req.files", req.files)
-  console.log("projectImages", projectImages);
-  console.log("universityLogo", universityLogo);
+  // console.log("req.files", req.files)
+  // console.log("projectImages", projectImages);
+  // console.log("universityLogo", universityLogo);
 
   let inputData = req.body;
   const students = [];
@@ -216,7 +324,7 @@ router.post('/submitForm', upload.fields([{ name: 'projectImages' }, { name: 'un
     students.push(student);
   }
   const projectImagesArr = []
-  projectImages.forEach((image) => {
+  await projectImages.forEach((image) => {
     let file = image.filename
     projectImagesArr.push(file)
   })
@@ -232,13 +340,14 @@ router.post('/submitForm', upload.fields([{ name: 'projectImages' }, { name: 'un
     universityLogo: universityLogo[0].filename,
     student: students,
     approvedproject: approvedProjectt,
-    createdBy: user._id
-  })
+    createdBy: user._id,
+    collaboration:[],
+    })
   user.projects.push(projectData._id)
   await user.save();
   // console.log("form-data", inputData);
-  console.log("students data", students);
-  console.log("project data", projectData);
+  // console.log("students data", students);
+  // console.log("project data", projectData);
   res.json({ sucess: true, message: "Form submitted successfully" });
 
 });
@@ -278,7 +387,7 @@ router.post('/signup', async function (req, res) {
         email: email,
         password: hashedPassword,
         avatar: avatarUrl,
-        universityEmail: ""// Assign the generated avatar URL
+        universityEmail: ""
       });
       await user.save();
       req.session.username = user.username;
@@ -291,46 +400,10 @@ router.post('/signup', async function (req, res) {
   }
   catch (error) {
     console.error('Error saving user:', error);
-    // Handle errors appropriately
     res.redirect("/signup");
   }
   // Create a new user with the avatar URL
 });
-
-// router.post('/api/user/signup', async function(req, res) {
-//   try {
-//     const newUser = new userModel({
-//         username: req.body.username,
-//         email: req.body.email,
-//         password: req.body.password, // Consider hashing the password
-//     });
-//     const savedUser = await newUser.save();
-
-//     // Respond with the user ID (or another unique identifier)
-//     res.status(201).json({ userId: savedUser._id });
-// } catch (error) {
-//     res.status(500).json({ message: 'Error creating user', error: error.message });
-// }
-// // res.redirect("/")
-// });
-
-// router.put('/api/user/:userId/avatar', async (req, res) => {
-//   const { userId } = req.params;
-//   const { avatar } = req.body;
-//   console.log(userId);
-//   try {
-//       // Find the user by ID and update the avatar
-//       const updatedUser = await userModel.findByIdAndUpdate(userId, { avatar }, { new: true });
-
-//       if (!updatedUser) {
-//           return res.status(404).send({ message: 'User not found' });
-//       }
-
-//       res.send({ message: 'Avatar updated successfully', user: updatedUser });
-//   } catch (error) {
-//       res.status(400).send({ message: 'Error updating avatar', error: error.message });
-//   }
-// });
 
 router.get('/login', function (req, res) {
   res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false, passwordReseted: false });
@@ -338,8 +411,8 @@ router.get('/login', function (req, res) {
 
 router.post('/login', async (req, res) => {
   const { username, email, password } = req.body
-  console.log(username);
-  console.log(email);
+  // console.log(username);
+  // console.log(email);
 
   const user = await userModel.findOne({ $or: [{ username: username }, { email: email }] });
 
@@ -362,11 +435,8 @@ router.post('/login', async (req, res) => {
   }
 })
 
-router.get('/dashboard', isAuthenticated, function (req, res) {
-  res.render('dashboard', { nav: true, loggedIn: true });
-});
 
-router.get('/about', function (req, res) {
+router.get('/aboutus', function (req, res) {
   res.render('aboutus', { nav: true, loggedIn: false });
 });
 
@@ -374,9 +444,23 @@ router.get('/contact', function (req, res) {
   res.render('contact', { nav: true, loggedIn: false });
 });
 
+router.post("/contactUs",async function(req,res){
+const{firstName,lastName,usermail,query} = req.body;
+  const contactUser = await contact.create({
+    firstName:firstName,
+    lastName:lastName,
+    email:usermail,
+    userIssue:query
+  })
+  await contactUser.save();
+  res.render('contact', { nav: true, loggedIn: false });
+
+});
+
 router.get('/forgotpsswd', function (req, res) {
   res.render('forgotpsswd', { nav: false, loggedIn: false });
 });
+
 
 router.post('/forgotpsswd', async function (req, res) {
   const { username, email } = req.body
@@ -454,3 +538,38 @@ function isAuthenticated(req, res, next) {
 
 
 module.exports = router;
+
+// router.post('/api/user/signup', async function(req, res) {
+//   try {
+//     const newUser = new userModel({
+//         username: req.body.username,
+//         email: req.body.email,
+//         password: req.body.password, // Consider hashing the password
+//     });
+//     const savedUser = await newUser.save();
+
+//     // Respond with the user ID (or another unique identifier)
+//     res.status(201).json({ userId: savedUser._id });
+// } catch (error) {
+//     res.status(500).json({ message: 'Error creating user', error: error.message });
+// }
+// // res.redirect("/")
+// });
+
+// router.put('/api/user/:userId/avatar', async (req, res) => {
+//   const { userId } = req.params;
+//   const { avatar } = req.body;
+//   console.log(userId);
+//   try {
+//       // Find the user by ID and update the avatar
+//       const updatedUser = await userModel.findByIdAndUpdate(userId, { avatar }, { new: true });
+
+//       if (!updatedUser) {
+//           return res.status(404).send({ message: 'User not found' });
+//       }
+
+//       res.send({ message: 'Avatar updated successfully', user: updatedUser });
+//   } catch (error) {
+//       res.status(400).send({ message: 'Error updating avatar', error: error.message });
+//   }
+// });

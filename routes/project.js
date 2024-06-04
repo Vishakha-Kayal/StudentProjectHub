@@ -19,7 +19,11 @@ const projectSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
     },
-    approvedProject: Boolean
+    approvedProject: Boolean,
+    collaboration:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref : "collaboration"
+    }]
 }, { timestamps: true })
 
 module.exports = mongoose.model("project", projectSchema)

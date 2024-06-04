@@ -1,0 +1,70 @@
+<% include ./partials/notificationTemplate.ejs%>
+<div class="w-full h-[13%] flex items-center justify-start border-b-2 border-white bg-[#93c2af]">
+    <h1 class="text-2xl text-[#43856F] font-semibold pl-4">
+      Notifications
+    </h1>
+    </div>
+          <div class="w-[97%] h-[84%] flex flex-col justify-center items-center bg-[#bdc0bf48] m-auto rounded-xl">
+            <div class="w-[95%] h-[95%] rounded-lg overflow-hidden">
+                <div class="w-full h-[13%] flex items-center">
+                  <div class="w-[13vw] h-full flex justify-center items-center border-b-[2.5px] border-slate-600 gap-2 ml-3 comment">
+                    <h1 class="text-xl font-semibold "> <a href="/dashboard/notifications/comments">Comments</a> </h1>
+                  <h1 class="bg-red-500 rounded-lg px-1"><span class="text-md p-1 text-white">1</span></h1>   
+                  </div>
+                  <div class="w-[13vw] h-full flex justify-center items-center gap-2 ml-3 colaborate">
+                    <h1 class="text-xl font-semibold"> <a href="/dashboard/notifications/collaboration">Collaboration</a> </h1>
+                    <h1 class="bg-gray-500 rounded-lg px-1"><span class="text-md p-1 text-gray-200">1</span></h1>   
+                  </div>
+                </div>
+          
+                <!-- collaborate div -->
+                <div class="w-full h-[87%] flex flex-col items-center">
+                  <% colab.forEach(colabdet => {%>
+                  <% if(colabdet.collabReqSend._id.toString() == user._id.toString()){%> 
+                    <div class="relative w-[95%] h-[19vh] bg-[#c1c5c4c1] mt-2 rounded-md flex items-start justify-center gap-2 px-2 py-2">
+                      <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
+                          <img
+                            src="<%= colabdet.collabReqSend.avatar %>"
+                            alt=""
+                            class="w-full h-full object-cover avatar"
+                          />
+                        </div>
+
+                      <div class="w-[90%] h-full flex flex-col px-2">
+                          <div class="w-full ">
+                              <h2 class="text-[#000000e3] text-lg "><span class="capitalize text-[#000] text-lg font-semibold"> <%= colabdet.collabReqSend.username %> </span> has requested to collaborate on the project  <i class="ri-shake-hands-fill text-[#43856F]"></i> <span class="capitalize text-[#000] text-lg font-semibold">  <%= colabdet.collabReqRec.projectTitle %></span>.</h2>
+                             <h2 class="text-base font-medium text-gray-500"><span>1 day ago </span><span>@<%= colabdet.collabReqSend.username %></span></h2>
+                          </div>
+                          <form class="acknowledge" action="/colabResponse" method="post">
+                          <div class="w-full flex justify-between items-center mt-3">
+                            <div class="w-[80%] flex gap-2 acknowledge-div">
+                              <div class="w-24 text-[#316a58] py-2 border-[#316a58] border-[1px]  rounded-lg flex justify-center items-center font-semibold decline-btn cursor-pointer">Decline</div>
+                              <div class="w-24 py-2 bg-[#316a58e5] rounded-lg flex justify-center items-center text-white accept-btn cursor-pointer">Accept</div>
+                            </div>
+                            <div class="w-[20%]">
+                              <p class="text-[#316a58] font-semibold">Check your mail</p>
+                            </div>
+                          </div>
+                          <input type="hidden" name="acceptance" id="acceptanceInput">
+                        </form>
+                      </div>
+
+                      <div class="w-[0.95rem] h-[0.95rem] bg-red-600 rounded-full absolute top-[1em] right-8"></div>
+                  </div>
+                  
+                  <% } %>
+                  <% }) %>
+
+                   
+                </div>
+
+              
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/uniDashboard.js"></script>
+  </body>
+</html>

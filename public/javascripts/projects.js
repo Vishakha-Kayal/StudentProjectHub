@@ -129,7 +129,6 @@ displayProjectInfo = async () => {
   let uploadProjectSteps = document.querySelector(".uploadProjectSteps");
   let commentBtn = document.querySelector(".commentbtn");
   let commentinp = document.querySelector(".commentinp");
-  let rightDiv = document.querySelector(".right");
   let responseData;
   try {
     let response = await fetch("/projectData");
@@ -138,7 +137,6 @@ displayProjectInfo = async () => {
     }
     await response.json().then((data) => {
       responseData = data;
-      //   console.log(data[0].projectTitle);
     });
   } catch (error) {
     console.error(
@@ -147,11 +145,12 @@ displayProjectInfo = async () => {
     );
   }
   sidebar.forEach((elem) => {
-    elem.addEventListener("click", (e) => {
+    elem.addEventListener("click", async (e) => {
+      console.log("clicked");
       projectDetails.classList.remove("hidden");
       uploadProjectSteps.classList.add("hidden");
       title = elem.getAttribute("data-index");
-      responseData.forEach((project) => {
+      responseData.project.forEach(async (project) => {
         if (project.projectTitle == title) {
           projectTitleHeading.textContent = project.projectTitle;
           universityNameHeading.textContent = project.universityName;
@@ -159,24 +158,25 @@ displayProjectInfo = async () => {
           projectCategoryHeading.textContent = project.projectCategory;
           projectDescriptionHeading.textContent = project.projectDescription;
 
-          //    // Populate project images
-          //    let img = "";
-          //    let image = "";
-          //    project['projectImages'].forEach(function (elem, i) {
+          // Populate project images
+          let img = "";
+          let image = "";
+          project["projectImages"].forEach(function (elem, i) {
+            // console.log(project["projectImages"]);
+            img = `<img src="/uploads/${project["projectImages"][0]}"
+                             alt="" class="actual m-auto h-full  rounded-md">`;
+            image += `<img src="/uploads/${project["projectImages"][i]}"
+                              alt="" class="imm image">`;
 
-          //        img = `<img src="temp/${elem[0]}"
-          //                    alt="" class="actual m-auto h-full  rounded-md">`
-          //        image += `<img src="temp/${elem[i]}"
-          //                     alt="" class="imm image">`
-
-          //        img += image
-          //    })
-          //    projectImagesHeading.innerHTML = img;
-          //    imgAttribute = document.querySelectorAll(".image");
-          //    imgdiv = document.querySelector(".actual");
-          //    arr = Array.from(imgAttribute);
-          //    i = 0
-          //    totalImages = arr.length;
+            img += image;
+          });
+          projectImagesHeading.innerHTML = img;
+          // console.log("imgtag", img);
+          imgAttribute = document.querySelectorAll(".image");
+          imgdiv = document.querySelector(".actual");
+          arr = Array.from(imgAttribute);
+          i = 0;
+          totalImages = arr.length;
 
           //Populatestudent details.
           let studentDetails = "";
@@ -217,13 +217,68 @@ displayProjectInfo = async () => {
             showReviews(project);
             commentinp.value = "";
           });
+
+          let colabBtn = document.querySelector(".colab-btn");
+          let colaborateBtn = document.querySelector(".colaborate-btn");
+          colabBtn.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            colabBtn.disabled = true;
+
+            const form = new FormData(e.target);
+            // console.log("bodydata",e.target);
+            const formData = Object.fromEntries(form.entries());
+            formData.projectId = project._id;
+            try {
+              const response = await fetch("/collaborate", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+              });
+            } catch (e) {
+            } finally {
+              colabBtn.disabled = false; // Re-enable the button after the operation
+            }
+          });
+          console.log("response colab");
+          const colabModel = await fetch("/collaborationData");
+          if (!colabModel.ok) {
+            throw new Error("Network response was not ok");
+          }
+          await colabModel
+            .json()
+            .then((data) => {
+              console.log("response colab", data);
+              return data;
+            })
+            .then((colabArray) => {
+              colabArray.forEach((colabObject) => {
+                if (responseData.user != null) {
+                  if (colabObject.collabReqRec == project._id) {
+                    colaborateBtn.textContent = "Request Send";
+                  }
+                  else {
+                    colaborateBtn.innerHTML = `<i class="ri-shake-hands-line"></i>
+                  Collaborate`;
+                  }
+                } 
+                else {
+                  colaborateBtn.innerHTML = `<i class="ri-shake-hands-line"></i>
+                Collaborate`;
+                }
+              });
+            });
+
           showReviews(project);
         }
       });
     });
   });
 };
+
 displayProjectInfo();
+
 async function showReviews(project) {
   let reviewData;
   let commentsContainer = document.querySelector(".commentsContainer");
@@ -236,11 +291,14 @@ async function showReviews(project) {
     .then((data) => {
       reviewData = data;
       // console.log("data",data);
+    })
+    .catch(() => {
+      console.log("Failed to post comment:", data.message);
     });
   let allComments = "";
   reviewData.forEach((reviewOfEachUser) => {
-    if (reviewOfEachUser.receiverDetail._id == project._id) {
-      console.log("REVIEW", reviewOfEachUser.receiverDetail._id);
+    if (reviewOfEachUser["receiverDetail"]._id == project._id) {
+      // console.log("REVIEW", reviewOfEachUser.receiverDetail._id);
       //   console.log(reviewOfEachUser.timestamp);
 
       var currentDate = new Date();
@@ -278,94 +336,203 @@ async function showReviews(project) {
                    </div>
        </div>
    </div>`;
-      console.log(allComments);
+      // console.log(allComments);
     }
     commentsContainer.innerHTML = allComments;
   });
 }
 
-// let project;
-// let sidebar = document.querySelectorAll(".sidebar")
-// let projectTitleHeading = document.querySelector(".projectTitle")
-// let universityLogoHeading = document.querySelector(".universityLogo")
-// let universityNameHeading = document.querySelector(".universityName")
-// let projectCategoryHeading = document.querySelector(".projectCategory")
-// let projectImagesHeading = document.querySelector(".projectImages")
-// let projectDescriptionHeading = document.querySelector(".projectDescription")
-// let studentDetailsHeading = document.querySelector(".studentDetails")
-// let rightDiv = document.querySelector(".right")
-// sidebar.forEach((e, i) => {
-//     e.addEventListener("click", async () => {
-//         let data = await JSON.parse(e.getAttribute('data-index'));
-//         console.log(data);
-//         projectTitleHeading.innerHTML = data.projectTitle;
-//         universityLogoHeading.src = `uploads/${data.universityLogo}`
-//         universityNameHeading.innerHTML = data.universityName;
-//         projectCategoryHeading.innerHTML = data.projectCategory;
-//         projectDescriptionHeading.innerHTML = data.projectDescription
-//         let img = "";
-//         let image = "";
-//         data.projectImages.forEach(function (e, i) {
-//             console.log(data.projectImages[i]);
-//             img = `<img src="uploads/${data.projectImages[0]}"
-//                             alt="" class="actual m-auto h-full  rounded-md">`
-//             image += `<img src="uploads/${data.projectImages[i]}"
-//                              alt="" class="imm image">`
-//             img += image
-//         })
-//         console.log(img);
-//         projectImagesHeading.innerHTML = img;
-//         imgAttribute = document.querySelectorAll(".image");
-//         imgdiv = document.querySelector(".actual");
-//         arr = Array.from(imgAttribute);
-//         i = 0
-//         totalImages = arr.length;
+displaySelectedProjects = async (selectedUniName, selectedCategory) => {
+  let sidebar = document.querySelector(".sideBarParentdiv");
+  await fetch("/projectData")
+    .then((response) => {
+      return response.json();
+    })
+    .then((projectData) => {
+      console.log("college name ", selectedUniName);
+      console.log("CATEGORY name ", selectedCategory);
 
-//         let studentDetails = "";
+      if (selectedUniName && selectedCategory) {
+        console.log("both divs selected");
 
-//         data.student.forEach(function (elem) {
-//             studentDetails += `<div class="flex justify-between items-center w-full h-[25%]">
-//                             <div
-//                                 class="w-[45%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
-//                                 <h1>${elem.studentName}</h1>
-//                             </div>
-//                             <div
-//                                 class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
-//                                 <h1>${elem.studentStream}</h1>
-//                             </div>
-//                             <div
-//                                 class="w-[27.5%] h-full text-center text-xl border-2 capitalize border-black flex justify-center items-center">
-//                                 <h1>${elem.yearOfQualification}</h1>
-//                             </div>
-//                         </div>`
-//         })
-//         studentDetailsHeading.innerHTML = studentDetails;
+        let element = "";
+        projectData.forEach((project) => {
+          if (
+            project.universityName == selectedUniName &&
+            project.projectCategory == selectedCategory.toLowerCase()
+          ) {
+            console.log("entered");
+            element += ` 
+          <div class="w-full max-h-32 rounded-llg hover:bg-[#b7d6c9] p-2 sidebar"
+          data-index="${project.projectTitle}">
+          <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+              <div class="lef w-[2.6vw] h-[2.6vw] mt-2 rounded-full overflow-hidden">
+                  <img class="w-full h-full object-contain" src="/uploads/${project.universityLogo}"
+                      alt="">
+              </div>
+              <div class="rig w-[90%] h-full ">
+                  <h1 class="text-2xl font-medium max-h-[4.5rem] capitalize">
+                  ${project.projectTitle}
+                  </h1>
+                  <h3 class="text-lg text-zinc-500 capitalize">
+                  ${project.universityName}
+                  </h3>
+                  <h3 class="text-md text-zinc-500 capitalize">
+                  ${project.projectCategory}
+                  </h3>
+              </div>
+          </div>
+      </div>
+          `;
+          }
+        });
+        sidebar.innerHTML = element;
+        displayProjectInfo();
+      } else if (selectedUniName) {
+        console.log("individually university clicked !");
+        let element = "";
+        projectData.forEach((project) => {
+          if (project.universityName == selectedUniName) {
+            element += ` 
+          <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2 sidebar"
+          data-index="${project.projectTitle}">
+          <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+              <div class="lef w-[2.6vw] h-[2.6vw] mt-2 rounded-full overflow-hidden">
+                  <img class="w-full h-full object-contain" src="/uploads/${project.universityLogo}"
+                      alt="">
+              </div>
+              <div class="rig w-[90%] h-full ">
+                  <h1 class="text-2xl font-medium max-h-[4.5rem] capitalize">
+                  ${project.projectTitle}
+                  </h1>
+                  <h3 class="text-lg text-zinc-500 capitalize">
+                  ${project.universityName}
+                  </h3>
+                  <h3 class="text-md text-zinc-500 capitalize">
+                  ${project.projectCategory}
+                  </h3>
+              </div>
+          </div>
+      </div>
+          `;
+          }
+        });
+        sidebar.innerHTML = element;
+        displayProjectInfo();
+      } else if (selectedCategory) {
+        console.log("individually category clicked !");
+        let element = "";
+        projectData.forEach((project) => {
+          if (project.projectCategory == selectedCategory.toLowerCase()) {
+            element += ` 
+          <div class="w-full max-h-32 rounded-l-lg hover:bg-[#b7d6c9] p-2 sidebar"
+          data-index="${project.projectTitle}">
+          <div class="fir flex w-full h-full gap-7  cursor-pointer point-cursor ">
+              <div class="lef w-[2.6vw] h-[2.6vw] mt-2 rounded-full overflow-hidden">
+                  <img class="w-full h-full object-contain" src="/uploads/${project.universityLogo}"
+                      alt="">
+              </div>
+              <div class="rig w-[90%] h-full ">
+                  <h1 class="text-2xl font-medium max-h-[4.5rem] capitalize">
+                  ${project.projectTitle}
+                  </h1>
+                  <h3 class="text-lg text-zinc-500 capitalize">
+                  ${project.universityName}
+                  </h3>
+                  <h3 class="text-md text-zinc-500 capitalize">
+                  ${project.projectCategory}
+                  </h3>
+              </div>
+          </div>
+      </div>
+          `;
+          }
+        });
+        sidebar.innerHTML = element;
+        displayProjectInfo();
+      } else {
+        window.location.reload();
+      }
+    });
+};
 
-//         let commentBtn = document.querySelector(".commentbtn")
+changeSideBar = async () => {
+  const uniDiv = document.querySelectorAll(".universities");
+  const catDiv = document.querySelectorAll(".categories");
+  let selectedUniName = "";
+  let selectedCategory = "";
 
-//         commentBtn.addEventListener("submit", async (e) => {
-//             e.preventDefault();
-//             const form = new FormData(e.target);
-//             const formData = Object.fromEntries(form.entries());
+  // Reset and apply filters when university filter is clicked
+  uniDiv.forEach((elem) => {
+    elem.addEventListener("click", (e) => {
+      console.log(e.target.textContent.trim());
+      selectedUniName = e.target.textContent.trim();
+      displaySelectedProjects(selectedUniName, selectedCategory);
+    });
+  });
 
-//             formData.projectId = data._id;
-//             console.log(formData)
-//             try {
-//                 const response = await fetch("/comments", {
-//                     method: 'POST',
-//                     headers: {
-//                         'Content-Type': 'application/json'
-//                     },
-//                     body: JSON.stringify(formData)
-//                 });
-//                 const data = await response.json();
-//                 console.log(data);
-//             }
-//             catch (e) {
+  catDiv.forEach((elem) => {
+    elem.addEventListener("click", (e) => {
+      console.log(e.target.textContent.trim());
+      selectedCategory = e.target.textContent.trim();
+      displaySelectedProjects(selectedUniName, selectedCategory);
+    });
+  });
 
-//             }
-//         })
-//     }
-//     )
-// }
-// )
+  let closeIcon = document.querySelectorAll(".ic");
+  closeIcon[1].addEventListener("click", () => {
+    console.log("clicked closedicon");
+    selectedUniName = "";
+    displaySelectedProjects(selectedUniName, selectedCategory);
+  });
+
+  let closeIcon2 = document.querySelectorAll(".icons");
+  closeIcon2[1].addEventListener("click", () => {
+    console.log("clicked categorycloseicon");
+    selectedCategory = "";
+    displaySelectedProjects(selectedUniName, selectedCategory);
+  });
+};
+changeSideBar();
+
+let checkUserLoggedin = () => {
+  let value = JSON.parse(document.body.getAttribute("data-logged-in"));
+  // console.log(value);
+  let commentinp = document.querySelector(".commentinp");
+  commentinp.addEventListener("click", () => {
+    if (!value) {
+      alert("please sign in");
+    }
+  });
+};
+checkUserLoggedin();
+
+let searchFilter = () => {};
+searchFilter();
+
+document.querySelector(".main").addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});
+
+// commentBtn.addEventListener("submit", async function (e) {
+//   e.preventDefault();
+//   const form = new FormData(e.target);
+//   // console.log("bodydata",e.target);
+
+//   const formData = Object.fromEntries(form.entries());
+//   formData.projectId = project._id;
+//   // console.log("formObj",formData)
+//   try {
+//     const response = await fetch("/comments", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(formData),
+//     });
+//     const data = await response.json();
+//     //   console.log(data);
+//   } catch (e) { }
+//   showReviews(project);
+//   commentinp.value = "";
+// });

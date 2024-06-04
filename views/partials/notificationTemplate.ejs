@@ -1,0 +1,101 @@
+<% include ./header.ejs%>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="w-full h-screen bg-[#E4EBE8] flex justify-center items-center">
+      <!-- Main Div -->
+      <div
+        class="w-[85%] h-[90%] rounded-3xl bg-[#316a58] flex overflow-hidden"
+        style="border: 2px solid #bec2c0"
+      >
+        <!-- NavBar -->
+        <div class="left w-[22%] h-full flex flex-col">
+          <!-- first-section-nav-bar -->
+          <div class="w-full h-[13%] border-b-2 border-white">
+            <div class="w-full h-full flex items-center justify-center gap-1">
+              <div class="h-[55%] w-[18%] bg-white p-1 rounded-lg">
+                <img class="w-full h-full" src="/images/logo1.png" alt="" />
+              </div>
+              <div class="h-[55%] w-[67%] flex items-center">
+                <h1 class="text-xl font-bold text-[#ddeee5]">
+                  StudentProjectHub
+                </h1>
+              </div>
+            </div>
+          </div>
+          <!-- second-section-nav-bar -->
+          <div
+            class="nav-bar w-full h-[60%] flex flex-col justify-center items-center gap-4"
+          >
+            <!-- dashboard -->
+            <div
+              id="dashboard" class="w-[80%] text-white gap-3 flex justify-center py-2 rounded-lg"
+            >
+              <i class="ri-dashboard-fill text-xl"></i>
+              <a href="/dashboard">
+                <h2 class="text-lg font-semibold cursor-pointer">
+                  Dashboard
+                </h2></a
+              >
+            </div>
+
+            <!-- Notifications -->
+            <div id="notification"
+              class="w-[80%] gap-3 flex justify-center py-2 rounded-lg text-white"
+            >
+              <i class="ri-notification-2-fill text-xl inline-block ml-2"></i>
+              <a href="/dashboard/notifications/comments"
+                ><h2 class="text-lg font-semibold cursor-pointer">
+                  Notifications
+                </h2></a
+              >
+            </div>
+
+            <!-- Your Queries -->
+            <div
+              id="queries" class="w-[80%] gap-3 flex justify-center items-center py-2 rounded-lg text-white"
+            >
+              <i
+                class="ri-questionnaire-fill text-xl inline-block ml-2 mt-2"
+              ></i>
+              <a href="/dashboard/queries">
+                <h2 class="text-lg font-semibold cursor-pointer">
+                  Your Queries
+                </h2></a
+              >
+            </div>
+
+            <!-- LogOut -->
+            <div id="logout"
+              class="w-[80%] gap-3 flex justify-center py-2 rounded-lg text-white"
+            >
+              <i
+                class="ri-shut-down-line text-xl inline-block -ml-[1.7rem]"
+              ></i>
+             <a href="/logout"><h2 class="text-lg font-semibold cursor-pointer">LogOut</h2></a>
+            </div>
+          </div>
+
+          <!-- third-section-nav-bar -->
+          <div
+            class="w-full h-[27%] flex flex-col justify-center items-center gap-2"
+          >
+            <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
+              <img
+                src="/uploads/poddarlogooptimised.jpeg"
+                alt=""
+                class="w-full h-full object-cover avatar"
+              />
+            </div>
+            <h2 class="text-white text-base">@vishu</h2>
+            <h2 class="text-white text-base">vishu@gmail.com</h2>
+          </div>
+        </div>
+
+        <div class="right w-[78%] h-full flex flex-col bg-[#E4EBE8]">
+          
