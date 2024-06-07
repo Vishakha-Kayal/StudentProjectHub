@@ -1,0 +1,29 @@
+<% include ./partials/header.ejs%>
+<h1 class="text-center text-2xl font-medium pt-3">Admin Panel</h1>
+<div class="w-full h-screen flex justify-center mt-10 gap-3">
+    <%contact.forEach(query =>{%>
+        <% if(query.queryResolved == ""){%>
+            <div class="w-[40vw] h-[40%] bg-[#64a38ca9] px-6 py-4 rounded-md">
+                <div class="mb-2">
+                    <h1 class="text-lg font-semibold">User query :</h1>
+                    <div class="bg-white border-[1px] border-black px-2 py-1 rounded-md h-[7vh]"><p class="text-[17px] font-base"><%= query.userIssue %></p></div>
+                </div>
+                <div>
+                    <form action="/adminresolve/<%= query._id %>" method="post">
+                        <h1 class="text-lg font-semibold">Response:</h1>
+                        <textarea name="response" id="" cols="20" rows="3" class="mb-2 px-2 py-1 rounded-md w-full h-full text-black border-[1px] border-black outline-none"></textarea>
+                        <div class="flex justify-center items-center ">
+                            <input type="submit" value="Submit" class="bg-[#0f1f1b] mb-2 cursor-pointer text-white text-lg font-medium m-auto px-3 py-1 rounded-lg">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <% } %> 
+    <%})%>
+   
+</div>
+
+</body>
+</html>
+
+

@@ -75,10 +75,10 @@ router.get('/', function (req, res) {
 });
 
 router.get('/project', async function (req, res) {
-loggedIn = req.session.loggedIn || false;
+  loggedIn = req.session.loggedIn || false;
   try {
     const project = await projectModel.find().populate("createdBy");
-    console.log("loggedInValue tru",req.session.loggedIn)
+    console.log("loggedInValue tru", req.session.loggedIn)
     res.render('projects', { nav: true, loggedIn: req.session.loggedIn, projects: project, avatar: req.session.avatar, review: "" });
   } catch (error) {
     res.status(500).json({ error: error.message }); // Send error as JSON
@@ -86,7 +86,7 @@ loggedIn = req.session.loggedIn || false;
 });
 
 
-async function sendColabMail(userEmail , recieveremail) {
+async function sendColabMail(userEmail, recieveremail) {
 
   // Configure nodemailer with secure settings
   const transporter = nodemailer.createTransport({
@@ -122,78 +122,112 @@ async function sendColabMail(userEmail , recieveremail) {
 
 }
 
-router.post('/collaborate',isAuthenticated,async function(req,res){
+router.post('/collaborate', isAuthenticated, async function (req, res) {
   console.log(req.body);
-  const {projectId} =req.body;
+  const { projectId } = req.body;
   console.log("clicked");
-  const user = await userModel.findOne({username:req.session.username});
-  if(!user){
+  const user = await userModel.findOne({ username: req.session.username });
+  if (!user) {
     res.status(500).send("something went wrong")
   }
- try{
+  try {
 
-  const collaborate = await collaborateModel.create({
-    collabReqSend:user._id,
-    collabReqRec:projectId,
-    reqResponse:null,
-  })
+    const collaborate = await collaborateModel.create({
+      collabReqSend: user._id,
+      collabReqRec: projectId,
+      reqResponse: null,
+    })
 
-  const project = await projectModel.findOne({_id:projectId}).populate("createdBy");
-  console.log("p",project);
-  let userEmail = user.universityEmail;
-  let recieveremail = project.createdBy.universityEmail;
-  await project.collaboration.push(collaborate._id);
-  project.save();
-  sendColabMail(userEmail , recieveremail);
-  console.log("user email",userEmail)
-  console.log("reciever email",recieveremail)
- }
- catch(e){
-  console.log(e);
- }
+    const project = await projectModel.findOne({ _id: projectId }).populate("createdBy");
+    console.log("p", project);
+    let userEmail = user.universityEmail;
+    let recieveremail = project.createdBy.universityEmail;
+    await project.collaboration.push(collaborate._id);
+    project.save();
+    sendColabMail(userEmail, recieveremail);
+    console.log("user email", userEmail)
+    console.log("reciever email", recieveremail)
+  }
+  catch (e) {
+    console.log(e);
+  }
 })
 
-router.post('/colabResponse',isAuthenticated,async function(req,res){
-  console.log("req.body",req.body);
+router.post('/colabResponse', isAuthenticated, async function (req, res) {
+  console.log("req.body", req.body);
 })
 
-router.get("/collaborationData",async(req,res)=>{
+router.get("/collaborationData", async (req, res) => {
   const colabData = await collaborateModel.find();
   res.json(colabData);
 })
 
 router.get('/projectData', async (req, res) => {
   const project = await projectModel.find().populate('createdBy');
-  const user = await userModel.findOne({username:req.session.username});
-  res.json({project,user});
+  const user = await userModel.findOne({ username: req.session.username });
+  res.json({ project, user });
 });
 
-router.get("/dashboard",isAuthenticated,async (req, res) => {
-  const project = await userModel.findOne({username:req.session.username}).populate('projects');
-  console.log("project",project);
-  res.render("dashboard", { nav: false, loggedIn: req.session.loggedIn ,user:project,avatar : req.session.avatar})
+router.get("/dashboard", isAuthenticated, async (req, res) => {
+  const project = await userModel.findOne({ username: req.session.username }).populate('projects');
+  console.log("project", project);
+  res.render("dashboard", { nav: false, loggedIn: req.session.loggedIn, user: project, avatar: req.session.avatar })
 })
 
-router.get("/dashboard/notifications/comments",isAuthenticated,async(req,res)=>{
-  const user = await userModel.findOne({username:req.session.username});
+router.get("/dashboard/notifications/comments", isAuthenticated, async (req, res) => {
+  const user = await userModel.findOne({ username: req.session.username });
   const review = await commentModel.find()
-  .populate('senderName receiverDetail');
-  console.log("project_user_id",review)
-  res.render("notifications", { nav: false, loggedIn: req.session.loggedIn ,avatar : req.session.avatar,review:review,user})
+    .populate('senderName receiverDetail');
+  console.log("project_user_id", review)
+  res.render("notifications", { nav: false, loggedIn: req.session.loggedIn, avatar: req.session.avatar, review: review, user })
 })
 
-router.get("/dashboard/notifications/collaboration",isAuthenticated,async(req,res)=>{
-  const user = await userModel.findOne({username:req.session.username});
-  const colab  = await collaborateModel.find()
-  .populate('collabReqRec collabReqSend');
+router.get("/dashboard/notifications/collaboration", isAuthenticated, async (req, res) => {
+  const user = await userModel.findOne({ username: req.session.username });
+  const colab = await collaborateModel.find()
+    .populate('collabReqRec collabReqSend');
   // res.json(colab)
-  res.render("notificationcollaborate", { nav: false, loggedIn: req.session.loggedIn ,avatar : req.session.avatar,colab,user})
+  res.render("notificationcollaborate", { nav: false, loggedIn: req.session.loggedIn, avatar: req.session.avatar, colab, user })
 })
 
 
-router.get("/dashboard/queries",isAuthenticated,async(req,res)=>{
-  res.render("queries", { nav: false, loggedIn: req.session.loggedIn ,avatar : req.session.avatar})
+router.get("/dashboard/queries", isAuthenticated, async (req, res) => {
+  res.render("queries", { nav: false, loggedIn: req.session.loggedIn, avatar: req.session.avatar })
 })
+
+router.get("/admin", async (req, res) => {
+  const contacT = await contact.find();
+  res.render("admin", { nav: false})
+})
+
+router.post("/admin", async function (req, res) {
+  const { adminusername } = await req.body;
+  const contacT = await contact.find();
+  if (adminusername == process.env.ADMIN_USERNAME) {
+    req.session.adminusername = adminusername;
+    req.session.isAdmin = true;
+    res.render('adminresolve',{ nav: false ,contact:contacT})
+  }
+  else{
+    req.session.isAdmin = false;
+  }
+})
+
+router.get("/adminresolve", isAdmin,async (req, res) => {
+  const contacT = await contact.find();
+  res.render("adminresolve", { nav: false ,contact:contacT})
+})
+
+router.post("/adminresolve/:queryid", async (req, res) => {
+  const contacT = await contact.find();
+  const {response} =req.body;
+  const queryId = req.params.queryid
+  let contactModel = await contact.findOne({_id:queryId});
+  contactModel.queryResolved=response;
+  contactModel.save();
+  res.render('adminresolve',{ nav: false ,contact:contacT});
+})
+
 
 // router.get('/dashboard', function (req, res) {
 //   res.render('dashboard', { nav: true, loggedIn: true });
@@ -341,8 +375,8 @@ router.post('/submitForm', upload.fields([{ name: 'projectImages' }, { name: 'un
     student: students,
     approvedproject: approvedProjectt,
     createdBy: user._id,
-    collaboration:[],
-    })
+    collaboration: [],
+  })
   user.projects.push(projectData._id)
   await user.save();
   // console.log("form-data", inputData);
@@ -444,13 +478,14 @@ router.get('/contact', function (req, res) {
   res.render('contact', { nav: true, loggedIn: false });
 });
 
-router.post("/contactUs",async function(req,res){
-const{firstName,lastName,usermail,query} = req.body;
+router.post("/contactUs", async function (req, res) {
+  const { firstName, lastName, usermail, query } = req.body;
   const contactUser = await contact.create({
-    firstName:firstName,
-    lastName:lastName,
-    email:usermail,
-    userIssue:query
+    firstName: firstName,
+    lastName: lastName,
+    email: usermail,
+    userIssue: query,
+    queryResolved: ""
   })
   await contactUser.save();
   res.render('contact', { nav: true, loggedIn: false });
@@ -527,12 +562,19 @@ router.get("/logout", function (req, res, next) {
   res.redirect('/')
 });
 
+function isAdmin(req, res, next) {
+  if (req.session.isAdmin) {
+    return next();
+  } else {
+    res.status(401).send('Unauthorized: Access denied');
+  }
+}
 
 function isAuthenticated(req, res, next) {
   if (req.session.loggedIn) {
     return next();
   } else {
-    res.redirect('/signup')
+    res.redirect('/signup');
   }
 }
 
