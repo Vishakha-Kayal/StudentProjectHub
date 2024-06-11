@@ -16,6 +16,18 @@ dotenv.config({
 
 let verificationCode = "";
 
+let commentAlert = false;
+let collaborationAlert = false;
+
+async function setAlertForUser(userId,value,property) {
+  try {
+    console.log("notification");
+    await userModel.findByIdAndUpdate(userId, { $set: { [property]: value } });
+  } catch (error) {
+    console.error('Failed to set notification alert for user:', error);
+    throw error; // Rethrow the error to handle it in the calling function
+  }
+}
 
 async function sendMail(email) {
 
@@ -57,7 +69,7 @@ async function sendMail(email) {
   }
 }
 
-async function sendCollabRequest(receiverMail, senderMail) {
+async function sendCollabRequest(receiverMail, senderMail,senderName,projectName,receiverName) {
   // Configure nodemailer with secure settings
   const transporter = nodemailer.createTransport({
     host: "smtp-relay.brevo.com",
@@ -74,8 +86,25 @@ async function sendCollabRequest(receiverMail, senderMail) {
     let info = await transporter.sendMail({
       from: 'studentprojecthub11@gmail.com', // corrected sender address
       to: receiverMail,
-      subject: `Collaboration Request From ${senderMail}`,
-      text: `Collaboration Request from ${senderMail}`,
+      subject: `Collaboration Request for Your Project ${projectName}`,
+      text: `Dear ${receiverName},
+
+      We hope this email finds you well. We are excited to inform you that a collaboration request has been submitted for your project, ${projectName}, featured on our website, StudentProjectHub.
+      
+      The request was submitted by ${senderName}, who is interested in collaborating on your project. Here are the details of the request:
+      - Requester's Name: ${senderName}
+      - Email: ${senderMail}
+      
+      To proceed with this collaboration request, you can contact ${senderName} directly via email at ${senderMail}. We encourage you to discuss the potential collaboration and explore how you can work together on your project.
+      
+      Additionally, we would like you to respond on our website whether you accept or decline the collaboration request by checking the notification bar.
+
+      If you have any questions or need further assistance, please do not hesitate to reach out to us at support@projecthub.com.
+      
+      Thank you for being a valuable member of our community. We look forward to seeing the exciting collaborations that will emerge from your project.
+      
+      Best regards,
+      Team StudentProjectHub`,
     });
 
     console.log('Message sent: %s', info.messageId);
@@ -96,7 +125,7 @@ function generateRandomCode() {
 router.get('/', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
   const avatar = req.session.avatar
-  res.render('index', { nav: true, loggedIn: req.session.loggedIn, avatar: avatar, user });
+  res.render('index', { nav: true, loggedIn: req.session.loggedIn, avatar: avatar, user,});
 });
 
 router.get('/project', async function (req, res) {
@@ -117,6 +146,7 @@ router.get('/projectData', async (req, res) => {
   const user = await userModel.findOne({ username: req.session.username });
   res.json({ project, user });
 });
+
 router.get('/reviewData', async (req, res) => {
   const review = await commentModel.find().populate('senderName receiverDetail');
   res.json(review);
@@ -132,7 +162,12 @@ router.post('/comments', isAuthenticated, async function (req, res) {
       senderName: user._id,
       receiverDetail: projectId,
     })
+
+
     const review = await commentModel.find().populate('senderName receiverDetail');
+    let property="hasNewComments"
+    await setAlertForUser(review[review.length-1].receiverDetail.createdBy,true,property);
+    commentAlert = true
     res.json(review);
 
   }
@@ -155,11 +190,16 @@ router.post('/collaborate', async function (req, res) {
     const collaboration = await collaborationModel.create({
       collabReqRec: project._id,
       collabReqSend: user._id,
-      reqResponse:""
+      reqResponse: ""
     });
     project.collaborations.push(collaboration._id)
     await project.save();
-    sendCollabRequest(collabReqReceiver, collabReqSender)
+    let senderName=user.username
+    let projectName=project.projectTitle
+    let receiverName=project.createdBy.username
+    sendCollabRequest(collabReqReceiver, collabReqSender,senderName,projectName,receiverName)
+    let property="hasNewCollaboartion"
+    await setAlertForUser(project.createdBy._id,true,property);
     project = await projectModel.findOne({ _id: collabProjectId.id }).populate('createdBy').populate('collaborations');
   }
 
@@ -178,11 +218,11 @@ router.get('/uploadProject', isAuthenticated, async function (req, res) {
       res.redirect("/form")
     }
     else {
-      res.render('uploadProject', { nav: false, loggedIn: false, user });
+      res.render('uploadProject', { nav: false, loggedIn: false, user, commentAlert, collaborationAlert });
     }
   }
   else {
-    res.render('uploadProject', { nav: false, loggedIn: false, user });
+    res.render('uploadProject', { nav: false, loggedIn: false, user, commentAlert, collaborationAlert });
   }
 });
 
@@ -219,7 +259,7 @@ router.post('/uploadProject', async function (req, res) {
 
 router.get('/verify', isAuthenticated, async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  res.render('verification', { nav: false, loggedIn: false, invalidOtp: false, user });
+  res.render('verification', { nav: false, loggedIn: false, invalidOtp: false, user, commentAlert, collaborationAlert });
 });
 
 router.post('/verify', async function (req, res) {
@@ -232,14 +272,14 @@ router.post('/verify', async function (req, res) {
     res.redirect('/form')
   }
   else {
-    res.render('verify', { nav: false, loggedIn: false, invalidOtp: true, user });
+    res.render('verify', { nav: false, loggedIn: false, invalidOtp: true, user, commentAlert, collaborationAlert });
   }
 
 });
 
 router.get('/form', isAuthenticated, async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  res.render('form', { nav: false, loggedIn: false, user });
+  res.render('form', { nav: false, loggedIn: false, user, commentAlert, collaborationAlert });
 });
 
 
@@ -298,13 +338,14 @@ router.post('/submitForm', upload.fields([{ name: 'projectImages' }, { name: 'un
 
 router.get('/projectUploaded', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  res.render('projectUploaded', { nav: false, loggedIn: false, user });
+  res.render('projectUploaded', { nav: false, loggedIn: false, user, commentAlert, collaborationAlert });
 });
 
 router.get('/signup', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  res.render('signup', { nav: false, loggedIn: false, userExist: false, user });
+  res.render('signup', { nav: false, loggedIn: false, userExist: false, user, commentAlert, collaborationAlert });
 });
+
 
 router.post('/signup', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
@@ -315,7 +356,7 @@ router.post('/signup', async function (req, res) {
     let userExist = false;
     if (existingUser) {
       userExist = true;
-      res.render('signup', { nav: false, loggedIn: false, userExist: userExist, user });
+      res.render('signup', { nav: false, loggedIn: false, userExist: userExist, user, commentAlert, collaborationAlert });
     }
 
     else {
@@ -396,7 +437,7 @@ router.post('/signup', async function (req, res) {
 
 router.get('/login', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false, passwordReseted: false, user });
+  res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false, passwordReseted: false, user, commentAlert, collaborationAlert });
 });
 
 router.post('/login', async (req, res) => {
@@ -429,39 +470,35 @@ router.post('/login', async (req, res) => {
   // res.redirect('/')
 })
 
-router.get('/dashboard', isAuthenticated, async function (req, res) {
-  const user = await userModel.findOne({ username: req.session.username }).populate('projects');
-  const avatar = req.session.avatar
-  res.render('dashboard', { avatar: avatar, nav: true, loggedIn: true, user });
-});
+
 
 router.get('/about', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  res.render('about', { nav: true, loggedIn: false, user });
+  res.render('about', { nav: true, loggedIn: false, user, commentAlert, collaborationAlert });
 });
 
 router.get('/contact', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  res.render('contact', { nav: true, loggedIn: req.session.loggedIn, user, query: false });
+  res.render('contact', { nav: true, loggedIn: req.session.loggedIn, user, query: false, commentAlert, collaborationAlert });
 });
 
 router.post('/contact', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
   const { firstName, lastName, email, query } = req.body
   await contactModel.create({
-    user:user._id,
+    user: user._id,
     firstName,
     lastName,
     email,
     query,
-    queryResolved:""
+    queryResolved: ""
   })
-  res.render('contact', { nav: true, loggedIn: req.session.loggedIn, user, query: true });
+  res.render('contact', { nav: true, loggedIn: req.session.loggedIn, user, query: true, commentAlert, collaborationAlert });
 });
 
 router.get('/forgotpsswd', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  res.render('forgotpsswd', { nav: false, loggedIn: false, userNotFound: false, user });
+  res.render('forgotpsswd', { nav: false, loggedIn: false, userNotFound: false, user, commentAlert, collaborationAlert });
 });
 
 router.post('/forgotpsswd', async (req, res) => {
@@ -471,7 +508,7 @@ router.post('/forgotpsswd', async (req, res) => {
   console.log(user.email);
 
   if (!user) {
-    res.render("forgotpsswd", { nav: false, loggedIn: false, userNotFound: true, user: userData });
+    res.render("forgotpsswd", { nav: false, loggedIn: false, userNotFound: true, user: userData, commentAlert, collaborationAlert });
   }
 
   else {
@@ -485,7 +522,7 @@ router.post('/forgotpsswd', async (req, res) => {
 
 router.get('/verifypage', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  res.render('verifypage', { nav: false, loggedIn: false, invalidOtp: false, user });
+  res.render('verifypage', { nav: false, loggedIn: false, invalidOtp: false, user, commentAlert, collaborationAlert });
 });
 
 router.post('/verifypage', async function (req, res) {
@@ -498,13 +535,13 @@ router.post('/verifypage', async function (req, res) {
     res.redirect("/createpsswd")
   }
   else {
-    res.render('verifypage', { nav: false, loggedIn: false, invalidOtp: true, user });
+    res.render('verifypage', { nav: false, loggedIn: false, invalidOtp: true, user, commentAlert, collaborationAlert });
   }
 });
 
 router.get('/createpsswd', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  res.render('createpsswd', { nav: false, loggedIn: false, user });
+  res.render('createpsswd', { nav: false, loggedIn: false, user, commentAlert, collaborationAlert });
 });
 
 router.post('/createpsswd', async function (req, res) {
@@ -519,7 +556,7 @@ router.post('/createpsswd', async function (req, res) {
     const hashedPassword = await bcrypt.hash(confirmPassword, salt);
     user.password = hashedPassword;
     await user.save();
-    res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false, passwordReseted: true, user })
+    res.render('login', { nav: false, loggedIn: false, InvalidPassword: false, userNotFound: false, passwordReseted: true, user, commentAlert, collaborationAlert })
   }
 
   catch (error) {
@@ -531,16 +568,16 @@ router.post('/createpsswd', async function (req, res) {
 router.get('/dashboard/dashboard', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username }).populate('projects');
   const avatar = req.session.avatar
-  res.render('newDashboard', { avatar: avatar, nav: false, loggedIn: true, user });
+  res.render('newDashboard', { avatar: avatar, nav: false, loggedIn: true, user, });
 });
 
 let routeTime = null;
 let commentCount = 0;
-let collabCount=0;
+let collabCount = 0;
 
 router.get('/dashboard/notification/comments', async function (req, res) {
   let commentData = [];
-  commentCount=0
+  commentCount = 0
   const comments = await commentModel.find().populate("receiverDetail").populate("senderName")
   const user = await userModel.findOne({ username: req.session.username });
   if (comments) {
@@ -565,48 +602,50 @@ router.get('/dashboard/notification/comments', async function (req, res) {
       }
     })
   }
-  let previousTime=routeTime;
+  let previousTime = routeTime;
   routeTime = new Date()
-  res.render('comments', { nav: false, loggedIn: true, user, commentData, commentCount,previousTime,collabCount });
+  await setAlertForUser(user._id,false,"hasNewComments");
+  res.render('comments', { nav: false, loggedIn: true, user, commentData, commentCount, previousTime, collabCount, commentAlert, collaborationAlert });
 });
 
 
 let collabRouteTime = null;
 
 router.get('/dashboard/notification/collaborations', async function (req, res) {
-  let collabData=[]
-  collabCount=0
+  let collabData = []
+  collabCount = 0
   const user = await userModel.findOne({ username: req.session.username });
   const collaborations = await collaborationModel.find().populate("collabReqRec").populate("collabReqSend")
   if (collaborations) {
     collaborations.forEach((collab) => {
       const isSameUser = user._id.toString() === collab.collabReqRec.createdBy.toString();
       if (isSameUser) {
-        if(collab.reqResponse == ""){
-        if (collabRouteTime) {
-          // console.log("ifcollabtime",collabRouteTime);
-          // console.log("ifcollabtimestamp",collab.timestamp);
-          if (collabRouteTime < collab.timestamp) {
-            collabCount++;
+        if (collab.reqResponse == "") {
+          if (collabRouteTime) {
+            // console.log("ifcollabtime",collabRouteTime);
+            // console.log("ifcollabtimestamp",collab.timestamp);
+            if (collabRouteTime < collab.timestamp) {
+              collabCount++;
+            }
           }
-        }
-        else {
-          // console.log("elsecollabtime",new Date());
-          // console.log("elsecollabtimestamp",collab.timestamp);
-          if (new Date() > collab.timestamp) {
-            collabCount++;
+          else {
+            // console.log("elsecollabtime",new Date());
+            // console.log("elsecollabtimestamp",collab.timestamp);
+            if (new Date() > collab.timestamp) {
+              collabCount++;
+            }
           }
+          collabData.push(collab)
         }
-        collabData.push(collab)
-      }
       }
     })
   }
-  let previousTime=collabRouteTime;
+  let previousTime = collabRouteTime;
   collabRouteTime = new Date()
   // console.log(collabRouteTime);
   // console.log(previousTime);
-  res.render('collaborations', { nav: false, loggedIn: true, user,commentCount,collabData,collabCount,previousTime });
+  await setAlertForUser(user._id,false,"hasNewCollaboration");
+  res.render('collaborations', { nav: false, loggedIn: true, user, commentCount, collabData, collabCount, previousTime });
 });
 
 router.post('/dashboard/notification/collaborations', async function (req, res) {
@@ -616,7 +655,7 @@ router.post('/dashboard/notification/collaborations', async function (req, res) 
     const collaboration = await collaborationModel.findOneAndUpdate(
       { _id: data.id },
       { $set: { reqResponse: data.response } },
-      { new: true }   
+      { new: true }
     );
 
     if (!collaboration) {
@@ -634,7 +673,7 @@ router.post('/dashboard/notification/collaborations', async function (req, res) 
 
 router.get('/dashboard/queries', async function (req, res) {
   const user = await userModel.findOne({ username: req.session.username });
-  let contactData=[]
+  let contactData = []
   const contacts = await contactModel.find();
   if (contacts) {
     contacts.forEach((contact) => {
@@ -644,8 +683,50 @@ router.get('/dashboard/queries', async function (req, res) {
       }
     })
   }
-  res.render('queries', { nav: false, loggedIn: true, user,contactData });
+  res.render('queries', { nav: false, loggedIn: true, user, contactData, commentAlert, collaborationAlert });
 });
+
+router.get("/admin", async (req, res) => {
+  const contacT = await contactModel.find();
+  res.render("admin", { nav: false})
+})
+
+router.post("/admin", async function (req, res) {
+  const { adminusername } = await req.body;
+  const contacT = await contactModel.find();
+  if (adminusername == process.env.ADMIN_USERNAME) {
+    req.session.adminusername = adminusername;
+    req.session.isAdmin = true;
+    res.render('adminresolve',{ nav: false ,contact:contacT})
+  }
+  else{
+    req.session.isAdmin = false;
+  }
+})
+
+router.get("/adminresolve", isAdmin,async (req, res) => {
+  const contacT = await contactModel.find();
+  res.render("adminresolve", { nav: false ,contact:contacT})
+})
+
+router.post("/adminresolve/:queryid", async (req, res) => {
+  const contacT = await contactModel.find();
+  const {response} =req.body;
+  const queryId = req.params.queryid
+  let contact = await contactModel.findOne({_id:queryId});
+  contact.queryResolved=response;
+  contact.save();
+  res.redirect('/adminresolve ')
+  // res.render('adminresolve',{ nav: false ,contact:contacT});
+})
+
+function isAdmin(req, res, next) {
+  if (req.session.isAdmin) {
+    return next();
+  } else {
+    res.status(401).send('Unauthorized: Access denied');
+  }
+}
 
 function isAuthenticated(req, res, next) {
   if (req.session.loggedIn) {

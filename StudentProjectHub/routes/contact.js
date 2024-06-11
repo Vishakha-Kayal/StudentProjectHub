@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const users = require("./users")
 
 const contactSchema = new mongoose.Schema({
   user:{

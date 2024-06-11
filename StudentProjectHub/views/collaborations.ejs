@@ -23,7 +23,9 @@
                         
                             <i class="ri-notification-2-fill text-xl inline-block ml-2"></i>
                             <h1 class="font-semibold">Notifications</h1>
-                            <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[40%] "></div>
+                            <% if(user.hasNewComments == true || user.hasNewCollaboration == true){ %>
+                                <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[40%] "></div>
+                                <% } %>
                         </a>
                     </div>
                     <div class="w-full h-[10vh]  flex items-center justify-center  text-white">
@@ -112,8 +114,7 @@
                                                 <div class="w-full mt-3 "><span class="font-bold"><%= element.collabReqSend.username %></span><span> has
                                                         requested to collaborate on the project</span> <i class="ri-shake-hands-fill text-[#43856F]"></i><span
                                                         class="font-bold"> <%= element.collabReqRec.projectTitle %></span></div>
-                                                <div class="w-full flex gap-2"><span class="opacity-50 font-semibold text-sm">1
-                                                        day ago</span><span
+                                                <div class="w-full flex gap-2"><span class="opacity-50 font-semibold text-sm setTimeDiv" data-index="<%= element.timestamp %>"></span><span
                                                         class="opacity-50 font-semibold text-sm">@<%= element.collabReqSend.username %></span></div>
                                             </div>
                                         </div>

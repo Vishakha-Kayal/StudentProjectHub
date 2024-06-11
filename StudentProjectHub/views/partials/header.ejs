@@ -45,9 +45,11 @@
                                     class="relative w-[4vw] h-[2.5vw] bg-[#43856F] flex items-center justify-center rounded-lg hover:bg-[#316a58] transition-all duration-150 ease-in-out">
                                     <a href="/dashboard/notification/comments" class="point-cursor w-full h-full flex items-center justify-center ">
                                     <i class="ri-notification-2-line text-white"></i>
+                                    <% if(user.hasNewComments == true || user.hasNewCollaboration == true){ %>
                                     <div
                                         class="absolute left-[76%] -top-[6%] rounded-full w-[0.8vw] h-[0.8vw] bg-red-500">
                                     </div>
+                                    <% }  %>
                                 </a>
                                 </div>
                                 <div

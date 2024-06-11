@@ -23,7 +23,9 @@
                         
                             <i class="ri-notification-2-fill text-xl inline-block ml-2"></i>
                             <h1 class="font-semibold">Notifications</h1>
+                            <% if(user.hasNewComments == true || user.hasNewCollaboration == true){ %>
                             <div class="absolute w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full left-[9%] top-[40%] "></div>
+                            <% } %>
                         </a>
                     </div>
                     <div class="w-full h-[10vh]  flex items-center justify-center  text-white">
@@ -84,11 +86,11 @@
                             <div class="w-[13vw]">
                                 <a class="w-full point-cursor" href="/dashboard/notification/collaborations">
                                 <div class="w-[90%] h-full flex items-center justify-center gap-2 ">
-                                    <h1 class="text-lg font-semibold">Collaboration</h1>
-                                    <div
-                                        class="w-[1.7vw] h-[1.7vw] rounded-lg  flex items-center justify-center bg-gray-300">
-                                        <h1 class="text-sm"><%= collabCount %></h1>
-                                    </div>
+                                    <h1 class="text-lg font-semibold">Collaboration</h1>                       
+                                    <% if(user.hasNewCollaboration == true){ %>
+                                            <div class="w-[0.7vw] h-[0.7vw] bg-red-600 rounded-full  "></div>
+                                            <% } %>
+                        
                                 </div>
                                 </a>
                             </div>
@@ -109,8 +111,7 @@
                                         <div class="w-[92%] h-full  ">
                                             <div class="w-full mt-3 "><span class="font-bold capitalize"><%= element.senderName.username %></span><span> has
                                                     commented on the project</span><span class="font-bold"> <%= element.receiverDetail.projectTitle %></span></div>
-                                            <div class="w-full flex gap-2"><span class="opacity-50 font-semibold text-sm">1
-                                                    day ago</span><span
+                                            <div class="w-full flex gap-2"><span class="opacity-50 font-semibold text-sm setTimeDiv" data-index="<%= element.timestamp %>"></span><span
                                                     class="opacity-50 font-semibold text-sm">@<%= element.senderName.username %></span></div>
                                         </div>
                                     </div>
@@ -137,3 +138,4 @@
             </div>
         </div>
     </div>
+    <script src="/javascripts/comment.js"></script>
